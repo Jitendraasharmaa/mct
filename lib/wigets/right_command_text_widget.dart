@@ -12,7 +12,7 @@ class RightCommandTextWidget extends StatelessWidget {
       style: TextStyle(
         fontSize: 12,
         color: Colors.black,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w500,
       ),
     );
   }
