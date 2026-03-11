@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/constants/text_consts.dart';
+import 'package:mct_prayer_book/screens/big_purnima_amavasya_screen.dart';
 import 'package:mct_prayer_book/screens/coming_leaving_prayer.dart';
+import 'package:mct_prayer_book/screens/initation_ceremony_screen.dart';
 import 'package:mct_prayer_book/screens/morning_evening_prayer_command.dart';
 import 'package:mct_prayer_book/screens/purnima_amavasya_screen.dart';
 import 'package:mct_prayer_book/screens/serving_prasada_scren.dart';
@@ -58,6 +60,20 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => PurnimaAmavasyaScreen(),
+                    ),
+                  );
+                }
+                if (index == 4) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => BigPurnimaAmavasyaScreen(),
+                    ),
+                  );
+                }
+                if (index == 5) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => InitationCeremonyScreen(),
                     ),
                   );
                 }
