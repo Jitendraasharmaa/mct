@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/constants/text_consts.dart';
+import 'package:mct_prayer_book/screens/bid_festival_outing_ceremony_screen.dart';
 import 'package:mct_prayer_book/screens/big_purnima_amavasya_screen.dart';
 import 'package:mct_prayer_book/screens/coming_leaving_prayer.dart';
 import 'package:mct_prayer_book/screens/festival_ceremony_screen.dart';
@@ -122,6 +123,13 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => FestivalCeremonyScreen(),
+                    ),
+                  );
+                }
+                if (index == 12) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => BidFestivalOutingCeremonyScreen(),
                     ),
                   );
                 }
