@@ -3,10 +3,13 @@ import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/constants/text_consts.dart';
 import 'package:mct_prayer_book/screens/big_purnima_amavasya_screen.dart';
 import 'package:mct_prayer_book/screens/coming_leaving_prayer.dart';
+import 'package:mct_prayer_book/screens/hui_siang_transfer_merits.dart';
 import 'package:mct_prayer_book/screens/initation_ceremony_screen.dart';
+import 'package:mct_prayer_book/screens/khai_pan_opening_class.dart';
 import 'package:mct_prayer_book/screens/morning_evening_prayer_command.dart';
 import 'package:mct_prayer_book/screens/purnima_amavasya_screen.dart';
 import 'package:mct_prayer_book/screens/serving_prasada_scren.dart';
+import 'package:mct_prayer_book/screens/sien_en_express_gratitude.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 
 class PrayerCommandsScreen extends StatefulWidget {
@@ -74,6 +77,27 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => InitationCeremonyScreen(),
+                    ),
+                  );
+                }
+                if (index == 6) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => KhaiPanOpeningClass(),
+                    ),
+                  );
+                }
+                if (index == 7) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SienEnExpressGratitude(),
+                    ),
+                  );
+                }
+                if (index == 8) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => HuiSiangTransferMerits(),
                     ),
                   );
                 }

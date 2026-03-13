@@ -9,7 +9,7 @@ class SingleParaTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
     );
   }
 }

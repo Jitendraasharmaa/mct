@@ -19,17 +19,18 @@ class RowItemWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             flex: 4,
             child: RightCommandTextWidget(text: col1.toString()),
           ),
           Expanded(
-            flex: 3,
+            flex: 4,
             child: LeftCommandTextWidget(text: col2.toString()),
           ),
           Expanded(
-            flex: 5,
+            flex: 4,
             child: LeftCommandTextWidget(text: col3.toString()),
           ),
         ],
