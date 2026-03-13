@@ -3,6 +3,9 @@ import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:mct_prayer_book/wigets/row_items_widget.dart';
 import 'package:mct_prayer_book/wigets/single_para_text_widget.dart';
 
+import '../wigets/left_command_heading_widget.dart';
+import '../wigets/right_command_heading_widget.dart';
+
 class BidFestivalOutingCeremonyScreen extends StatelessWidget {
   const BidFestivalOutingCeremonyScreen({super.key});
 
@@ -51,6 +54,18 @@ class BidFestivalOutingCeremonyScreen extends StatelessWidget {
                   fontStyle: FontStyle.italic,
                 ),
               ),
+              SizedBox(height: 10.0),
+              Padding(
+                padding: EdgeInsetsGeometry.symmetric(horizontal: 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    RightCommandHeadingWidget(text: "Shang Ce-Li"),
+                    LeftCommandHeadingWidget(text: "Sia Ce-Li"),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10.0),
               RowItemWidget(
                 col1: "Chu Sien Siang San Cu",
                 col2: "",
