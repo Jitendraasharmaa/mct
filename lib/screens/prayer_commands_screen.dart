@@ -3,9 +3,11 @@ import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/constants/text_consts.dart';
 import 'package:mct_prayer_book/screens/big_purnima_amavasya_screen.dart';
 import 'package:mct_prayer_book/screens/coming_leaving_prayer.dart';
+import 'package:mct_prayer_book/screens/festival_ceremony_screen.dart';
 import 'package:mct_prayer_book/screens/hui_siang_transfer_merits.dart';
 import 'package:mct_prayer_book/screens/initation_ceremony_screen.dart';
 import 'package:mct_prayer_book/screens/khai_pan_opening_class.dart';
+import 'package:mct_prayer_book/screens/making_vow_screen.dart';
 import 'package:mct_prayer_book/screens/morning_evening_prayer_command.dart';
 import 'package:mct_prayer_book/screens/purnima_amavasya_screen.dart';
 import 'package:mct_prayer_book/screens/repentance_ceremony.dart';
@@ -106,6 +108,20 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => RepentanceCeremony(),
+                    ),
+                  );
+                }
+                if (index == 10) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MakingVowScreen(),
+                    ),
+                  );
+                }
+                if (index == 11) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => FestivalCeremonyScreen(),
                     ),
                   );
                 }
