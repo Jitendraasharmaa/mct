@@ -8,6 +8,7 @@ import 'package:mct_prayer_book/screens/initation_ceremony_screen.dart';
 import 'package:mct_prayer_book/screens/khai_pan_opening_class.dart';
 import 'package:mct_prayer_book/screens/morning_evening_prayer_command.dart';
 import 'package:mct_prayer_book/screens/purnima_amavasya_screen.dart';
+import 'package:mct_prayer_book/screens/repentance_ceremony.dart';
 import 'package:mct_prayer_book/screens/serving_prasada_scren.dart';
 import 'package:mct_prayer_book/screens/sien_en_express_gratitude.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
@@ -98,6 +99,13 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => HuiSiangTransferMerits(),
+                    ),
+                  );
+                }
+                if (index == 9) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => RepentanceCeremony(),
                     ),
                   );
                 }
