@@ -10,6 +10,7 @@ import 'package:mct_prayer_book/screens/initation_ceremony_screen.dart';
 import 'package:mct_prayer_book/screens/khai_pan_opening_class.dart';
 import 'package:mct_prayer_book/screens/making_vow_screen.dart';
 import 'package:mct_prayer_book/screens/morning_evening_prayer_command.dart';
+import 'package:mct_prayer_book/screens/new_year_ceremony.dart';
 import 'package:mct_prayer_book/screens/purnima_amavasya_screen.dart';
 import 'package:mct_prayer_book/screens/repentance_ceremony.dart';
 import 'package:mct_prayer_book/screens/serving_prasada_scren.dart';
@@ -130,6 +131,13 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => BidFestivalOutingCeremonyScreen(),
+                    ),
+                  );
+                }
+                if (index == 13) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => NewYearCeremony(),
                     ),
                   );
                 }
