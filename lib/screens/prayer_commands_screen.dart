@@ -178,7 +178,7 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
                   children: [
                     // Main Card
                     Container(
-                      height: 200,
+                      // height: 180,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [
@@ -191,17 +191,19 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: const Color(0xFF6B2E1A),
-                          width: 2,
+                          width: 3,
                         ),
                       ),
                       alignment: Alignment.center,
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        TextConsts().commandHeading[index],
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                      child: Expanded(
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          TextConsts().commandHeading[index],
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),

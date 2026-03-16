@@ -138,9 +138,7 @@ class ComingLeavingPrayer extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 24),
-
                   _title("Meaning of Chinese Terms"),
-
                   _twoCol("Cuo Yi", "Bow"),
                   _twoCol("Kui", "Kneel"),
                   _twoCol("Chi", "Stand"),
@@ -149,7 +147,7 @@ class ComingLeavingPrayer extends StatelessWidget {
                   _twoCol("Thui", "Move Behind"),
 
                   const SizedBox(height: 24),
-                  _title("Coming / Going Commands"),
+                  _title("Coming / Leaving Commands"),
                   _twoCol("If you're leaving, say", "Che Cia"),
                   _twoCol("If you are in Temple and TCS arrived:",
                       "Cie Cia → Song Cia"),
