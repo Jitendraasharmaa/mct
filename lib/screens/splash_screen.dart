@@ -3,6 +3,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/screens/main_screen.dart';
 
+import '../constants/app_version_service.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -15,6 +17,18 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _navigateToMain();
+    checkVersion();
+  }
+
+  Future<void> checkVersion() async {
+    bool updated = await AppVersionService.isAppUpdated();
+    if (updated) {
+      print("App was updated!");
+    } else {
+      print("App version is same");
+    }
+    String? version = await AppVersionService.getSavedVersion();
+    print("Saved Version: $version");
   }
 
   void _navigateToMain() {

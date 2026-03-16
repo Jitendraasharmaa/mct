@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
           ),
           itemBuilder: (context, index) {
             final items = [
-              {"icon": Symbols.prayer_times, "text": "Prayer Command"},
+              {"icon": Symbols.folded_hands_sharp, "text": "Prayer Command"},
               {"icon": Symbols.filter_frames_sharp, "text": "Holy Messages"},
               {"icon": Icons.settings, "text": "Settings"},
               {"icon": Icons.info, "text": "About"},
@@ -73,6 +73,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(
                       items[index]["icon"] as IconData,

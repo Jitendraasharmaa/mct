@@ -122,8 +122,8 @@ class ComingLeavingPrayer extends StatelessWidget {
 
                   _infoBlock(
                     "You need to stand and kneel one more time to make a bow for Master.\n\n"
-                    "Chi, Cuo Yi, (Tien Chuan Se Yi Sia) Kuei\n"
-                    "Kei Tien Chuan Se (Chan Cia) (Che Cia)   Yi Khou Sou\n\n"
+                        "Chi, Cuo Yi, (Tien Chuan Se Yi Sia), "
+                        "(Ke Wei) Tien Chuan Se (Chan Cia) (Che Cia)   Yi Khou Sou\n\n"
                     "Chi, Cuo Yi, (Chan Cia) (Che Cia)\n"
                     "Li Pi, Chuei Shou, Ci Kong, Thuei",
                   ),
@@ -149,13 +149,13 @@ class ComingLeavingPrayer extends StatelessWidget {
                   _twoCol("Thui", "Move Behind"),
 
                   const SizedBox(height: 24),
-
                   _title("Coming / Going Commands"),
-
+                  _twoCol("If you're leaving, say", "Che Cia"),
+                  _twoCol("If you are in Temple and TCS arrived:",
+                      "Cie Cia → Song Cia"),
+                  _twoCol("TCS leaving but you are staying back", "Song Cia"),
                   _twoCol("If you're coming, say", "Chan Cia"),
-                  _twoCol("If you're going, say", "Che Cia"),
-                  _twoCol("If Tien Chuan Se going, say", "Song Cia"),
-                  _twoCol("If Tien Chuan Se coming, say", "Cie Cia"),
+
                 ],
               ),
             ],
