@@ -279,6 +279,7 @@ class MorningEveningPrayerCommand extends StatelessWidget {
                         ),
 
                         Container(
+                          margin: EdgeInsets.only(top: 40),
                           padding: const EdgeInsets.only(
                             top: 15,
                             left: 10,
@@ -287,20 +288,22 @@ class MorningEveningPrayerCommand extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.08),
-                                blurRadius: 8,
-                                spreadRadius: 2,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
+                            border: Border.all(color: Colors.grey.shade400),
+                            borderRadius: BorderRadius.circular(8),
                           ),
 
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                              Text(
+                                "Mo Nien Yen Chan Wen",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primaryColor,
+                                ),
+                              ),
+                              SizedBox(height: 20),
                               Text(
                                 "Chien Sin Kwei Cai, Ming Ming Sang Ti Lien Sia, Sin Sou Cen Chuan.",
                                 textAlign: TextAlign.center,
