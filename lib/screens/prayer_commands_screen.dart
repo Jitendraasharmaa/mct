@@ -195,15 +195,13 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
                         ),
                       ),
                       alignment: Alignment.center,
-                      child: Expanded(
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          TextConsts().commandHeading[index],
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        TextConsts().commandHeading[index],
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
                         ),
                       ),
                     ),
