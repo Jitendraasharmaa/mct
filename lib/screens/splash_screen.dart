@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mct_prayer_book/constants/app_colors.dart';
-import 'package:mct_prayer_book/screens/main_screen.dart';
+import 'package:mct_prayer_book/pages/home_screen.dart';
 
 import '../constants/app_version_service.dart';
 
@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     });
   }
