@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/constants/app_colors.dart';
-import 'package:mct_prayer_book/pages/home_screen.dart';
+import 'package:mct_prayer_book/screens/home_screen.dart';
 import 'package:mct_prayer_book/screens/more_screens.dart';
 import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
 import 'package:mct_prayer_book/screens/songs_screens.dart';
