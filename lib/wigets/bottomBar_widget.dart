@@ -43,11 +43,8 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
               setState(() {
                 selectedIndex = index;
               });
-
               if (index == 0) return;
-
               Widget page;
-
               switch (index) {
                 case 1:
                   page = const PrayerCommandsScreen();

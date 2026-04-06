@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:mct_prayer_book/constants/app_colors.dart';
-import 'package:mct_prayer_book/wigets/info_text_widget.dart';
-
-import 'home_screen.dart';
+import 'package:mct_prayer_book/pages/home_screen.dart';
+import 'package:mct_prayer_book/screens/more_screens.dart';
+import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
+import 'package:mct_prayer_book/screens/songs_screens.dart';
+import 'package:mct_prayer_book/screens/sutra_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,8 +17,11 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    const HomeScreen(),
-    const InfoTextWidget(text: "There is no profile details"),
+    HomeScreen(),
+    PrayerCommandsScreen(),
+    SutraScreen(),
+    SongsScreens(),
+    MoreScreens(),
   ];
 
   void _onItemTapped(int index) {
@@ -31,8 +35,9 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: AppColors.whiteColor,
-        selectedItemColor: AppColors.secondaryColor,
+        unselectedItemColor: AppColors.primaryText,
+        showUnselectedLabels: true,
+        selectedItemColor: AppColors.orangeDark,
         unselectedIconTheme: IconThemeData(size: 25),
         selectedIconTheme: IconThemeData(size: 30),
         selectedFontSize: 20,
@@ -40,8 +45,23 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Symbols.window), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.volunteer_activism_outlined),
+            label: "Prayers",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book_outlined),
+            label: "Sutra",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.music_note_outlined),
+            label: "Songs",
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.menu), label: "More"),
         ],
       ),
     );

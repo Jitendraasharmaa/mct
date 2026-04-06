@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mct_prayer_book/models/quickItems_model.dart';
 import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
-import 'package:mct_prayer_book/wigets/bottomBar_widget.dart';
 
 import '../constants/app_colors.dart';
 
@@ -41,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomBarWidget(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 20),
