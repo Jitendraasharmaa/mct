@@ -51,9 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final todayTeaching = getTodayTeaching();
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
