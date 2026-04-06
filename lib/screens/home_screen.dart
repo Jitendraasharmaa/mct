@@ -118,9 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        Text(
-                          'ॐ',
-                          style: TextStyle(color: Colors.white70, fontSize: 28),
+                        Icon(
+                          Icons.auto_stories_outlined,
+                          color: AppColors.whiteColor,
                         ),
                       ],
                     ),
