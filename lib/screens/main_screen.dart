@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/screens/home_screen.dart';
 import 'package:mct_prayer_book/screens/more_screens.dart';
-import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
+import 'package:mct_prayer_book/screens/prayers_screen.dart';
 import 'package:mct_prayer_book/screens/songs_screens.dart';
 import 'package:mct_prayer_book/screens/sutra_screen.dart';
 
@@ -18,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _screens = [
     HomeScreen(),
-    PrayerCommandsScreen(),
+    PrayersScreen(),
     SutraScreen(),
     SongsScreens(),
     MoreScreens(),
@@ -40,7 +40,7 @@ class _MainScreenState extends State<MainScreen> {
         selectedItemColor: AppColors.orangeDark,
         unselectedIconTheme: IconThemeData(size: 25),
         selectedIconTheme: IconThemeData(size: 30),
-        selectedFontSize: 20,
+        selectedFontSize: 15,
         backgroundColor: AppColors.primaryColor,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
