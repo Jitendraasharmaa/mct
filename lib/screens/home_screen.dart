@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<QuickAccessItem> quickItems = const [
     QuickAccessItem(icon: '🙏', title: 'Prayers', subtitle: '16 available'),
-    QuickAccessItem(icon: '📜', title: 'Sutras', subtitle: '0 available'),
+    QuickAccessItem(icon: '📜', title: 'Sutras', subtitle: '4 available'),
     QuickAccessItem(icon: '🎵', title: 'Holy Songs', subtitle: '0 available'),
     QuickAccessItem(icon: '📣', title: 'Events', subtitle: '0 upcoming'),
   ];
