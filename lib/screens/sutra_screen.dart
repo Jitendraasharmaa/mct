@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mct_prayer_book/screens/sutras/Cing_thien_ti_shen_cou_screen.dart';
+import 'package:mct_prayer_book/screens/sutras/mi_lek_Ciu_khu_cen_cing.dart';
+import 'package:mct_prayer_book/screens/sutras/pai_siao_cing_screen.dart';
+import 'package:mct_prayer_book/screens/sutras/sin_ming_se_screen.dart';
 
 import '../constants/app_colors.dart';
-import '../wigets/loading_cards_screen.dart';
 import '../wigets/prayer_cards.dart';
 
 class SutraScreen extends StatelessWidget {
@@ -63,6 +66,15 @@ class SutraScreen extends StatelessWidget {
                       duration: '2:15',
                       progress: 0.55,
                       isFavorite: true,
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return MiLekCiuKhuCenCingScreen();
+                            },
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 18),
                     PrayerCard(
@@ -73,9 +85,56 @@ class SutraScreen extends StatelessWidget {
                       duration: '3:42',
                       progress: 0.15,
                       isFavorite: false,
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return PaiSiaoCingScreen();
+                            },
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 18),
-                    LoadingCard(),
+                    PrayerCard(
+                      title: 'Cing Tien Ti Shen Cou',
+                      subtitle: 'Chinese · English · Hindi',
+                      preview:
+                          'Sutra of filial piety - The root of all virtue is to love and respect our parents.',
+                      duration: '3:42',
+                      progress: 0.15,
+                      isFavorite: false,
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return CingThienTiShenCouScreen();
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 18),
+                    PrayerCard(
+                      title: 'Sin Ming Se',
+                      subtitle: 'Chinese · English · Hindi',
+                      preview:
+                          'Heart Sutra - The root of all virtue is to love and respect our parents.',
+                      duration: '3:42',
+                      progress: 0.15,
+                      isFavorite: false,
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return SinMingSeScreen();
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 18),
+                    // LoadingCard(),
                     SizedBox(height: 24),
                   ],
                 ),

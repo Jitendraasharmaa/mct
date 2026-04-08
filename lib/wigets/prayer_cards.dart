@@ -10,6 +10,7 @@ class PrayerCard extends StatelessWidget {
   final String duration;
   final double progress;
   final bool isFavorite;
+  final VoidCallback? onTap;
 
   const PrayerCard({
     super.key,
@@ -19,6 +20,7 @@ class PrayerCard extends StatelessWidget {
     required this.duration,
     required this.progress,
     required this.isFavorite,
+    this.onTap,
   });
 
   @override
@@ -128,7 +130,15 @@ class PrayerCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: AppColors.orange.withOpacity(0.25)),
                 ),
-                child: Text("Read"),
+                child: GestureDetector(
+                  onTap: onTap,
+                  child: Text(
+                    "Read",
+                    style: GoogleFonts.notoSerifGeorgian(
+                      color: AppColors.primaryText,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

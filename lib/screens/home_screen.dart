@@ -2,7 +2,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mct_prayer_book/models/quickItems_model.dart';
+import 'package:mct_prayer_book/screens/events_screen.dart';
 import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
+import 'package:mct_prayer_book/screens/songs_screens.dart';
+import 'package:mct_prayer_book/screens/sutra_screen.dart';
 
 import '../constants/app_colors.dart';
 import '../models/daily_quote.dart';
@@ -47,6 +50,27 @@ class _HomeScreenState extends State<HomeScreen> {
     // Rotate through all teachings
     final index = difference % teachings.length;
     return teachings[index];
+  }
+
+  void _openScreen(BuildContext context, int index) {
+    Widget screen;
+    switch (index) {
+      case 0:
+        screen = PrayerCommandsScreen();
+        break;
+      case 1:
+        screen = SutraScreen();
+        break;
+      case 2:
+        screen = SongsScreens();
+        break;
+      case 3:
+        screen = EventsScreen();
+        break;
+      default:
+        return;
+    }
+    Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
   }
 
   @override
@@ -169,15 +193,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   final item = quickItems[index];
                   return GestureDetector(
-                    onTap: () {
-                      if (index == 0) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => PrayerCommandsScreen(),
-                          ),
-                        );
-                      }
-                    },
+                    onTap: () => _openScreen(context, index),
+                    // onTap: () {
+                    //   if (index == 0) {
+                    //     Navigator.of(context).push(
+                    //       MaterialPageRoute(
+                    //         builder: (context) => PrayerCommandsScreen(),
+                    //       ),
+                    //     );
+                    //   }
+                    // },
                     child: Container(
                       padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
