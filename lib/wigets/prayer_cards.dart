@@ -81,48 +81,48 @@ class PrayerCard extends StatelessWidget {
           const SizedBox(height: 22),
           Row(
             children: [
-              Container(
-                width: 52,
-                height: 52,
-                decoration: const BoxDecoration(
-                  color: AppColors.orange,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.play_arrow_rounded,
-                  color: Colors.white,
-                  size: 34,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: LinearProgressIndicator(
-                        minHeight: 5,
-                        value: progress,
-                        backgroundColor: AppColors.orangeLight,
-                        valueColor: const AlwaysStoppedAnimation(
-                          AppColors.orange,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   width: 52,
+              //   height: 52,
+              //   decoration: const BoxDecoration(
+              //     color: AppColors.orange,
+              //     shape: BoxShape.circle,
+              //   ),
+              //   child: const Icon(
+              //     Icons.play_arrow_rounded,
+              //     color: Colors.white,
+              //     size: 34,
+              //   ),
+              // ),
+              // const SizedBox(width: 16),
+              // Expanded(
+              //   child: Column(
+              //     children: [
+              //       ClipRRect(
+              //         borderRadius: BorderRadius.circular(10),
+              //         child: LinearProgressIndicator(
+              //           minHeight: 5,
+              //           value: progress,
+              //           backgroundColor: AppColors.orangeLight,
+              //           valueColor: const AlwaysStoppedAnimation(
+              //             AppColors.orange,
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
 
-              const SizedBox(width: 12),
-              Text(
-                duration,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.secondaryText,
-                ),
-              ),
-              SizedBox(width: 10.0),
+              // const SizedBox(width: 12),
+              // Text(
+              //   duration,
+              //   style: const TextStyle(
+              //     fontSize: 15,
+              //     fontWeight: FontWeight.w600,
+              //     color: AppColors.secondaryText,
+              //   ),
+              // ),
+              // SizedBox(width: 10.0),
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -135,6 +135,7 @@ class PrayerCard extends StatelessWidget {
                   child: Text(
                     "Read",
                     style: GoogleFonts.notoSerifGeorgian(
+                      fontSize: 16,
                       color: AppColors.primaryText,
                     ),
                   ),
