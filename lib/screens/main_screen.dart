@@ -18,8 +18,8 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _screens = [
     HomeScreen(),
-    PrayersScreen(),
     SutraScreen(),
+    PrayersScreen(),
     SongsScreens(),
     MoreScreens(),
   ];
@@ -50,13 +50,14 @@ class _MainScreenState extends State<MainScreen> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.volunteer_activism_outlined),
-            label: "Prayers",
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.menu_book_outlined),
             label: "Sutra",
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.volunteer_activism_outlined),
+            label: "Prayers",
+          ),
+
           BottomNavigationBarItem(
             icon: Icon(Icons.music_note_outlined),
             label: "Songs",

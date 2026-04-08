@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mct_prayer_book/models/quickItems_model.dart';
@@ -223,90 +224,105 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-
               const SizedBox(height: 22),
-
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.card,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 64,
-                      height: 64,
+              StreamBuilder<DatabaseEvent>(
+                stream: FirebaseDatabase.instance.ref('Events').onValue,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container(
                       decoration: BoxDecoration(
-                        color: AppColors.orange,
-                        borderRadius: BorderRadius.circular(18),
+                        color: AppColors.card,
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: AppColors.border),
                       ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '12',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Text(
-                            'APR',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: const Center(child: Text("There is no events")),
+                    );
+                  }
+
+                  if (!snapshot.hasData ||
+                      snapshot.data?.snapshot.value == null) {
+                    return const Text('No event data found');
+                  }
+
+                  final rawData = snapshot.data!.snapshot.value;
+
+                  if (rawData is! Map) {
+                    return const Text('Invalid data format');
+                  }
+
+                  final programs = Map<String, dynamic>.from(rawData);
+
+                  // Get first child (p1)
+                  final firstProgram = Map<String, dynamic>.from(
+                    programs.values.first as Map,
+                  );
+
+                  return Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.card,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: AppColors.border),
                     ),
-                    const SizedBox(width: 16),
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Vesak Dharma Ceremony',
-                            style: TextStyle(
-                              color: AppColors.primaryText,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 64,
+                          height: 64,
+                          decoration: BoxDecoration(
+                            color: AppColors.orange,
+                            borderRadius: BorderRadius.circular(18),
                           ),
-                          SizedBox(height: 4),
-                          Text(
-                            'Main Temple Hall · 10:00 AM',
-                            style: TextStyle(
-                              color: AppColors.secondaryText,
-                              fontSize: 14,
-                            ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${firstProgram['day'] ?? '--'}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Text(
+                                '${firstProgram['month'] ?? '--'}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                firstProgram['eventName']?.toString() ?? '',
+                                style: const TextStyle(
+                                  color: AppColors.primaryText,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '${firstProgram['templeName'] ?? ''} · ${firstProgram['time'] ?? ''}',
+                                style: const TextStyle(
+                                  color: AppColors.secondaryText,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    // Container(
-                    //   padding: const EdgeInsets.symmetric(
-                    //     horizontal: 16,
-                    //     vertical: 10,
-                    //   ),
-                    //   decoration: BoxDecoration(
-                    //     color: AppColors.orangeLight,
-                    //     borderRadius: BorderRadius.circular(20),
-                    //   ),
-                    //   child: Text(
-                    //     'Join',
-                    //     style: TextStyle(
-                    //       color: AppColors.orangeDark,
-                    //       fontWeight: FontWeight.w600,
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
+                  );
+                },
               ),
             ],
           ),
@@ -315,68 +331,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-//   Widget _buildBottomNav() {
-//     final items = [
-//       Icons.home_outlined,
-//       Icons.volunteer_activism_outlined,
-//       Icons.menu_book_outlined,
-//       Icons.music_note_outlined,
-//       Icons.menu,
-//     ];
-//
-//     final labels = ['Home', 'Prayers', 'Sutras', 'Songs', 'More'];
-//
-//     return Container(
-//       decoration: BoxDecoration(
-//         color: AppColors.bottomNav,
-//         border: Border(top: BorderSide(color: AppColors.border)),
-//       ),
-//       padding: const EdgeInsets.only(top: 10, bottom: 10),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceAround,
-//         children: List.generate(items.length, (index) {
-//           final selected = selectedIndex == index;
-//
-//           return GestureDetector(
-//             onTap: () {
-//               setState(() {
-//                 selectedIndex = index;
-//               });
-//             },
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 Icon(
-//                   items[index],
-//                   color: selected ? AppColors.orange : AppColors.primaryText,
-//                   size: 28,
-//                 ),
-//                 const SizedBox(height: 4),
-//                 Text(
-//                   labels[index],
-//                   style: TextStyle(
-//                     color: selected
-//                         ? AppColors.orange
-//                         : AppColors.secondaryText,
-//                     fontSize: 13,
-//                     fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-//                   ),
-//                 ),
-//                 const SizedBox(height: 6),
-//                 Container(
-//                   width: 6,
-//                   height: 6,
-//                   decoration: BoxDecoration(
-//                     color: selected ? AppColors.orange : Colors.transparent,
-//                     shape: BoxShape.circle,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           );
-//         }),
-//       ),
-//     );
-//   }
-// }

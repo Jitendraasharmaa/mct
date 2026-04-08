@@ -16,7 +16,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: AppColors.appBarColor,
       automaticallyImplyLeading: true,
       leading: showBack
           ? IconButton(

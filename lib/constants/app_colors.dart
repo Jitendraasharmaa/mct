@@ -7,6 +7,7 @@ class AppColors {
   static Color whiteColor = Colors.white;
   static Color textColor = Colors.blueGrey;
   static Color browColor = Colors.brown;
+  static Color appBarColor = Colors.brown;
 
   static const background = Color(0xFFF5F1E8);
   static const primaryText = Color(0xFF2A211B);

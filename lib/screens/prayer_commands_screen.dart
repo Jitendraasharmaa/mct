@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/constants/text_consts.dart';
 import 'package:mct_prayer_book/screens/bid_festival_outing_ceremony_screen.dart';
@@ -27,212 +28,127 @@ class PrayerCommandsScreen extends StatefulWidget {
 }
 
 class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
+  void _openScreen(BuildContext context, int index) {
+    Widget screen;
+    switch (index) {
+      case 0:
+        screen = ComingLeavingPrayer();
+        break;
+      case 1:
+        screen = MorningEveningPrayerCommand();
+        break;
+      case 2:
+        screen = ServingPrasadaScren();
+        break;
+      case 3:
+        screen = PurnimaAmavasyaScreen();
+        break;
+      case 4:
+        screen = BigPurnimaAmavasyaScreen();
+        break;
+      case 5:
+        screen = InitationCeremonyScreen();
+        break;
+      case 6:
+        screen = KhaiPanOpeningClass();
+        break;
+      case 7:
+        screen = SienEnExpressGratitude();
+        break;
+      case 8:
+        screen = HuiSiangTransferMerits();
+        break;
+      case 9:
+        screen = RepentanceCeremony();
+        break;
+      case 10:
+        screen = MakingVowScreen();
+        break;
+      case 11:
+        screen = FestivalCeremonyScreen();
+        break;
+      case 12:
+        screen = BidFestivalOutingCeremonyScreen();
+        break;
+      case 13:
+        screen = NewYearCeremony();
+        break;
+      case 14:
+        screen = SetUpAltarCeremony();
+        break;
+      case 15:
+        screen = HolyWaterCeremony();
+        break;
+      default:
+        return;
+    }
+    Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppbarWidget(title: "Prayer Commands"),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(10, 15, 10, 20),
-        child: GridView.builder(
-          padding: EdgeInsets.zero,
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+        child: ListView.builder(
           itemCount: TextConsts().commandHeading.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-
+          shrinkWrap: true,
           itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                if (index == 0) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ComingLeavingPrayer(),
+            return Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              decoration: BoxDecoration(
+                color: AppColors.card,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: AppColors.orange,
+                      borderRadius: BorderRadius.circular(18),
                     ),
-                  );
-                }
-                if (index == 1) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => MorningEveningPrayerCommand(),
+                    child: Text(
+                      "${index + 1}",
+                      style: GoogleFonts.notoSerifGeorgian(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  );
-                }
-                if (index == 2) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ServingPrasadaScren(),
-                    ),
-                  );
-                }
-                if (index == 3) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => PurnimaAmavasyaScreen(),
-                    ),
-                  );
-                }
-                if (index == 4) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => BigPurnimaAmavasyaScreen(),
-                    ),
-                  );
-                }
-                if (index == 5) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => InitationCeremonyScreen(),
-                    ),
-                  );
-                }
-                if (index == 6) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => KhaiPanOpeningClass(),
-                    ),
-                  );
-                }
-                if (index == 7) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => SienEnExpressGratitude(),
-                    ),
-                  );
-                }
-                if (index == 8) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => HuiSiangTransferMerits(),
-                    ),
-                  );
-                }
-                if (index == 9) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => RepentanceCeremony(),
-                    ),
-                  );
-                }
-                if (index == 10) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => MakingVowScreen(),
-                    ),
-                  );
-                }
-                if (index == 11) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => FestivalCeremonyScreen(),
-                    ),
-                  );
-                }
-                if (index == 12) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => BidFestivalOutingCeremonyScreen(),
-                    ),
-                  );
-                }
-                if (index == 13) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => NewYearCeremony(),
-                    ),
-                  );
-                }
-                if (index == 14) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => SetUpAltarCeremony(),
-                    ),
-                  );
-                }
-                if (index == 15) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => HolyWaterCeremony(),
-                    ),
-                  );
-                }
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: AlignmentGeometry.topCenter,
-                    end: AlignmentGeometry.bottomLeft,
-                    colors: [AppColors.secondaryColor, AppColors.primaryColor],
                   ),
-                  borderRadius: BorderRadius.circular(18),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade300,
-                      blurRadius: 6,
-                      offset: Offset(0, 3),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      TextConsts().commandHeading[index],
+                      style: GoogleFonts.notoSerifGeorgian(
+                        color: AppColors.primaryText,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ],
-                ),
-                child: Stack(
-                  children: [
-                    // Main Card
-                    Container(
-                      // height: 180,
+                  ),
+                  SizedBox(width: 10),
+                  InkWell(
+                    onTap: () => _openScreen(context, index),
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color(0xFFF6D27A), // light yellow
-                            Color(0xFFE99A7A), // light orange
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
+                        color: AppColors.orange.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: const Color(0xFF6B2E1A),
-                          width: 3,
+                          color: AppColors.orange.withOpacity(0.25),
                         ),
                       ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        TextConsts().commandHeading[index],
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
+                      child: Icon(Icons.arrow_forward),
                     ),
-
-                    // Top Left Number Box
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF5B1A0E), // dark brown
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(12),
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "${index + 1}",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },
