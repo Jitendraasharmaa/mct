@@ -3,7 +3,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="mct_prayer_book">
+        android:label="MCT">
 
         <activity
             android:name=".MainActivity"
