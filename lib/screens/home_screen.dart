@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // StreamBuilder will re-listen automatically
     });
   }
+
   int selectedIndex = 0;
 
   final List<QuickAccessItem> quickItems = const [
@@ -160,9 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return const Center(child: Text("No quotes available"));
                     }
                     // Pick one quote based on today's day
-                    final today = DateTime
-                        .now()
-                        .day;
+                    final today = DateTime.now().day;
                     // Example:
                     // day 1 -> index 0
                     // day 2 -> index 1
@@ -183,8 +184,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'DAILY TEACHING',
@@ -215,7 +216,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 "- ${todayQuote["author"] ?? ""}",
                                 style: TextStyle(
-                                    color: Colors.white70, fontSize: 13),
+                                  color: Colors.white70,
+                                  fontSize: 13,
+                                ),
                               ),
                             ],
                           ),
@@ -224,6 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
+
                 // Container(
                 //   width: double.infinity,
                 //   padding: const EdgeInsets.all(22),
@@ -270,7 +274,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 //     ],
                 //   ),
                 // ),
-
                 const SizedBox(height: 28),
 
                 Text(
@@ -354,9 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 22),
                 StreamBuilder<DatabaseEvent>(
-                  stream: FirebaseDatabase.instance
-                      .ref('Events')
-                      .onValue,
+                  stream: FirebaseDatabase.instance.ref('Events').onValue,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Container(
@@ -435,8 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  '${firstProgram['templeName'] ??
-                                      ''} · ${firstProgram['time'] ?? ''}',
+                                  '${firstProgram['templeName'] ?? ''} · ${firstProgram['time'] ?? ''}',
                                   style: const TextStyle(
                                     color: AppColors.secondaryText,
                                     fontSize: 14,
