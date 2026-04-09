@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     'DAILY TEACHING',
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: AppColors.whiteColor,
                                       letterSpacing: 1.5,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w700,
@@ -206,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 todayQuote["quote"] ?? "",
                                 style: GoogleFonts.notoSerifGeorgian(
-                                  color: Colors.white,
+                                  color: AppColors.whiteColor,
                                   fontSize: 24,
                                   height: 1.45,
                                   fontStyle: FontStyle.italic,
@@ -227,55 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
-
-                // Container(
-                //   width: double.infinity,
-                //   padding: const EdgeInsets.all(22),
-                //   decoration: BoxDecoration(
-                //     color: AppColors.orange,
-                //     borderRadius: BorderRadius.circular(28),
-                //   ),
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       Row(
-                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //         children: [
-                //           Text(
-                //             'DAILY TEACHING',
-                //             style: TextStyle(
-                //               color: Colors.white,
-                //               letterSpacing: 1.5,
-                //               fontSize: 14,
-                //               fontWeight: FontWeight.w700,
-                //             ),
-                //           ),
-                //           Icon(
-                //             Icons.auto_stories_outlined,
-                //             color: AppColors.whiteColor,
-                //           ),
-                //         ],
-                //       ),
-                //       SizedBox(height: 16),
-                //       Text(
-                //         '"${todayTeaching.quote}"',
-                //         style: GoogleFonts.notoSerifGeorgian(
-                //           color: Colors.white,
-                //           fontSize: 24,
-                //           height: 1.45,
-                //           fontStyle: FontStyle.italic,
-                //         ),
-                //       ),
-                //       SizedBox(height: 14),
-                //       Text(
-                //         "– ${todayTeaching.author}",
-                //         style: TextStyle(color: Colors.white70, fontSize: 13),
-                //       ),
-                //     ],
-                //   ),
-                // ),
                 const SizedBox(height: 28),
-
                 Text(
                   'QUICK ACCESS',
                   style: TextStyle(
