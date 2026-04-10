@@ -21,8 +21,149 @@ class _EventsScreenState extends State<EventsScreen> {
     AppColors.border,
   ];
 
+  final ScrollController _scrollController = ScrollController();
+
   String searchQuery = '';
   String selectedFilter = 'all';
+
+  int visibleItemCount = 10;
+  int filteredLength = 0;
+  bool isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController.addListener(() async {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 100 &&
+          !isLoadingMore &&
+          visibleItemCount < filteredLength) {
+        setState(() {
+          isLoadingMore = true;
+        });
+
+        await Future.delayed(const Duration(milliseconds: 800));
+
+        if (!mounted) return;
+
+        setState(() {
+          visibleItemCount += 10;
+
+          if (visibleItemCount > filteredLength) {
+            visibleItemCount = filteredLength;
+          }
+
+          isLoadingMore = false;
+        });
+      }
+    });
+  }
+
+  void resetPagination() {
+    visibleItemCount = 10;
+    isLoadingMore = false;
+
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void openFilterSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(24),
+        ),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Filter Events",
+                style: GoogleFonts.notoSerifGeorgian(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryText,
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              ListTile(
+                leading: const Icon(Icons.sort_by_alpha_outlined),
+                title: const Text("All Events"),
+                trailing: selectedFilter == 'all'
+                    ? Icon(Icons.check, color: AppColors.primaryText)
+                    : null,
+                onTap: () {
+                  setState(() {
+                    selectedFilter = 'all';
+                    resetPagination();
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+
+              ListTile(
+                leading: const Icon(Icons.calendar_today_outlined),
+                title: const Text("Sort by Date"),
+                trailing: selectedFilter == 'date'
+                    ? Icon(Icons.check, color: AppColors.primaryText)
+                    : null,
+                onTap: () {
+                  setState(() {
+                    selectedFilter = 'date';
+                    resetPagination();
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+
+              ListTile(
+                leading: const Icon(Icons.access_time_outlined),
+                title: const Text("Sort by Time"),
+                trailing: selectedFilter == 'time'
+                    ? Icon(Icons.check, color: AppColors.primaryText)
+                    : null,
+                onTap: () {
+                  setState(() {
+                    selectedFilter = 'time';
+                    resetPagination();
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+
+              ListTile(
+                leading: const Icon(Icons.location_on_outlined),
+                title: const Text("Sort by Temple Name"),
+                trailing: selectedFilter == 'temple'
+                    ? Icon(Icons.check, color: AppColors.primaryText)
+                    : null,
+                onTap: () {
+                  setState(() {
+                    selectedFilter = 'temple';
+                    resetPagination();
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +175,6 @@ class _EventsScreenState extends State<EventsScreen> {
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: Row(
               children: [
-                // Filter Button
                 Container(
                   height: 56,
                   width: 56,
@@ -44,112 +184,7 @@ class _EventsScreenState extends State<EventsScreen> {
                     border: Border.all(color: AppColors.border),
                   ),
                   child: IconButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(24),
-                          ),
-                        ),
-                        builder: (context) {
-                          return Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Filter Events",
-                                  style: GoogleFonts.notoSerifGeorgian(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.primaryText,
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
-
-                                ListTile(
-                                  leading: const Icon(
-                                    Icons.sort_by_alpha_outlined,
-                                  ),
-                                  title: const Text("All Events"),
-                                  trailing: selectedFilter == 'all'
-                                      ? Icon(
-                                    Icons.check,
-                                    color: AppColors.primaryText,
-                                  )
-                                      : null,
-                                  onTap: () {
-                                    setState(() {
-                                      selectedFilter = 'all';
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                ),
-
-                                ListTile(
-                                  leading: const Icon(
-                                    Icons.calendar_today_outlined,
-                                  ),
-                                  title: const Text("Sort by Date"),
-                                  trailing: selectedFilter == 'date'
-                                      ? Icon(
-                                    Icons.check,
-                                    color: AppColors.primaryText,
-                                  )
-                                      : null,
-                                  onTap: () {
-                                    setState(() {
-                                      selectedFilter = 'date';
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                ),
-
-                                ListTile(
-                                  leading: const Icon(
-                                    Icons.access_time_outlined,
-                                  ),
-                                  title: const Text("Sort by Time"),
-                                  trailing: selectedFilter == 'time'
-                                      ? Icon(
-                                    Icons.check,
-                                    color: AppColors.primaryText,
-                                  )
-                                      : null,
-                                  onTap: () {
-                                    setState(() {
-                                      selectedFilter = 'time';
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                ),
-
-                                ListTile(
-                                  leading: const Icon(
-                                    Icons.location_on_outlined,
-                                  ),
-                                  title: const Text("Sort by Temple Name"),
-                                  trailing: selectedFilter == 'temple'
-                                      ? Icon(
-                                    Icons.check,
-                                    color: AppColors.primaryText,
-                                  )
-                                      : null,
-                                  onTap: () {
-                                    setState(() {
-                                      selectedFilter = 'temple';
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    },
+                    onPressed: openFilterSheet,
                     icon: Icon(
                       Icons.tune_rounded,
                       color: AppColors.primaryText,
@@ -159,12 +194,12 @@ class _EventsScreenState extends State<EventsScreen> {
 
                 const SizedBox(width: 12),
 
-                // Search Field
                 Expanded(
                   child: TextField(
                     onChanged: (value) {
                       setState(() {
                         searchQuery = value.toLowerCase().trim();
+                        resetPagination();
                       });
                     },
                     decoration: InputDecoration(
@@ -183,6 +218,7 @@ class _EventsScreenState extends State<EventsScreen> {
                         onPressed: () {
                           setState(() {
                             searchQuery = '';
+                            resetPagination();
                           });
                         },
                       )
@@ -195,15 +231,11 @@ class _EventsScreenState extends State<EventsScreen> {
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(18),
-                        borderSide: BorderSide(
-                          color: AppColors.border,
-                        ),
+                        borderSide: BorderSide(color: AppColors.border),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(18),
-                        borderSide: BorderSide(
-                          color: AppColors.border,
-                        ),
+                        borderSide: BorderSide(color: AppColors.border),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(18),
@@ -250,7 +282,7 @@ class _EventsScreenState extends State<EventsScreen> {
                 }
 
                 if (!snapshot.hasData ||
-                    snapshot.data!.snapshot.value == null) {
+                    snapshot.data?.snapshot.value == null) {
                   return const Center(
                     child: Text(
                       'No event data found',
@@ -271,9 +303,9 @@ class _EventsScreenState extends State<EventsScreen> {
                 }
 
                 final Map<dynamic, dynamic> data = rawData;
-                List<Map<String, dynamic>> events = [];
+                final List<Map<String, dynamic>> events = [];
 
-                // Traverse the nested firebase structure
+                // Traverse nested Firebase structure
                 data.forEach((yearKey, yearValue) {
                   if (yearValue is Map) {
                     yearValue.forEach((monthKey, monthValue) {
@@ -294,7 +326,7 @@ class _EventsScreenState extends State<EventsScreen> {
                   }
                 });
 
-                // Search filter
+                // Search
                 List<Map<String, dynamic>> filteredEvents =
                 events.where((event) {
                   final eventName =
@@ -312,25 +344,37 @@ class _EventsScreenState extends State<EventsScreen> {
                       time.contains(searchQuery);
                 }).toList();
 
-                // Apply sorting/filter option
-                if (selectedFilter == 'date') {
-                  filteredEvents.sort((a, b) {
-                    final aDate = a['date']?.toString() ?? '';
-                    final bDate = b['date']?.toString() ?? '';
-                    return aDate.compareTo(bDate);
-                  });
-                } else if (selectedFilter == 'time') {
-                  filteredEvents.sort((a, b) {
-                    final aTime = a['time']?.toString() ?? '';
-                    final bTime = b['time']?.toString() ?? '';
-                    return aTime.compareTo(bTime);
-                  });
-                } else if (selectedFilter == 'temple') {
-                  filteredEvents.sort((a, b) {
-                    final aTemple = a['templeName']?.toString() ?? '';
-                    final bTemple = b['templeName']?.toString() ?? '';
-                    return aTemple.compareTo(bTemple);
-                  });
+                // Sorting
+                switch (selectedFilter) {
+                  case 'date':
+                    filteredEvents.sort((a, b) {
+                      final aDate = a['date']?.toString() ?? '';
+                      final bDate = b['date']?.toString() ?? '';
+                      return aDate.compareTo(bDate);
+                    });
+                    break;
+
+                  case 'time':
+                    filteredEvents.sort((a, b) {
+                      final aTime = a['time']?.toString() ?? '';
+                      final bTime = b['time']?.toString() ?? '';
+                      return aTime.compareTo(bTime);
+                    });
+                    break;
+
+                  case 'temple':
+                    filteredEvents.sort((a, b) {
+                      final aTemple = a['templeName']?.toString() ?? '';
+                      final bTemple = b['templeName']?.toString() ?? '';
+                      return aTemple.compareTo(bTemple);
+                    });
+                    break;
+                }
+
+                filteredLength = filteredEvents.length;
+
+                if (visibleItemCount > filteredLength) {
+                  visibleItemCount = filteredLength;
                 }
 
                 if (filteredEvents.isEmpty) {
@@ -348,10 +392,25 @@ class _EventsScreenState extends State<EventsScreen> {
                 }
 
                 return ListView.separated(
+                  controller: _scrollController,
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
-                  itemCount: filteredEvents.length,
+                  itemCount: visibleItemCount +
+                      (visibleItemCount < filteredLength ? 1 : 0),
                   separatorBuilder: (_, __) => const SizedBox(height: 14),
                   itemBuilder: (context, index) {
+                    // Pagination Loader
+                    if (index == visibleItemCount) {
+                      return Visibility(
+                        visible: isLoadingMore,
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 20),
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                      );
+                    }
+
                     final event = filteredEvents[index];
                     final cardColor = cardColors[index % cardColors.length];
 
@@ -379,6 +438,7 @@ class _EventsScreenState extends State<EventsScreen> {
                               ),
                             ),
                           ),
+
                           Container(
                             width: 1.5,
                             margin:
@@ -388,6 +448,7 @@ class _EventsScreenState extends State<EventsScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
+
                           Expanded(
                             child: Container(
                               padding: const EdgeInsets.all(16),
@@ -420,6 +481,7 @@ class _EventsScreenState extends State<EventsScreen> {
                                       color: AppColors.greenColor,
                                     ),
                                   ),
+
                                   const SizedBox(height: 10),
 
                                   Row(
