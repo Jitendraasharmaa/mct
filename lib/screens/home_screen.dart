@@ -31,15 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  int selectedIndex = 0;
-
-  final List<QuickAccessItem> quickItems = const [
-    QuickAccessItem(icon: '🙏', title: 'Prayers', subtitle: '16 available'),
-    QuickAccessItem(icon: '📜', title: 'Sutras', subtitle: '4 available'),
-    QuickAccessItem(icon: '🎵', title: 'Holy Songs', subtitle: '0 available'),
-    QuickAccessItem(icon: '📣', title: 'Events', subtitle: '0 upcoming'),
-  ];
-
   String getGreeting() {
     final now = DateTime.now().toUtc().add(
       const Duration(hours: 5, minutes: 30),
@@ -236,72 +227,110 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 18),
-                GridView.builder(
-                  itemCount: quickItems.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 1.18,
-                  ),
-                  itemBuilder: (context, index) {
-                    final item = quickItems[index];
-                    return GestureDetector(
-                      onTap: () => _openScreen(context, index),
-                      // onTap: () {
-                      //   if (index == 0) {
-                      //     Navigator.of(context).push(
-                      //       MaterialPageRoute(
-                      //         builder: (context) => PrayerCommandsScreen(),
-                      //       ),
-                      //     );
-                      //   }
-                      // },
-                      child: Container(
-                        padding: const EdgeInsets.all(18),
-                        decoration: BoxDecoration(
-                          color: AppColors.card,
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(color: AppColors.border),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 54,
-                              height: 54,
-                              decoration: BoxDecoration(
-                                color: AppColors.background,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                item.icon,
-                                style: const TextStyle(fontSize: 28),
-                              ),
-                            ),
-                            const Spacer(),
-                            Text(
-                              item.title,
-                              style: GoogleFonts.notoSerifGeorgian(
-                                color: AppColors.primaryText,
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              item.subtitle,
-                              style: TextStyle(
-                                color: AppColors.secondaryText,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
+                StreamBuilder<DatabaseEvent>(
+                  stream: FirebaseDatabase.instance
+                      .ref('allevents/year/month')
+                      .onValue,
+                  builder: (context, snapshot) {
+                    int eventTotalLength = 0;
+                    if (snapshot.hasData &&
+                        snapshot.data!.snapshot.value != null) {
+                      final data = Map<String, dynamic>.from(
+                        snapshot.data!.snapshot.value as Map,
+                      );
+
+                      data.forEach((monthName, monthData) {
+                        if (monthData is Map) {
+                          eventTotalLength += monthData.keys
+                              .where((key) => key.toString().startsWith('e'))
+                              .length;
+                        }
+                      });
+                    }
+                    final updatedQuickItems = [
+                      QuickAccessItem(
+                        icon: '🙏',
+                        title: 'Prayers',
+                        subtitle: '16 available',
                       ),
+                      QuickAccessItem(
+                        icon: '📜',
+                        title: 'Sutras',
+                        subtitle: '4 available',
+                      ),
+                      QuickAccessItem(
+                        icon: '🎵',
+                        title: 'Holy Songs',
+                        subtitle: '0 available',
+                      ),
+                      QuickAccessItem(
+                        icon: '📣',
+                        title: 'Events',
+                        subtitle: '$eventTotalLength available',
+                      ),
+                    ];
+
+                    return GridView.builder(
+                      itemCount: updatedQuickItems.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 1.18,
+                          ),
+                      itemBuilder: (context, index) {
+                        final item = updatedQuickItems[index];
+
+                        return GestureDetector(
+                          onTap: () => _openScreen(context, index),
+                          child: Container(
+                            padding: const EdgeInsets.all(18),
+                            decoration: BoxDecoration(
+                              color: AppColors.card,
+                              borderRadius: BorderRadius.circular(24),
+                              border: Border.all(color: AppColors.border),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 54,
+                                  height: 54,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.background,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    item.icon,
+                                    style: const TextStyle(fontSize: 28),
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  item.title,
+                                  style: GoogleFonts.notoSerifGeorgian(
+                                    color: AppColors.primaryText,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  item.subtitle,
+                                  style: const TextStyle(
+                                    color: AppColors.secondaryText,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
