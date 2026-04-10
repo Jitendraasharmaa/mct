@@ -13,6 +13,12 @@ class AppColors {
   static const primaryText = Color(0xFF2A211B);
   static const secondaryText = Color(0xFF8B8177);
 
+  static const greenColor = Color(0xFF2FA084);
+  static const pinkColor = Color(0xFFCA5995);
+  static const lightPink = Color(0xFFFFE5E5);
+  static const lightYellow = Color(0xFFE8F5E9);
+  static const lightGreen = Color(0xFFBABF94);
+
   static const orange = Color(0xFFE58A2F);
   static const orangeDark = Color(0xFFD8791E);
   static const orangeLight = Color(0xFFFBE7D3);

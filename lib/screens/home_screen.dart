@@ -118,7 +118,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-
                 Row(
                   children: [
                     Expanded(
@@ -133,7 +132,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
                 StreamBuilder<DatabaseEvent>(
                   stream: FirebaseDatabase.instance
                       .ref("dailyTeachings")
