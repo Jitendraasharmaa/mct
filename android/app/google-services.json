@@ -1,14 +1,13 @@
 {
   "project_info": {
-    "project_number": "421331551496",
-    "firebase_url": "https://mct-app-5698e-default-rtdb.firebaseio.com",
-    "project_id": "mct-app-5698e",
-    "storage_bucket": "mct-app-5698e.firebasestorage.app"
+    "project_number": "631680147171",
+    "project_id": "mct-app-5bc26",
+    "storage_bucket": "mct-app-5bc26.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:421331551496:android:e521d6acf54ccbd11dd8bd",
+        "mobilesdk_app_id": "1:631680147171:android:94e65b9293d946ad46afd6",
         "android_client_info": {
           "package_name": "com.mct_prayer_book"
         }
@@ -16,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyArWOrN8iV0UyVG6_y3t2BOQQFdDmU8H5s"
+          "current_key": "AIzaSyB8a4AIPgh9g6wBunRBghpr-a897WaWv0I"
         }
       ],
       "services": {

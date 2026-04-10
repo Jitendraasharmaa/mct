@@ -41,53 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAWELNOroUEDJkP0kQFbUqzgCOcViddDFI',
-    appId: '1:421331551496:web:ac0240a0504df7f81dd8bd',
-    messagingSenderId: '421331551496',
-    projectId: 'mct-app-5698e',
-    authDomain: 'mct-app-5698e.firebaseapp.com',
-    databaseURL: 'https://mct-app-5698e-default-rtdb.firebaseio.com',
-    storageBucket: 'mct-app-5698e.firebasestorage.app',
-    measurementId: 'G-KBDDHVJ1K6',
+    apiKey: 'AIzaSyCrRZScnRKPPh9vIj3w9dgRQvzimIdLqnA',
+    appId: '1:631680147171:web:7598208a6026161746afd6',
+    messagingSenderId: '631680147171',
+    projectId: 'mct-app-5bc26',
+    authDomain: 'mct-app-5bc26.firebaseapp.com',
+    storageBucket: 'mct-app-5bc26.firebasestorage.app',
+    measurementId: 'G-MELREF816S',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyArWOrN8iV0UyVG6_y3t2BOQQFdDmU8H5s',
-    appId: '1:421331551496:android:e521d6acf54ccbd11dd8bd',
-    messagingSenderId: '421331551496',
-    projectId: 'mct-app-5698e',
-    databaseURL: 'https://mct-app-5698e-default-rtdb.firebaseio.com',
-    storageBucket: 'mct-app-5698e.firebasestorage.app',
+    apiKey: 'AIzaSyB8a4AIPgh9g6wBunRBghpr-a897WaWv0I',
+    appId: '1:631680147171:android:94e65b9293d946ad46afd6',
+    messagingSenderId: '631680147171',
+    projectId: 'mct-app-5bc26',
+    storageBucket: 'mct-app-5bc26.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCqE8WRpQWEKQajsmNUw1GRNjkVQnkSWTU',
-    appId: '1:421331551496:ios:85e2f1eced6c8fa61dd8bd',
-    messagingSenderId: '421331551496',
-    projectId: 'mct-app-5698e',
-    databaseURL: 'https://mct-app-5698e-default-rtdb.firebaseio.com',
-    storageBucket: 'mct-app-5698e.firebasestorage.app',
+    apiKey: 'AIzaSyAmQ7EVPmWLoHrMQUjylBC0T8ftm1wnF_Y',
+    appId: '1:631680147171:ios:a308bcc524c7f13246afd6',
+    messagingSenderId: '631680147171',
+    projectId: 'mct-app-5bc26',
+    storageBucket: 'mct-app-5bc26.firebasestorage.app',
     iosBundleId: 'com.example.mctPrayerBook',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCqE8WRpQWEKQajsmNUw1GRNjkVQnkSWTU',
-    appId: '1:421331551496:ios:85e2f1eced6c8fa61dd8bd',
-    messagingSenderId: '421331551496',
-    projectId: 'mct-app-5698e',
-    databaseURL: 'https://mct-app-5698e-default-rtdb.firebaseio.com',
-    storageBucket: 'mct-app-5698e.firebasestorage.app',
+    apiKey: 'AIzaSyAmQ7EVPmWLoHrMQUjylBC0T8ftm1wnF_Y',
+    appId: '1:631680147171:ios:a308bcc524c7f13246afd6',
+    messagingSenderId: '631680147171',
+    projectId: 'mct-app-5bc26',
+    storageBucket: 'mct-app-5bc26.firebasestorage.app',
     iosBundleId: 'com.example.mctPrayerBook',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAWELNOroUEDJkP0kQFbUqzgCOcViddDFI',
-    appId: '1:421331551496:web:c42182ae5ad700ab1dd8bd',
-    messagingSenderId: '421331551496',
-    projectId: 'mct-app-5698e',
-    authDomain: 'mct-app-5698e.firebaseapp.com',
-    databaseURL: 'https://mct-app-5698e-default-rtdb.firebaseio.com',
-    storageBucket: 'mct-app-5698e.firebasestorage.app',
-    measurementId: 'G-FLXMJWMW8R',
+    apiKey: 'AIzaSyCrRZScnRKPPh9vIj3w9dgRQvzimIdLqnA',
+    appId: '1:631680147171:web:1ac6165e028bd54d46afd6',
+    messagingSenderId: '631680147171',
+    projectId: 'mct-app-5bc26',
+    authDomain: 'mct-app-5bc26.firebaseapp.com',
+    storageBucket: 'mct-app-5bc26.firebasestorage.app',
+    measurementId: 'G-QZMQNPBD48',
   );
+
 }
