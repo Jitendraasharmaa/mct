@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/screens/more_screens.dart';
 import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
 import 'package:mct_prayer_book/screens/songs_screens.dart';
@@ -17,6 +16,9 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     final items = [
       Icons.home_outlined,
       Icons.volunteer_activism_outlined,
@@ -29,8 +31,19 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.bottomNav,
-        border: Border(top: BorderSide(color: AppColors.border)),
+        color: theme.cardColor,
+        border: Border(
+          top: BorderSide(
+            color: theme.dividerColor,
+          ),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(isDark ? 0.18 : 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
+        ],
       ),
       padding: const EdgeInsets.only(top: 10, bottom: 10),
       child: Row(
@@ -43,7 +56,9 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
               setState(() {
                 selectedIndex = index;
               });
+
               if (index == 0) return;
+
               Widget page;
               switch (index) {
                 case 1:
@@ -62,37 +77,60 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
                   page = const SizedBox.shrink();
               }
 
-              Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => page),
+              );
             },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  items[index],
-                  size: 28,
-                  color: selected ? AppColors.orange : AppColors.primaryText,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  labels[index],
-                  style: TextStyle(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: selected
+                    ? theme.colorScheme.primary.withOpacity(
+                  isDark ? 0.20 : 0.10,
+                )
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    items[index],
+                    size: selected ? 30 : 28,
                     color: selected
-                        ? AppColors.orange
-                        : AppColors.secondaryText,
-                    fontSize: 13,
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                        ? theme.colorScheme.primary
+                        : theme.textTheme.bodyMedium?.color,
                   ),
-                ),
-                const SizedBox(height: 6),
-                Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: selected ? AppColors.orange : Colors.transparent,
+                  const SizedBox(height: 4),
+                  Text(
+                    labels[index],
+                    style: TextStyle(
+                      color: selected
+                          ? theme.colorScheme.primary
+                          : theme.textTheme.bodyMedium?.color,
+                      fontSize: 13,
+                      fontWeight: selected
+                          ? FontWeight.w600
+                          : FontWeight.w500,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 6),
+
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: selected
+                          ? theme.colorScheme.primary
+                          : Colors.transparent,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         }),

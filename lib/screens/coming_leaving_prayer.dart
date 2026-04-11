@@ -10,8 +10,12 @@ class ComingLeavingPrayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppbarWidget(title: "Coming/Leaving Prayer"),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: const AppbarWidget(title: "Coming/Leaving Prayer"),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -20,20 +24,21 @@ class ComingLeavingPrayer extends StatelessWidget {
               // ---------------- Main table block ----------------
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: theme.cardColor,
                   borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: theme.dividerColor),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 2,
+                      color: Colors.black.withOpacity(isDark ? 0.20 : 0.10),
+                      blurRadius: 4,
                       spreadRadius: 0,
                       offset: const Offset(0, 2),
                     ),
                   ],
                 ),
                 padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: const [
+                child: const Column(
+                  children: [
                     // Top headings
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,7 +47,6 @@ class ComingLeavingPrayer extends StatelessWidget {
                         LeftCommandHeadingWidget(text: "Sia Ce-Li"),
                       ],
                     ),
-
                     SizedBox(height: 10),
 
                     // Sub heading
@@ -118,42 +122,54 @@ class ComingLeavingPrayer extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _title("If Tien Chuan Se (Master) is Present"),
+                  _title(context, "If Tien Chuan Se (Master) is Present"),
 
                   _infoBlock(
+                    context,
                     "You need to stand and kneel one more time to make a bow for Master.\n\n"
-                        "Chi, Cuo Yi, (Tien Chuan Se Yi Sia), "
-                        "(Ke Wei) Tien Chuan Se (Chan Cia) (Che Cia)   Yi Khou Sou\n\n"
+                    "Chi, Cuo Yi, (Tien Chuan Se Yi Sia), "
+                    "(Ke Wei) Tien Chuan Se (Chan Cia) (Che Cia)   Yi Khou Sou\n\n"
                     "Chi, Cuo Yi, (Chan Cia) (Che Cia)\n"
                     "Li Pi, Chuei Shou, Ci Kong, Thuei",
                   ),
 
                   const SizedBox(height: 24),
 
-                  _title("Thing to know"),
+                  _title(context, "Thing to know"),
 
                   _infoBlock(
+                    context,
                     "Chien Jen Ta Cong : All Tao Members who are present.\n\n"
                     "Because the prayer is bowing to us, we also humbly bow back.",
                   ),
 
                   const SizedBox(height: 24),
-                  _title("Meaning of Chinese Terms"),
-                  _twoCol("Cuo Yi", "Bow"),
-                  _twoCol("Kui", "Kneel"),
-                  _twoCol("Chi", "Stand"),
-                  _twoCol("Chui Shou", "Hands Down"),
-                  _twoCol("Ci Kong", "Bow"),
-                  _twoCol("Thui", "Move Behind"),
+
+                  _title(context, "Meaning of Chinese Terms"),
+
+                  _twoCol(context, "Cuo Yi", "Bow"),
+                  _twoCol(context, "Kui", "Kneel"),
+                  _twoCol(context, "Chi", "Stand"),
+                  _twoCol(context, "Chui Shou", "Hands Down"),
+                  _twoCol(context, "Ci Kong", "Bow"),
+                  _twoCol(context, "Thui", "Move Behind"),
 
                   const SizedBox(height: 24),
-                  _title("Coming / Leaving Commands"),
-                  _twoCol("If you're leaving, say", "Che Cia"),
-                  _twoCol("If you are in Temple and TCS arrived:",
-                      "Cie Cia → Song Cia"),
-                  _twoCol("TCS leaving but you are staying back", "Song Cia"),
-                  _twoCol("If you're coming, say", "Chan Cia"),
 
+                  _title(context, "Coming / Leaving Commands"),
+
+                  _twoCol(context, "If you're leaving, say", "Che Cia"),
+                  _twoCol(
+                    context,
+                    "If you are in Temple and TCS arrived:",
+                    "Cie Cia → Song Cia",
+                  ),
+                  _twoCol(
+                    context,
+                    "TCS leaving but you are staying back",
+                    "Song Cia",
+                  ),
+                  _twoCol(context, "If you're coming, say", "Chan Cia"),
                 ],
               ),
             ],
@@ -166,44 +182,78 @@ class ComingLeavingPrayer extends StatelessWidget {
 
 // ------------------------------------------------------------
 
-Widget _title(String text) {
+Widget _title(BuildContext context, String text) {
+  final theme = Theme.of(context);
+
   return Padding(
     padding: const EdgeInsets.only(bottom: 10),
     child: Text(
       text,
-      style: const TextStyle(fontSize: 16.5, fontWeight: FontWeight.w600),
+      style: TextStyle(
+        fontSize: 16.5,
+        fontWeight: FontWeight.w600,
+        color: theme.colorScheme.onSurface,
+      ),
     ),
   );
 }
 
-Widget _infoBlock(String text) {
+Widget _infoBlock(BuildContext context, String text) {
+  final theme = Theme.of(context);
+  final isDark = theme.brightness == Brightness.dark;
+
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.all(14),
     decoration: BoxDecoration(
-      color: Colors.grey.shade100,
+      color: isDark ? theme.cardColor : Colors.grey.shade100,
       borderRadius: BorderRadius.circular(14),
-      border: Border.all(color: Colors.grey.shade300),
+      border: Border.all(color: theme.dividerColor),
     ),
-    child: Text(text, style: const TextStyle(height: 1.45, fontSize: 14.5)),
+    child: Text(
+      text,
+      style: TextStyle(
+        height: 1.45,
+        fontSize: 14.5,
+        color: theme.colorScheme.onSurface,
+      ),
+    ),
   );
 }
 
-Widget _twoCol(String left, String right) {
+Widget _twoCol(BuildContext context, String left, String right) {
+  final theme = Theme.of(context);
+  final isDark = theme.brightness == Brightness.dark;
+
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 6),
     child: Row(
       children: [
-        Expanded(child: Text(left, style: const TextStyle(fontSize: 14.5))),
+        Expanded(
+          child: Text(
+            left,
+            style: TextStyle(
+              fontSize: 14.5,
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+        ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
           decoration: BoxDecoration(
+            color: isDark
+                ? theme.colorScheme.primary.withOpacity(0.12)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.shade400),
+            border: Border.all(color: theme.dividerColor),
           ),
           child: Text(
             right,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              color: theme.colorScheme.onSurface,
+            ),
           ),
         ),
       ],

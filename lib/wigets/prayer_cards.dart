@@ -25,12 +25,22 @@ class PrayerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
-      padding: const EdgeInsets.all(18),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: theme.dividerColor),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(isDark ? 0.18 : 0.06),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,18 +54,18 @@ class PrayerCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.primaryText,
+                        color: theme.textTheme.labelLarge?.color,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: AppColors.secondaryText,
+                        color: theme.textTheme.bodyMedium?.color,
                       ),
                     ),
                   ],
@@ -74,7 +84,7 @@ class PrayerCard extends StatelessWidget {
             style: GoogleFonts.notoSerifGeorgian(
               fontSize: 17,
               height: 1.6,
-              color: AppColors.primaryText.withOpacity(0.75),
+              color: theme.textTheme.bodyMedium?.color,
               fontStyle: FontStyle.italic,
             ),
           ),
@@ -136,7 +146,7 @@ class PrayerCard extends StatelessWidget {
                     "Read",
                     style: GoogleFonts.notoSerifGeorgian(
                       fontSize: 16,
-                      color: AppColors.primaryText,
+                      color: theme.textTheme.labelLarge?.color,
                     ),
                   ),
                 ),

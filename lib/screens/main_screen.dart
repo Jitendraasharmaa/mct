@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/screens/home_screen.dart';
 import 'package:mct_prayer_book/screens/more_screens.dart';
 import 'package:mct_prayer_book/screens/prayers_screen.dart';
@@ -71,7 +70,11 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: isConnectedInternet
           ? _screens[_selectedIndex]
           : Center(
@@ -79,7 +82,7 @@ class _MainScreenState extends State<MainScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
-                backgroundColor: Colors.white,
+                backgroundColor: theme.cardColor,
                 elevation: 12,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 24,
@@ -92,23 +95,27 @@ class _MainScreenState extends State<MainScreen> {
                       height: 70,
                       width: 70,
                       decoration: BoxDecoration(
-                        color: Colors.red.shade50,
+                        color: isDark
+                            ? Colors.red.withOpacity(0.15)
+                            : Colors.red.shade50,
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
                         Icons.wifi_off_rounded,
                         size: 38,
-                        color: Colors.red.shade400,
+                        color: isDark
+                            ? Colors.red.shade300
+                            : Colors.red.shade400,
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
+                    Text(
                       "No Internet Connection",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -117,7 +124,7 @@ class _MainScreenState extends State<MainScreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey.shade600,
+                        color: theme.textTheme.bodyMedium?.color,
                         height: 1.5,
                       ),
                     ),
@@ -129,7 +136,7 @@ class _MainScreenState extends State<MainScreen> {
                           setState(() {});
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red.shade400,
+                          backgroundColor: theme.colorScheme.primary,
                           foregroundColor: Colors.white,
                           elevation: 0,
                           padding: const EdgeInsets.symmetric(vertical: 14),
@@ -152,31 +159,37 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
       bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: AppColors.primaryText,
-        showUnselectedLabels: true,
-        selectedItemColor: AppColors.orangeDark,
-        unselectedIconTheme: IconThemeData(size: 25),
-        selectedIconTheme: IconThemeData(size: 30),
-        selectedFontSize: 15,
-        backgroundColor: AppColors.primaryColor,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: theme.cardColor,
+        elevation: 8,
+        selectedItemColor: theme.colorScheme.primary,
+        unselectedItemColor: theme.textTheme.bodyMedium?.color,
+        showUnselectedLabels: true,
+        selectedFontSize: 15,
+        unselectedFontSize: 13,
+        selectedIconTheme: const IconThemeData(size: 30),
+        unselectedIconTheme: const IconThemeData(size: 25),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
             label: "Home",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book_outlined),
+            activeIcon: Icon(Icons.menu_book),
             label: "Sutra",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.volunteer_activism_outlined),
+            activeIcon: Icon(Icons.volunteer_activism),
             label: "Prayers",
           ),
-
           BottomNavigationBarItem(
             icon: Icon(Icons.music_note_outlined),
+            activeIcon: Icon(Icons.music_note),
             label: "Songs",
           ),
           BottomNavigationBarItem(icon: Icon(Icons.menu), label: "More"),

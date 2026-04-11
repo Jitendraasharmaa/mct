@@ -9,9 +9,11 @@ import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
 import 'package:mct_prayer_book/screens/songs_screens.dart';
 import 'package:mct_prayer_book/screens/sutra_screen.dart';
 import 'package:mct_prayer_book/wigets/loading_cards_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/app_colors.dart';
 import '../models/daily_quote.dart';
+import '../providers/theme_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -79,160 +81,233 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final todayTeaching = getTodayTeaching();
+    final themeProvider = context.watch<ThemeProvider>();
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return SafeArea(
       child: Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
         body: RefreshIndicator(
+          color: theme.colorScheme.primary,
           onRefresh: _refreshScreen,
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(22, 18, 22, 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'NAMASTE · ${getGreeting()}',
-                  style: TextStyle(
-                    color: AppColors.secondaryText,
-                    fontSize: 15,
-                    letterSpacing: 1.2,
-                    fontWeight: FontWeight.w500,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      getGreeting(),
+                      style: TextStyle(
+                        color: theme.textTheme.bodyMedium?.color,
+                        fontSize: 15,
+                        letterSpacing: 1.2,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.light_mode,
+                          color: !isDark
+                              ? theme.colorScheme.primary
+                              : theme.textTheme.bodyMedium?.color,
+                        ),
+                        Switch(
+                          value: themeProvider.isDarkMode,
+                          onChanged: (value) {
+                            context.read<ThemeProvider>().toggleTheme(value);
+                          },
+                        ),
+                        Icon(
+                          Icons.dark_mode,
+                          color: isDark
+                              ? theme.colorScheme.primary
+                              : theme.textTheme.bodyMedium?.color,
+                        ),
+                        const SizedBox(width: 12),
+                      ],
+                    ),
+                  ],
                 ),
+
                 const SizedBox(height: 10),
+
                 Text(
                   'Maitreya\nCharitable Trust',
                   style: GoogleFonts.notoSerifGeorgian(
-                    color: AppColors.primaryText,
+                    color: theme.colorScheme.onSurface,
                     fontSize: 38,
                     height: 1.1,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
+
                 const SizedBox(height: 24),
+
                 Row(
                   children: [
                     Expanded(
-                      child: Container(height: 1, color: AppColors.border),
+                      child: Container(height: 1, color: theme.dividerColor),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: Icon(Icons.star, size: 24, color: AppColors.gold),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Icon(
+                        Icons.star,
+                        size: 24,
+                        color: theme.colorScheme.secondary,
+                      ),
                     ),
                     Expanded(
-                      child: Container(height: 1, color: AppColors.border),
+                      child: Container(height: 1, color: theme.dividerColor),
                     ),
                   ],
                 ),
+
                 StreamBuilder<DatabaseEvent>(
                   stream: FirebaseDatabase.instance
                       .ref("dailyTeachings")
                       .onValue,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return LoadingCard();
+                      return Container(
+                        margin: const EdgeInsets.only(top: 15, bottom: 10),
+                        decoration: BoxDecoration(
+                          color: theme.cardColor,
+                          borderRadius: BorderRadius.circular(28),
+                          border: Border.all(color: theme.dividerColor),
+                        ),
+                        child: const LoadingCard(),
+                      );
                     }
 
                     if (!snapshot.hasData ||
                         snapshot.data!.snapshot.value == null) {
-                      return const Center(child: Text("No quote found"));
+                      return Center(
+                        child: Text(
+                          "No quote found",
+                          style: TextStyle(
+                            color: theme.textTheme.bodyMedium?.color,
+                          ),
+                        ),
+                      );
                     }
 
                     final rawData = snapshot.data!.snapshot.value;
 
                     if (rawData is! Map) {
-                      return const Center(child: Text("Invalid data format"));
+                      return Center(
+                        child: Text(
+                          "Invalid data format",
+                          style: TextStyle(
+                            color: theme.textTheme.bodyMedium?.color,
+                          ),
+                        ),
+                      );
                     }
+
                     final data = Map<String, dynamic>.from(rawData);
-                    // Convert all daily teachings into a list
+
                     final quotes = data.entries.map((entry) {
                       return Map<String, dynamic>.from(entry.value);
                     }).toList();
 
                     if (quotes.isEmpty) {
-                      return const Center(child: Text("No quotes available"));
+                      return Center(
+                        child: Text(
+                          "No quotes available",
+                          style: TextStyle(
+                            color: theme.textTheme.bodyMedium?.color,
+                          ),
+                        ),
+                      );
                     }
-                    // Pick one quote based on today's day
+
                     final today = DateTime.now().day;
-                    // Example:
-                    // day 1 -> index 0
-                    // day 2 -> index 1
-                    // repeats automatically if more days than quotes
                     final index = (today - 1) % quotes.length;
                     final todayQuote = quotes[index];
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(22),
-                          decoration: BoxDecoration(
-                            color: AppColors.orange,
-                            borderRadius: BorderRadius.circular(28),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                    return Container(
+                      margin: const EdgeInsets.only(top: 15, bottom: 10),
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(22),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primary,
+                        borderRadius: BorderRadius.circular(28),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'DAILY TEACHING',
-                                    style: TextStyle(
-                                      color: AppColors.whiteColor,
-                                      letterSpacing: 1.5,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.auto_stories_outlined,
-                                    color: AppColors.whiteColor,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 16),
                               Text(
-                                todayQuote["quote"] ?? "",
-                                style: GoogleFonts.notoSerifGeorgian(
-                                  color: AppColors.whiteColor,
-                                  fontSize: 24,
-                                  height: 1.45,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                              SizedBox(height: 14),
-                              Text(
-                                "- ${todayQuote["author"] ?? ""}",
+                                'DAILY TEACHING',
                                 style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 13,
+                                  color: Colors.white,
+                                  letterSpacing: 1.5,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
                                 ),
+                              ),
+                              const Icon(
+                                Icons.auto_stories_outlined,
+                                color: Colors.white,
                               ),
                             ],
                           ),
-                        ),
+
+                          const SizedBox(height: 16),
+
+                          Text(
+                            todayQuote["quote"] ?? "",
+                            style: GoogleFonts.notoSerifGeorgian(
+                              color: Colors.white,
+                              fontSize: 24,
+                              height: 1.45,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+
+                          const SizedBox(height: 14),
+
+                          Text(
+                            "- ${todayQuote["author"] ?? ""}",
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
                 ),
-                const SizedBox(height: 28),
+
+                const SizedBox(height: 10),
+
                 Text(
                   'QUICK ACCESS',
                   style: TextStyle(
-                    color: AppColors.secondaryText,
+                    color: theme.textTheme.bodyMedium?.color,
                     fontSize: 15,
                     letterSpacing: 1.5,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 18),
+
+                const SizedBox(height: 10),
+
                 StreamBuilder<DatabaseEvent>(
                   stream: FirebaseDatabase.instance
                       .ref('allevents/year/month')
                       .onValue,
                   builder: (context, snapshot) {
                     int eventTotalLength = 0;
+
                     if (snapshot.hasData &&
                         snapshot.data!.snapshot.value != null) {
                       final data = Map<String, dynamic>.from(
@@ -247,6 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                       });
                     }
+
                     final updatedQuickItems = [
                       QuickAccessItem(
                         icon: '🙏',
@@ -289,9 +365,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(18),
                             decoration: BoxDecoration(
-                              color: AppColors.card,
+                              color: theme.cardColor,
                               borderRadius: BorderRadius.circular(24),
-                              border: Border.all(color: AppColors.border),
+                              border: Border.all(color: theme.dividerColor),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -300,7 +376,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width: 54,
                                   height: 54,
                                   decoration: BoxDecoration(
-                                    color: AppColors.background,
+                                    color: isDark
+                                        ? theme.colorScheme.surface
+                                        : AppColors.lightBackground,
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   alignment: Alignment.center,
@@ -309,20 +387,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: const TextStyle(fontSize: 28),
                                   ),
                                 ),
+
                                 const Spacer(),
+
                                 Text(
                                   item.title,
                                   style: GoogleFonts.notoSerifGeorgian(
-                                    color: AppColors.primaryText,
+                                    color: theme.colorScheme.onSurface,
                                     fontSize: 17,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
+
                                 const SizedBox(height: 4),
+
                                 Text(
                                   item.subtitle,
-                                  style: const TextStyle(
-                                    color: AppColors.secondaryText,
+                                  style: TextStyle(
+                                    color: theme.textTheme.bodyMedium?.color,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -334,30 +416,46 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
+
                 const SizedBox(height: 22),
+
                 StreamBuilder<DatabaseEvent>(
                   stream: FirebaseDatabase.instance.ref('Events').onValue,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Container(
                         decoration: BoxDecoration(
-                          color: AppColors.card,
+                          color: theme.cardColor,
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: theme.dividerColor),
                         ),
-                        child: LoadingCard(),
+                        child: const LoadingCard(),
                       );
                     }
+
                     if (!snapshot.hasData ||
                         snapshot.data?.snapshot.value == null) {
-                      return const Text('No event data found');
+                      return Text(
+                        'No event data found',
+                        style: TextStyle(
+                          color: theme.textTheme.bodyMedium?.color,
+                        ),
+                      );
                     }
+
                     final rawData = snapshot.data!.snapshot.value;
+
                     if (rawData is! Map) {
-                      return const Text('Invalid data format');
+                      return Text(
+                        'Invalid data format',
+                        style: TextStyle(
+                          color: theme.textTheme.bodyMedium?.color,
+                        ),
+                      );
                     }
+
                     final programs = Map<String, dynamic>.from(rawData);
-                    // Get first child (p1)
+
                     final firstProgram = Map<String, dynamic>.from(
                       programs.values.first as Map,
                     );
@@ -365,9 +463,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.card,
+                        color: theme.cardColor,
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: AppColors.border),
+                        border: Border.all(color: theme.dividerColor),
                       ),
                       child: Row(
                         children: [
@@ -375,7 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 64,
                             height: 64,
                             decoration: BoxDecoration(
-                              color: AppColors.orange,
+                              color: theme.colorScheme.primary,
                               borderRadius: BorderRadius.circular(18),
                             ),
                             child: Column(
@@ -400,24 +498,28 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                           ),
+
                           const SizedBox(width: 16),
+
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   firstProgram['eventName']?.toString() ?? '',
-                                  style: const TextStyle(
-                                    color: AppColors.primaryText,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurface,
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
+
                                 const SizedBox(height: 4),
+
                                 Text(
                                   '${firstProgram['templeName'] ?? ''} · ${firstProgram['time'] ?? ''}',
-                                  style: const TextStyle(
-                                    color: AppColors.secondaryText,
+                                  style: TextStyle(
+                                    color: theme.textTheme.bodyMedium?.color,
                                     fontSize: 14,
                                   ),
                                 ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/constants/text_consts.dart';
 import 'package:mct_prayer_book/screens/bid_festival_outing_ceremony_screen.dart';
 import 'package:mct_prayer_book/screens/big_purnima_amavasya_screen.dart';
@@ -87,22 +86,34 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppbarWidget(title: "Prayer Commands"),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
         child: ListView.builder(
           itemCount: TextConsts().commandHeading.length,
-          shrinkWrap: true,
           itemBuilder: (context, index) {
             return Container(
               margin: const EdgeInsets.only(bottom: 10),
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10.0,
+                vertical: 5.0,
+              ),
               decoration: BoxDecoration(
-                color: AppColors.card,
+                color: theme.cardColor,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColors.border),
+                border: Border.all(color: theme.dividerColor),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(isDark ? 0.15 : 0.04),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
@@ -111,41 +122,54 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: AppColors.orange,
+                      color: theme.colorScheme.primary,
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Text(
                       "${index + 1}",
                       style: GoogleFonts.notoSerifGeorgian(
                         fontSize: 20,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+
+                  const SizedBox(width: 10),
+
                   Expanded(
                     child: Text(
                       TextConsts().commandHeading[index],
                       style: GoogleFonts.notoSerifGeorgian(
-                        color: AppColors.primaryText,
+                        color: theme.colorScheme.onSurface,
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+
+                  const SizedBox(width: 10),
+
                   InkWell(
+                    borderRadius: BorderRadius.circular(12),
                     onTap: () => _openScreen(context, index),
                     child: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: AppColors.orange.withOpacity(0.12),
+                        color: theme.colorScheme.primary.withOpacity(
+                          isDark ? 0.20 : 0.12,
+                        ),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: AppColors.orange.withOpacity(0.25),
+                          color: theme.colorScheme.primary.withOpacity(
+                            isDark ? 0.35 : 0.25,
+                          ),
                         ),
                       ),
-                      child: Icon(Icons.arrow_forward),
+                      child: Icon(
+                        Icons.arrow_forward,
+                        color: theme.colorScheme.primary,
+                      ),
                     ),
                   ),
                 ],

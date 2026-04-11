@@ -11,6 +11,8 @@ class MorningEveningPrayerCommand extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
       appBar: AppbarWidget(title: "Morning-Evening Prayer"),
       body: SingleChildScrollView(
@@ -19,19 +21,26 @@ class MorningEveningPrayerCommand extends StatelessWidget {
           child: Column(
             children: [
               Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
+                  color: theme.cardColor,
+                  borderRadius: BorderRadius.circular(28),
+                  border: Border.all(color: theme.dividerColor),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 2,
-                      spreadRadius: 0,
-                      offset: const Offset(0, 2),
+                      color: Colors.black.withOpacity(isDark ? 0.18 : 0.06),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
-                padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
                     // Top headings
@@ -264,9 +273,17 @@ class MorningEveningPrayerCommand extends StatelessWidget {
                         SizedBox(height: 10.0),
                         Text(
                           "Mo Chiu (Do a prayer inside your heart)",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: theme.textTheme.labelLarge?.color,
+                          ),
                         ),
-                        Text("Khou Chiu Lao Mu Ta Che Ta Pei"),
+                        Text(
+                          "Khou Chiu Lao Mu Ta Che Ta Pei",
+                          style: TextStyle(
+                            color: theme.textTheme.labelLarge?.color,
+                          ),
+                        ),
                         RowItemWidget(
                           col1: "Yi Pai Khou Sou",
                           col2: "",
@@ -275,7 +292,10 @@ class MorningEveningPrayerCommand extends StatelessWidget {
                         SizedBox(height: 5.0),
                         Text(
                           "Chi, Cuo Yi, (Sien Siang) Khe Thou Li Pi, Chuei Sou Ci Kung, Thuei",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: theme.textTheme.labelLarge?.color,
+                          ),
                         ),
 
                         Container(
@@ -287,11 +307,19 @@ class MorningEveningPrayerCommand extends StatelessWidget {
                             bottom: 10,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.grey.shade400),
-                            borderRadius: BorderRadius.circular(8),
+                            color: theme.cardColor,
+                            borderRadius: BorderRadius.circular(28),
+                            border: Border.all(color: theme.dividerColor),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(
+                                  isDark ? 0.18 : 0.06,
+                                ),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
-
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -300,7 +328,7 @@ class MorningEveningPrayerCommand extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.primaryColor,
+                                  color: theme.textTheme.labelLarge?.color,
                                 ),
                               ),
                               SizedBox(height: 20),

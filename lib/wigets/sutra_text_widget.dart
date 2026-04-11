@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mct_prayer_book/constants/app_colors.dart';
 
 class SutraTextWidget extends StatelessWidget {
-  String firstRow;
-  String secondRow;
-  String thirdRow = "";
+  final String firstRow;
+  final String secondRow;
+  final String thirdRow;
 
-  SutraTextWidget({
+  const SutraTextWidget({
     super.key,
     this.firstRow = "",
     this.secondRow = "",
@@ -16,41 +15,61 @@ class SutraTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          firstRow.toString(),
-          style: GoogleFonts.poppins(
-            fontSize: 23,
-            color: AppColors.primaryText,
-            letterSpacing: 2,
-          ),
-        ),
-        Text(
-          secondRow.toString(),
-          style: TextStyle(
-            fontSize: 20,
-            color: AppColors.orangeDark,
-            letterSpacing: 2,
-          ),
-        ),
-        Text(
-          thirdRow.toString(),
-          style: TextStyle(
-            fontSize: 22,
-            color: AppColors.textColor,
-            letterSpacing: 2,
-          ),
-        ),
-        Row(
-          children: [
-            Expanded(child: Container(height: 1, color: AppColors.border)),
-            Expanded(child: Container(height: 1, color: AppColors.border)),
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (firstRow.isNotEmpty)
+            Text(
+              firstRow,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.notoSerifSc(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.onSurface,
+                height: 1.5,
+              ),
+            ),
+
+          if (secondRow.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Text(
+              secondRow,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                color: theme.textTheme.bodyMedium?.color,
+                height: 1.5,
+              ),
+            ),
           ],
-        ),
-        SizedBox(height: 10),
-      ],
+
+          if (thirdRow.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Text(
+              thirdRow,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                color: theme.textTheme.bodySmall?.color ??
+                    theme.textTheme.bodyMedium?.color?.withOpacity(0.8),
+                fontStyle: FontStyle.italic,
+                height: 1.5,
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 12),
+
+          Divider(
+            color: theme.dividerColor,
+            thickness: 1,
+          ),
+        ],
+      ),
     );
   }
 }
