@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:mct_prayer_book/models/quickItems_model.dart';
 import 'package:mct_prayer_book/screens/events_screen.dart';
 import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
@@ -40,11 +41,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final hour = now.hour;
 
     if (hour >= 5 && hour < 12) {
-      return 'GOOD MORNING';
+      return 'Good Morning';
     } else if (hour >= 12 && hour < 17) {
-      return 'GOOD AFTERNOON';
+      return 'Good Afternoon';
     } else {
-      return 'GOOD EVENING';
+      return 'Good Evening';
     }
   }
 
@@ -79,6 +80,40 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
   }
 
+  Future<void> _checkForUpdate() async {
+    print('Checking for Update!');
+    await InAppUpdate.checkForUpdate()
+        .then((info) {
+          if (mounted) {
+            setState(() {
+              if (info.updateAvailability ==
+                  UpdateAvailability.updateAvailable) {
+                print('Update available!');
+                _update();
+              }
+            });
+          }
+        })
+        .catchError((error) {
+          print(error.toString());
+        });
+  }
+
+  void _update() async {
+    print('Updating');
+    await InAppUpdate.startFlexibleUpdate();
+    InAppUpdate.completeFlexibleUpdate().then((_) {}).catchError((error) {
+      print(error.toString());
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkForUpdate();
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
@@ -100,8 +135,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      getGreeting(),
-                      style: TextStyle(
+                      "Namaste.${getGreeting()}",
+                      style: GoogleFonts.notoSerifGeorgian(
                         color: theme.textTheme.bodyMedium?.color,
                         fontSize: 15,
                         letterSpacing: 1.2,
