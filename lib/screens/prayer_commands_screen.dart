@@ -18,6 +18,7 @@ import 'package:mct_prayer_book/screens/serving_prasada_scren.dart';
 import 'package:mct_prayer_book/screens/set_up_altar_ceremony.dart';
 import 'package:mct_prayer_book/screens/sien_en_express_gratitude.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
+import 'package:mct_prayer_book/wigets/card_shadow_widget.dart';
 
 class PrayerCommandsScreen extends StatefulWidget {
   const PrayerCommandsScreen({super.key});
@@ -97,24 +98,7 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
         child: ListView.builder(
           itemCount: TextConsts().commandHeading.length,
           itemBuilder: (context, index) {
-            return Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10.0,
-                vertical: 5.0,
-              ),
-              decoration: BoxDecoration(
-                color: theme.cardColor,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: theme.dividerColor),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(isDark ? 0.15 : 0.04),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
+            return CardShadowWidget(
               child: Row(
                 children: [
                   Container(

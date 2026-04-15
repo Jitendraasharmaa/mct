@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mct_prayer_book/constants/app_colors.dart';
 
 class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
@@ -26,7 +27,10 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
               },
             )
           : null,
-      title: Text(title, style: TextStyle(color: AppColors.whiteColor)),
+      title: Text(
+        title,
+        style: GoogleFonts.notoSerifGeorgian(color: AppColors.whiteColor),
+      ),
       centerTitle: false,
       actions: actions,
       elevation: 2,
