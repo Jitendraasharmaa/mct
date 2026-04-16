@@ -16,34 +16,50 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  bool isConnectedInternet = false;
-  StreamSubscription? _internetConnectionStreamSubscription;
+  bool? isConnectedInternet; // null = checking connection
+  StreamSubscription<InternetStatus>? _internetConnectionStreamSubscription;
+
+  int _selectedIndex = 0;
+
+  final List<Widget> _screens = const [
+    HomeScreen(),
+    SutraScreen(),
+    PrayersScreen(),
+    SongsScreens(),
+    MoreScreens(),
+  ];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _checkInitialConnection();
+
     _internetConnectionStreamSubscription = InternetConnection().onStatusChange
         .listen((event) {
-          print("The internet is: $event");
-          switch (event) {
-            case InternetStatus.connected:
-              setState(() {
-                isConnectedInternet = true;
-              });
-              break;
-            case InternetStatus.disconnected:
-              setState(() {
-                isConnectedInternet = false;
-              });
-              break;
-            default:
-              setState(() {
-                isConnectedInternet = false;
-              });
-              break;
-          }
+          if (!mounted) return;
+
+          setState(() {
+            isConnectedInternet = event == InternetStatus.connected;
+          });
         });
+  }
+
+  Future<void> _checkInitialConnection() async {
+    try {
+      final result = await InternetConnection().hasInternetAccess;
+
+      if (!mounted) return;
+
+      setState(() {
+        isConnectedInternet = result;
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        isConnectedInternet = false;
+      });
+    }
   }
 
   @override
@@ -52,20 +68,94 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 
-  int _selectedIndex = 0;
-
-  final List<Widget> _screens = [
-    HomeScreen(),
-    SutraScreen(),
-    PrayersScreen(),
-    SongsScreens(),
-    MoreScreens(),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  Widget _buildNoInternetWidget(
+    BuildContext context,
+    ThemeData theme,
+    bool isDark,
+  ) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          backgroundColor: theme.cardColor,
+          elevation: 12,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 20,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 70,
+                width: 70,
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? Colors.red.withOpacity(0.15)
+                      : Colors.red.shade50,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.wifi_off_rounded,
+                  size: 38,
+                  color: isDark ? Colors.red.shade300 : Colors.red.shade400,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                "No Internet Connection",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                "Please check your internet connection and try again.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: theme.textTheme.bodyMedium?.color,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: _checkInitialConnection,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  icon: const Icon(Icons.refresh_rounded),
+                  label: const Text(
+                    "Try Again",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -73,91 +163,19 @@ class _MainScreenState extends State<MainScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
+    Widget bodyWidget;
+
+    if (isConnectedInternet == null) {
+      bodyWidget = const Center(child: CircularProgressIndicator());
+    } else if (isConnectedInternet == true) {
+      bodyWidget = _screens[_selectedIndex];
+    } else {
+      bodyWidget = _buildNoInternetWidget(context, theme, isDark);
+    }
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      body: isConnectedInternet
-          ? _screens[_selectedIndex]
-          : Center(
-              child: AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                backgroundColor: theme.cardColor,
-                elevation: 12,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 20,
-                ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 70,
-                      width: 70,
-                      decoration: BoxDecoration(
-                        color: isDark
-                            ? Colors.red.withOpacity(0.15)
-                            : Colors.red.shade50,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.wifi_off_rounded,
-                        size: 38,
-                        color: isDark
-                            ? Colors.red.shade300
-                            : Colors.red.shade400,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      "No Internet Connection",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      "Please check your internet connection and try again.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: theme.textTheme.bodyMedium?.color,
-                        height: 1.5,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          setState(() {});
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primary,
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                        ),
-                        icon: const Icon(Icons.refresh_rounded),
-                        label: const Text(
-                          "Try Again",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+      body: bodyWidget,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
