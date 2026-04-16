@@ -15,6 +15,8 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
   String selectedTemple = 'All';
   String selectedDm = 'All';
 
+  DateTime? selectedDate;
+
   final List<InitiationCard> allItems = [
     InitiationCard(
       uniqueID: 'P123',
@@ -56,9 +58,44 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
 
       final matchesDm = selectedDm == 'All' || item.dmAttended == selectedDm;
 
-      return matchesSearch && matchesTemple && matchesDm;
+      bool matchesDate = true;
+
+      if (selectedDate != null) {
+        final itemDateParts = item.iniEnglishDate.split('-');
+
+        final itemDate = DateTime(
+          int.parse(itemDateParts[2]),
+          int.parse(itemDateParts[1]),
+          int.parse(itemDateParts[0]),
+        );
+
+        matchesDate =
+            itemDate.year == selectedDate!.year &&
+            itemDate.month == selectedDate!.month &&
+            itemDate.day == selectedDate!.day;
+      }
+
+      return matchesSearch && matchesTemple && matchesDm && matchesDate;
     }).toList();
   }
+
+  // List<InitiationCard> get filteredItems {
+  //   return allItems.where((item) {
+  //     final query = _searchController.text.toLowerCase();
+  //
+  //     final matchesSearch =
+  //         item.personName.toLowerCase().contains(query) ||
+  //         item.uniqueID.toLowerCase().contains(query) ||
+  //         item.templeName.toLowerCase().contains(query);
+  //
+  //     final matchesTemple =
+  //         selectedTemple == 'All' || item.templeName == selectedTemple;
+  //
+  //     final matchesDm = selectedDm == 'All' || item.dmAttended == selectedDm;
+  //
+  //     return matchesSearch && matchesTemple && matchesDm;
+  //   }).toList();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +154,10 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
                             items: const [
                               DropdownMenuItem(
                                 value: 'All',
-                                child: Text('All Temples'),
+                                child: Text(
+                                  'Temple',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               DropdownMenuItem(
                                 value: 'Hong Ci',
@@ -133,23 +173,11 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
                               ),
                               DropdownMenuItem(
                                 value: 'Kuang Ji',
-                                child: Text('Yi En'),
+                                child: Text('Kuang Ji'),
                               ),
                               DropdownMenuItem(
                                 value: 'Kong Thong',
                                 child: Text('Kong Thong'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Kuang Wu',
-                                child: Text('Kuang Wu'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Kong Rong',
-                                child: Text('Kuang Wu'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Kong Fong',
-                                child: Text('Kong Fong'),
                               ),
                             ],
                             onChanged: (value) {
@@ -161,7 +189,8 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
+
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -176,18 +205,12 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
                             isExpanded: true,
                             dropdownColor: theme.cardColor,
                             items: const [
-                              DropdownMenuItem(
-                                value: 'All',
-                                child: Text('DM Status'),
-                              ),
+                              DropdownMenuItem(value: 'All', child: Text('DM')),
                               DropdownMenuItem(
                                 value: 'Yes',
-                                child: Text('DM Attended'),
+                                child: Text('Yes'),
                               ),
-                              DropdownMenuItem(
-                                value: 'No',
-                                child: Text('DM Not Attended'),
-                              ),
+                              DropdownMenuItem(value: 'No', child: Text('No')),
                             ],
                             onChanged: (value) {
                               setState(() {
@@ -195,6 +218,91 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
                               });
                             },
                           ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+
+                    Expanded(
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(14),
+                        onTap: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: selectedDate ?? DateTime.now(),
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2035),
+                          );
+
+                          if (picked != null) {
+                            setState(() {
+                              selectedDate = picked;
+                            });
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 16,
+                          ),
+                          decoration: BoxDecoration(
+                            color: theme.cardColor,
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: theme.dividerColor),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_today_outlined,
+                                size: 18,
+                                color: theme.colorScheme.primary,
+                              ),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Text(
+                                  selectedDate == null
+                                      ? 'Date'
+                                      : '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: selectedDate == null
+                                        ? theme.textTheme.bodyMedium?.color
+                                        : theme.colorScheme.onSurface,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(width: 8),
+
+                    InkWell(
+                      borderRadius: BorderRadius.circular(14),
+                      onTap: () {
+                        setState(() {
+                          selectedTemple = 'All';
+                          selectedDm = 'All';
+                          selectedDate = null;
+                          _searchController.clear();
+                        });
+                      },
+                      child: Container(
+                        height: 54,
+                        width: 54,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: theme.colorScheme.primary.withOpacity(0.25),
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.filter_alt_off_rounded,
+                          color: theme.colorScheme.primary,
                         ),
                       ),
                     ),
