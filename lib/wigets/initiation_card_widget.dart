@@ -1,21 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:mct_prayer_book/constants/app_colors.dart';
+import 'package:mct_prayer_book/wigets/divider_widget.dart';
 
 class InitiationCard extends StatelessWidget {
   final String uniqueID;
+  final String? bookId;
   final String personName;
-  final String dmAttended;
-  final String iniEnglishDate;
-  final String iniChineseDate;
-  final String templeName;
+  final int? age;
+  final String? gender;
+  final String? education;
+  final int? phoneNumber;
+  final String? introducerName;
+  final String? guarantorName;
+  final String? masterName;
+  final String? templeName;
+  final String? iniEnglishDate;
+  final String? iniChineseDate;
+  final int? donationFee;
+  final String? address;
+  final String? dmAttended;
+  final String? remarks;
 
   const InitiationCard({
     super.key,
     required this.uniqueID,
+    this.bookId,
     required this.personName,
-    required this.dmAttended,
-    required this.iniEnglishDate,
-    required this.iniChineseDate,
-    required this.templeName,
+    this.age,
+    this.gender,
+    this.education,
+    this.phoneNumber,
+    this.introducerName,
+    this.guarantorName,
+    this.masterName,
+    this.templeName,
+    this.iniEnglishDate,
+    this.iniChineseDate,
+    this.donationFee,
+    this.address,
+    this.dmAttended,
+    this.remarks,
   });
 
   @override
@@ -60,84 +84,250 @@ class InitiationCard extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              _topIcon(context, Icons.remove_red_eye_outlined),
+              InkWell(
+                onTap: () {
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        insetPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 24,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _row(
+                                context,
+                                'Book Sl.No',
+                                bookId?.toString() ?? '-',
+                              ),
+                              DividerWidget(),
+                              _row(context, 'Name', personName),
+                              DividerWidget(),
+                              _row(context, 'Age', age?.toString() ?? '-'),
+                              DividerWidget(),
+                              _row(
+                                context,
+                                'Gender',
+                                gender?.toString() ?? '-',
+                              ),
+                              DividerWidget(),
+                              _row(context, 'Education', education ?? '-'),
+                              DividerWidget(),
+                              _row(
+                                context,
+                                'Phone',
+                                phoneNumber?.toString() ?? '-',
+                              ),
+                              DividerWidget(),
+                              _row(
+                                context,
+                                'Introducer',
+                                introducerName ?? '-',
+                              ),
+                              DividerWidget(),
+                              _row(context, 'guarantor', guarantorName ?? '-'),
+                              DividerWidget(),
+                              _row(context, 'Master', masterName ?? '-'),
+                              DividerWidget(),
+                              _row(context, 'Temple', templeName ?? '-'),
+                              DividerWidget(),
+                              _row(
+                                context,
+                                'English Date',
+                                iniEnglishDate ?? '-',
+                              ),
+                              DividerWidget(),
+                              _row(
+                                context,
+                                'Lunar Date',
+                                iniChineseDate ?? '-',
+                              ),
+                              DividerWidget(),
+                              _row(
+                                context,
+                                'Merits Fee',
+                                donationFee?.toString() ?? '-',
+                              ),
+                              DividerWidget(),
+                              _row(context, 'Address', address ?? '-'),
+                              DividerWidget(),
+                              _row(context, 'Dm Attended', dmAttended ?? '-'),
+                              DividerWidget(),
+                              _row(context, 'Remarks', remarks ?? '-'),
+                              SizedBox(height: 10),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Close"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: _topIcon(context, Icons.remove_red_eye_outlined),
+              ),
+              // const SizedBox(width: 12),
+              // _topIcon(context, Icons.copy_outlined),
               const SizedBox(width: 12),
-              _topIcon(context, Icons.copy_outlined),
-              const SizedBox(width: 12),
-              _topIcon(context, Icons.delete_outline),
+              InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      final theme = Theme.of(context);
+
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        insetPadding: const EdgeInsets.symmetric(
+                          horizontal: 28,
+                          vertical: 24,
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: theme.cardColor,
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 72,
+                                height: 72,
+                                decoration: BoxDecoration(
+                                  color: Colors.red.withOpacity(0.12),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.delete_outline_rounded,
+                                  color: Colors.red,
+                                  size: 36,
+                                ),
+                              ),
+
+                              const SizedBox(height: 20),
+
+                              Text(
+                                personName,
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w700,
+                                  color: theme.colorScheme.onSurface,
+                                ),
+                              ),
+
+                              const SizedBox(height: 10),
+
+                              Text(
+                                "Are you sure you want to delete this initiation record? This action cannot be undone.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  height: 1.5,
+                                  color: theme.textTheme.bodyMedium?.color,
+                                ),
+                              ),
+
+                              const SizedBox(height: 24),
+
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: OutlinedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 14,
+                                        ),
+                                        side: BorderSide(
+                                          color: theme.dividerColor,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            14,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "Cancel",
+                                        style: TextStyle(
+                                          color: theme.colorScheme.onSurface,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 12),
+
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        // delete logic here
+                                        Navigator.pop(context);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            theme.colorScheme.primary,
+                                        foregroundColor: AppColors.whiteColor,
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 14,
+                                        ),
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            14,
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        "Delete",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: _topIcon(context, Icons.delete_outline),
+              ),
               const SizedBox(width: 12),
               _topIcon(context, Icons.edit_outlined),
             ],
           ),
           const SizedBox(height: 16),
           _row(context, 'Name', personName),
-          _divider(context),
-          Row(
-            children: [
-              SizedBox(
-                width: 110,
-                child: Text(
-                  'Dm Attended',
-                  style: TextStyle(
-                    color: theme.textTheme.bodySmall?.color,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  // color: color.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(20),
-                  // border: Border.all(color: color.withOpacity(0.25)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 7,
-                      height: 7,
-                      decoration: BoxDecoration(
-                        // color: color,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      dmAttended,
-                      style: TextStyle(
-                        // color: color,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          _divider(context),
-          _row(context, 'English Date', iniEnglishDate, showInfo: true),
-          _divider(context),
-          _row(context, 'Chinese Date', iniChineseDate, showInfo: true),
-          _divider(context),
-          _row(context, 'Temple Name', templeName),
-          const SizedBox(height: 14),
-          Center(
-            child: TextButton(
-              onPressed: () {},
-              child: Text(
-                'View More',
-                style: TextStyle(
-                  color: theme.colorScheme.primary,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ),
+          DividerWidget(),
+          _row(context, 'Age', age.toString()),
+          DividerWidget(),
+          _row(context, 'Temple Name', templeName.toString()),
         ],
       ),
     );
@@ -162,6 +352,7 @@ class InitiationCard extends StatelessWidget {
               children: [
                 Text(
                   label,
+                  overflow: TextOverflow.clip,
                   style: TextStyle(
                     color: theme.textTheme.bodySmall?.color,
                     fontSize: 13,
@@ -172,6 +363,7 @@ class InitiationCard extends StatelessWidget {
           ),
           Expanded(
             child: Text(
+              overflow: TextOverflow.clip,
               value,
               style: TextStyle(
                 color: theme.colorScheme.onSurface,
@@ -181,16 +373,6 @@ class InitiationCard extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _divider(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Divider(
-        height: 1,
-        color: Theme.of(context).dividerColor.withOpacity(0.5),
       ),
     );
   }

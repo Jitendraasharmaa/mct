@@ -19,28 +19,42 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
 
   final List<InitiationCard> allItems = [
     InitiationCard(
-      uniqueID: 'P123',
-      personName: 'Jitendra Kumar Sharma',
-      dmAttended: 'Yes',
-      iniEnglishDate: '02-02-2026',
+      uniqueID: 'HC26041010',
+      bookId: "001",
+      personName: 'Jitendra Sharma',
+      age: 26,
+      gender: "Male",
+      education: "BCA",
+      phoneNumber: 9838247399,
+      introducerName: "Nangendra Thakur",
+      guarantorName: "Bishal Rai",
+      masterName: "Thu Tien Chuan Shi",
+      templeName: 'Kuang Wu',
+      iniEnglishDate: '04-09-2026',
       iniChineseDate: '01-01-2026',
-      templeName: 'Hong Ci',
-    ),
-    InitiationCard(
-      uniqueID: 'P124',
-      personName: 'Ramesh Singh',
-      dmAttended: 'No',
-      iniEnglishDate: '04-02-2026',
-      iniChineseDate: '03-01-2026',
-      templeName: 'Kuang Ji',
-    ),
-    InitiationCard(
-      uniqueID: 'P125',
-      personName: 'Amit Das',
+      donationFee: 100,
+      address: "Baneshow,kathamandu,Nepal,Baneshow,kathamandu,Nepal",
       dmAttended: 'Yes',
-      iniEnglishDate: '10-02-2026',
-      iniChineseDate: '08-01-2026',
-      templeName: 'Kong Thong',
+      remarks: "Nagendra friend's",
+    ),
+    InitiationCard(
+      uniqueID: 'HC26041012',
+      bookId: "002",
+      personName: 'Birendra Sharma',
+      age: 27,
+      gender: "Male",
+      education: "Bachelore of computer application",
+      phoneNumber: 9838247300,
+      introducerName: "Mani Raj Thakur",
+      guarantorName: "Gobinda Rai",
+      masterName: "Lee Tien Chuan Shi",
+      templeName: 'Kuang Wu',
+      iniEnglishDate: '04-09-2026',
+      iniChineseDate: '01-01-2026',
+      donationFee: 100,
+      address: "Baneshow,kathamandu,Nepal",
+      dmAttended: 'Yes',
+      remarks: "Jitendr's brother",
     ),
   ];
 
@@ -51,7 +65,7 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
       final matchesSearch =
           item.personName.toLowerCase().contains(query) ||
           item.uniqueID.toLowerCase().contains(query) ||
-          item.templeName.toLowerCase().contains(query);
+          item.templeName!.toLowerCase().contains(query);
 
       final matchesTemple =
           selectedTemple == 'All' || item.templeName == selectedTemple;
@@ -61,7 +75,7 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
       bool matchesDate = true;
 
       if (selectedDate != null) {
-        final itemDateParts = item.iniEnglishDate.split('-');
+        final itemDateParts = item.iniEnglishDate!.split('-');
 
         final itemDate = DateTime(
           int.parse(itemDateParts[2]),
@@ -78,24 +92,6 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
       return matchesSearch && matchesTemple && matchesDm && matchesDate;
     }).toList();
   }
-
-  // List<InitiationCard> get filteredItems {
-  //   return allItems.where((item) {
-  //     final query = _searchController.text.toLowerCase();
-  //
-  //     final matchesSearch =
-  //         item.personName.toLowerCase().contains(query) ||
-  //         item.uniqueID.toLowerCase().contains(query) ||
-  //         item.templeName.toLowerCase().contains(query);
-  //
-  //     final matchesTemple =
-  //         selectedTemple == 'All' || item.templeName == selectedTemple;
-  //
-  //     final matchesDm = selectedDm == 'All' || item.dmAttended == selectedDm;
-  //
-  //     return matchesSearch && matchesTemple && matchesDm;
-  //   }).toList();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -178,6 +174,10 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
                               DropdownMenuItem(
                                 value: 'Kong Thong',
                                 child: Text('Kong Thong'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'Kuang Wu',
+                                child: Text('Kuang Wu'),
                               ),
                             ],
                             onChanged: (value) {
@@ -329,14 +329,24 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
                     separatorBuilder: (_, __) => const SizedBox(height: 16),
                     itemBuilder: (context, index) {
                       final item = filteredItems[index];
-
                       return InitiationCard(
                         uniqueID: item.uniqueID,
+                        bookId: 001.toString(),
                         personName: item.personName,
-                        dmAttended: item.dmAttended,
+                        age: item.age,
+                        gender: item.gender,
+                        education: item.education,
+                        phoneNumber: item.phoneNumber,
+                        introducerName: item.introducerName,
+                        guarantorName: item.guarantorName,
+                        masterName: item.masterName,
+                        templeName: item.templeName,
                         iniEnglishDate: item.iniEnglishDate,
                         iniChineseDate: item.iniChineseDate,
-                        templeName: item.templeName,
+                        donationFee: item.donationFee,
+                        address: item.address,
+                        dmAttended: item.dmAttended,
+                        remarks: item.remarks,
                       );
                     },
                   ),
