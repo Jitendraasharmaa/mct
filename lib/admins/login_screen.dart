@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mct_prayer_book/admins/initiation_main_screen.dart';
+import 'package:mct_prayer_book/admins/super_admin_screen.dart';
 import 'package:mct_prayer_book/wigets/input_field_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -181,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => InitiationMainScreen(),
+                          builder: (context) => SuperAdminScreen(),
                         ),
                       );
                       // if (_formKey.currentState!.validate()) {
