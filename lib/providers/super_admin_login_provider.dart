@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SuperAdminLoginProvider extends ChangeNotifier {
-  final superAdminFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> superAdminFormKey = GlobalKey<FormState>();
 
   final TextEditingController superEmailController = TextEditingController();
 
@@ -52,7 +52,7 @@ class SuperAdminLoginProvider extends ChangeNotifier {
 
       final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
 
-      // Optional: only create if not exists
+      // Only create document if it doesn't exist
       final existingDoc = await docRef.get();
 
       if (!existingDoc.exists) {
@@ -83,23 +83,34 @@ class SuperAdminLoginProvider extends ChangeNotifier {
         return 'You are not a Super Admin';
       }
 
-      return null; // success
+      // Clear text fields after successful login
+      superEmailController.clear();
+      superPasswordController.clear();
+
+      return null;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'user-not-found':
           return 'No account found with this email';
+
         case 'wrong-password':
           return 'Incorrect password';
+
         case 'invalid-email':
           return 'Invalid email address';
+
         case 'user-disabled':
           return 'This account has been disabled';
+
         case 'too-many-requests':
           return 'Too many attempts. Try again later';
+
         case 'network-request-failed':
           return 'No internet connection';
+
         case 'invalid-credential':
           return 'Invalid email or password';
+
         default:
           return 'Login failed';
       }

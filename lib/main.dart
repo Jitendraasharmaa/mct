@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mct_prayer_book/providers/sign_out_provider.dart';
+import 'package:mct_prayer_book/providers/super_admin_login_provider.dart';
 import 'package:mct_prayer_book/providers/theme_provider.dart';
 import 'package:mct_prayer_book/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +14,11 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => ThemeProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => SuperAdminLoginProvider()),
+        ChangeNotifierProvider(create: (context) => SignOutProvider()),
+      ],
       child: const MyApp(),
     ),
   );
