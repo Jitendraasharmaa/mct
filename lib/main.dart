@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mct_prayer_book/providers/create_sub_admin_provider.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
+import 'package:mct_prayer_book/providers/sub_super_admins_details_provider.dart';
 import 'package:mct_prayer_book/providers/super_admin_login_provider.dart';
 import 'package:mct_prayer_book/providers/theme_provider.dart';
 import 'package:mct_prayer_book/screens/splash_screen.dart';
@@ -18,6 +20,10 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => SuperAdminLoginProvider()),
         ChangeNotifierProvider(create: (context) => SignOutProvider()),
+        ChangeNotifierProvider(
+            create: (context) => CreateSubSuperAdminProvider()),
+        ChangeNotifierProvider(
+            create: (context) => SubSuperAdminsDetailsProvider()),
       ],
       child: const MyApp(),
     ),

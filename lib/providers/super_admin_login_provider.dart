@@ -4,20 +4,14 @@ import 'package:flutter/material.dart';
 
 class SuperAdminLoginProvider extends ChangeNotifier {
   final GlobalKey<FormState> superAdminFormKey = GlobalKey<FormState>();
-
   final TextEditingController superEmailController = TextEditingController();
-
   final TextEditingController superPasswordController = TextEditingController();
-
   bool _isLoading = false;
-
   bool get isLoading => _isLoading;
-
   void _setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
   }
-
   Future<String?> superAdminLogin() async {
     final email = superEmailController.text.trim();
     final password = superPasswordController.text.trim();
@@ -25,21 +19,17 @@ class SuperAdminLoginProvider extends ChangeNotifier {
     if (email.isEmpty && password.isEmpty) {
       return 'Please enter email and password';
     }
-
     if (email.isEmpty) {
       return 'Please enter email';
     }
-
     if (password.isEmpty) {
       return 'Please enter password';
     }
-
     final emailRegex = RegExp(r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$');
 
     if (!emailRegex.hasMatch(email)) {
       return 'Please enter a valid email';
     }
-
     try {
       _setLoading(true);
 

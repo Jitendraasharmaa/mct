@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/admins/auth/login_screen.dart';
-import 'package:mct_prayer_book/admins/create_sup_super_admin.dart';
 import 'package:mct_prayer_book/admins/initiation_main_screen.dart';
+import 'package:mct_prayer_book/admins/sub_super_admins_details.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
+import 'package:mct_prayer_book/providers/sub_super_admins_details_provider.dart';
 import 'package:mct_prayer_book/screens/events_screen.dart';
 import 'package:mct_prayer_book/screens/main_screen.dart';
 import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
@@ -38,6 +39,9 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
   void initState() {
     super.initState();
     _loadAppVersion();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SubSuperAdminsDetailsProvider>().fetchSubSuperAdmins();
+    });
   }
 
   Future<void> _loadAppVersion() async {
@@ -52,19 +56,13 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final subSuperAdminsDetailsProvider =
+        Provider.of<SubSuperAdminsDetailsProvider>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: const AppbarWidget(title: "Dashboard"),
       drawer: buildAppDrawer(context, appVersion),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => CreateSupSuperAdmin()),
-          );
-        },
-        child: Icon(Icons.add),
-      ),
+
       body: RefreshIndicator(
         onRefresh: _refreshScreen,
         child: Padding(
@@ -98,12 +96,22 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
                 colors: [Color(0xFF4F8CFF), Color(0xFF2D68F0)],
                 icon: Icons.people_alt_outlined,
               ),
-              StatsCard(
-                title: 'Sub Admins',
-                subtitle: 'Total sub admins',
-                value: '6',
-                colors: [Color(0xFF8B2DFF), Color(0xFF6821D4)],
-                icon: Icons.admin_panel_settings_outlined,
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SubSuperAdminsDetailsScreen(),
+                    ),
+                  );
+                },
+                child: StatsCard(
+                  title: 'Sub Super Admins',
+                  subtitle: 'Total sub Super admins',
+                  value: subSuperAdminsDetailsProvider.subSuperAdmins.length
+                      .toString(),
+                  colors: const [Color(0xFF8B2DFF), Color(0xFF6821D4)],
+                  icon: Icons.admin_panel_settings_outlined,
+                ),
               ),
               GestureDetector(
                 onTap: () {

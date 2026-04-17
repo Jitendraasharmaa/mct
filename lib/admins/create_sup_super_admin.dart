@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mct_prayer_book/wigets/Elevated_button_widget.dart';
+import 'package:mct_prayer_book/providers/create_sub_admin_provider.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
+import 'package:provider/provider.dart';
 
+import '../constants/app_colors.dart';
 import '../wigets/input_field_widget.dart';
 
 class CreateSupSuperAdmin extends StatefulWidget {
@@ -17,6 +19,8 @@ class _CreateSupSuperAdminState extends State<CreateSupSuperAdmin> {
 
   @override
   Widget build(BuildContext context) {
+    final createSubSuperAdminProvider = context
+        .watch<CreateSubSuperAdminProvider>();
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     return Scaffold(
@@ -25,6 +29,7 @@ class _CreateSupSuperAdminState extends State<CreateSupSuperAdmin> {
         child: Padding(
           padding: EdgeInsetsGeometry.symmetric(horizontal: 20.0, vertical: 30),
           child: Form(
+            key: createSubSuperAdminProvider.formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -68,6 +73,7 @@ class _CreateSupSuperAdminState extends State<CreateSupSuperAdmin> {
                 InputFieldWidget(
                   labelText: 'userName',
                   hintText: 'Enter Username',
+                  controller: createSubSuperAdminProvider.usernameController,
                   prefixIcon: Icon(
                     Icons.lock_outline_rounded,
                     color: theme.textTheme.bodyMedium?.color,
@@ -82,6 +88,7 @@ class _CreateSupSuperAdminState extends State<CreateSupSuperAdmin> {
                 InputFieldWidget(
                   labelText: 'Email',
                   hintText: 'Enter Email ID',
+                  controller: createSubSuperAdminProvider.emailController,
                   prefixIcon: Icon(
                     Icons.lock_outline_rounded,
                     color: theme.textTheme.bodyMedium?.color,
@@ -95,6 +102,7 @@ class _CreateSupSuperAdminState extends State<CreateSupSuperAdmin> {
                 ),
 
                 InputFieldWidget(
+                  controller: createSubSuperAdminProvider.passwordController,
                   labelText: 'Password',
                   hintText: 'Enter Password',
                   prefixIcon: Icon(
@@ -127,7 +135,50 @@ class _CreateSupSuperAdminState extends State<CreateSupSuperAdmin> {
                 SizedBox(height: 15),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButtonWidget(onTap: () {}, text: ("Create")),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: AppColors.whiteColor,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14)),
+                    ),
+                    onPressed: createSubSuperAdminProvider.isLoading
+                        ? null
+                        : () async {
+                      if (createSubSuperAdminProvider
+                          .formKey
+                          .currentState!
+                          .validate()) {
+                        final message = await createSubSuperAdminProvider
+                            .createSubSuperAdmin();
+
+                        if (!mounted) return;
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(message ?? 'Done'),
+                            backgroundColor:
+                            message ==
+                                'Sub Super Admin created successfully'
+                                ? Colors.green
+                                : null,
+                          ),
+                        );
+                      }
+                    },
+                    child: createSubSuperAdminProvider.isLoading
+                        ? SizedBox(
+                      height: 22,
+                      width: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: theme.colorScheme.primary,
+                      ),
+                    )
+                        : const Text('Create'),
+                  ),
                 ),
               ],
             ),
