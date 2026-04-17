@@ -62,9 +62,7 @@ class MyApp extends StatelessWidget {
             fontSize: 16,
           ),
         ),
-
         iconTheme: IconThemeData(color: AppColors.primaryColor),
-
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           backgroundColor: AppColors.lightBottomNav,
           selectedItemColor: AppColors.primaryColor,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/constants/app_colors.dart';
+import 'package:mct_prayer_book/wigets/Elevated_button_widget.dart';
 import 'package:mct_prayer_book/wigets/divider_widget.dart';
+import 'package:mct_prayer_book/wigets/text_button_widget.dart';
 
 class InitiationCard extends StatelessWidget {
   final String uniqueID;
@@ -250,61 +251,22 @@ class InitiationCard extends StatelessWidget {
                               Row(
                                 children: [
                                   Expanded(
-                                    child: OutlinedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
+                                    child: TextButtonWidget(
+                                      onTap: () {
+                                        Navigator.of(context).pop();
                                       },
-                                      style: OutlinedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 14,
-                                        ),
-                                        side: BorderSide(
-                                          color: theme.dividerColor,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            14,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        "Cancel",
-                                        style: TextStyle(
-                                          color: theme.colorScheme.onSurface,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
+                                      text: "Cancel",
                                     ),
                                   ),
 
                                   const SizedBox(width: 12),
 
                                   Expanded(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        // delete logic here
+                                    child: ElevatedButtonWidget(
+                                      onTap: () {
                                         Navigator.pop(context);
                                       },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            theme.colorScheme.primary,
-                                        foregroundColor: AppColors.whiteColor,
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 14,
-                                        ),
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            14,
-                                          ),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        "Delete",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
+                                      text: "Delete",
                                     ),
                                   ),
                                 ],

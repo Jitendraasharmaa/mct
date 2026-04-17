@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/admins/login_screen.dart';
+import 'package:mct_prayer_book/admins/auth/stream_signIn_screen.dart';
 import 'package:mct_prayer_book/wigets/card_shadow_widget.dart';
 
 class MoreScreens extends StatelessWidget {
@@ -66,7 +66,7 @@ class MoreScreens extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
+                            builder: (context) => StreamSignInScreen(),
                           ),
                         );
                       },
