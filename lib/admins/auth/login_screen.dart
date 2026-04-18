@@ -6,6 +6,9 @@ import 'package:mct_prayer_book/providers/super_admin_login_provider.dart';
 import 'package:mct_prayer_book/wigets/input_field_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/sub_super_admin_login_provider.dart';
+import '../sub_sper_admin_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -197,6 +200,8 @@ class _LoginScreenState extends State<LoginScreen>
     final superLoginAdminProvider = Provider.of<SuperAdminLoginProvider>(
       context,
     );
+    final subSuperAdminLoginProvider = context
+        .watch<SubSuperAdminLoginProvider>();
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
@@ -281,22 +286,45 @@ class _LoginScreenState extends State<LoginScreen>
                     context: context,
                     title: 'Admin Access',
                     subtitle: 'Login to Maitreya Charitable Trust',
-                    formKey: _adminFormKey,
-                    emailController: _adminEmailController,
-                    passwordController: _adminPasswordController,
+                    formKey: subSuperAdminLoginProvider.formKey,
+                    emailController: subSuperAdminLoginProvider.emailController,
+                    passwordController:
+                        subSuperAdminLoginProvider.passwordController,
                     obscurePassword: _showAdminPassword,
                     togglePassword: () {
                       setState(() {
                         _showAdminPassword = !_showAdminPassword;
                       });
                     },
-                    onLogin: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const SuperAdminScreen(),
-                        ),
-                      );
+                    isLoading: subSuperAdminLoginProvider.isLoading,
+                    onLogin: () async {
+                      if (subSuperAdminLoginProvider.formKey.currentState!
+                          .validate()) {
+                        final message = await subSuperAdminLoginProvider
+                            .login();
+
+                        if (!mounted) return;
+
+                        if (message != null) {
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(SnackBar(content: Text(message)));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Login successful'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const SubSuperAdminScreen(),
+                            ),
+                          );
+                        }
+                      }
                     },
                   ),
                 ],

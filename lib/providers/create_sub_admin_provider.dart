@@ -6,6 +6,15 @@ import 'package:flutter/material.dart';
 class CreateSubSuperAdminProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
 
+  String? _selectedRole;
+
+  String? get selectedRole => _selectedRole;
+
+  void setRole(String? role) {
+    _selectedRole = role;
+    notifyListeners();
+  }
+
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -19,6 +28,17 @@ class CreateSubSuperAdminProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  String _generateUniqueId() {
+    final now = DateTime.now();
+
+    final year = (now.year % 100).toString().padLeft(2, '0');
+    final month = now.month.toString().padLeft(2, '0');
+    final hour = now.hour.toString().padLeft(2, '0');
+    final minute = now.minute.toString().padLeft(2, '0');
+
+    return 'mct$year$month$hour$minute';
+  }
+
   Future<String?> createSubSuperAdmin() async {
     final subSuperAdminUsername = usernameController.text.trim();
     final subSuperAdminEmail = emailController.text.trim();
@@ -27,6 +47,10 @@ class CreateSubSuperAdminProvider extends ChangeNotifier {
     if (subSuperAdminUsername.isEmpty) return 'Please enter username';
     if (subSuperAdminEmail.isEmpty) return 'Please enter email';
     if (subSuperAdminPassword.isEmpty) return 'Please enter password';
+
+    if (_selectedRole == null || _selectedRole!.isEmpty) {
+      return 'Please select a role';
+    }
 
     try {
       _setLoading(true);
@@ -39,14 +63,15 @@ class CreateSubSuperAdminProvider extends ChangeNotifier {
 
       final superAdminUid = currentUser.uid;
 
+      // Generate unique ID
+      final uniqueId = _generateUniqueId();
+
       // Create a secondary Firebase app
       final secondaryApp = await Firebase.initializeApp(
         name: 'Secondary',
         options: Firebase.app().options,
       );
-
       final secondaryAuth = FirebaseAuth.instanceFor(app: secondaryApp);
-
       // Create user WITHOUT affecting current logged in super admin
       final credential = await secondaryAuth.createUserWithEmailAndPassword(
         email: subSuperAdminEmail,
@@ -59,9 +84,10 @@ class CreateSubSuperAdminProvider extends ChangeNotifier {
           .collection('users')
           .doc(subSuperAdminUid)
           .set({
+            "uniqueID": uniqueId,
             'username': subSuperAdminUsername,
             'email': subSuperAdminEmail,
-            'role': 'sub_super_admin',
+            'role': _selectedRole,
             'createdBy': superAdminUid,
             'createdAt': FieldValue.serverTimestamp(),
           });
@@ -74,7 +100,7 @@ class CreateSubSuperAdminProvider extends ChangeNotifier {
       emailController.clear();
       passwordController.clear();
 
-      return 'Sub Super Admin created successfully';
+      return '${_selectedRole == 'admin' ? 'Admin' : 'Sub Super Admin'} created successfully';
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'email-already-in-use':

@@ -100,7 +100,39 @@ class _CreateSupSuperAdminState extends State<CreateSupSuperAdmin> {
                     return null;
                   },
                 ),
-
+                SizedBox(height: 15),
+                Consumer<CreateSubSuperAdminProvider>(
+                  builder: (context, provider, child) {
+                    return DropdownButtonFormField<String>(
+                      value: provider.selectedRole,
+                      decoration: InputDecoration(
+                        labelText: 'Role',
+                        hintText: 'Select Role',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.admin_panel_settings_outlined,
+                        ),
+                      ),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'sub_super_admin',
+                          child: Text('Sub Super Admin'),
+                        ),
+                        // DropdownMenuItem(value: 'admin', child: Text('Admin')),
+                      ],
+                      onChanged: provider.setRole,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a role';
+                        }
+                        return null;
+                      },
+                    );
+                  },
+                ),
+                SizedBox(height: 15),
                 InputFieldWidget(
                   controller: createSubSuperAdminProvider.passwordController,
                   labelText: 'Password',
@@ -142,41 +174,42 @@ class _CreateSupSuperAdminState extends State<CreateSupSuperAdmin> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14)),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                     onPressed: createSubSuperAdminProvider.isLoading
                         ? null
                         : () async {
-                      if (createSubSuperAdminProvider
-                          .formKey
-                          .currentState!
-                          .validate()) {
-                        final message = await createSubSuperAdminProvider
-                            .createSubSuperAdmin();
+                            if (createSubSuperAdminProvider
+                                .formKey
+                                .currentState!
+                                .validate()) {
+                              final message = await createSubSuperAdminProvider
+                                  .createSubSuperAdmin();
 
-                        if (!mounted) return;
+                              if (!mounted) return;
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(message ?? 'Done'),
-                            backgroundColor:
-                            message ==
-                                'Sub Super Admin created successfully'
-                                ? Colors.green
-                                : null,
-                          ),
-                        );
-                      }
-                    },
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(message ?? 'Done'),
+                                  backgroundColor:
+                                      message ==
+                                          'Sub Super Admin created successfully'
+                                      ? Colors.green
+                                      : null,
+                                ),
+                              );
+                            }
+                          },
                     child: createSubSuperAdminProvider.isLoading
                         ? SizedBox(
-                      height: 22,
-                      width: 22,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: theme.colorScheme.primary,
-                      ),
-                    )
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: theme.colorScheme.primary,
+                            ),
+                          )
                         : const Text('Create'),
                   ),
                 ),

@@ -15,7 +15,6 @@ class SuperAdminLoginProvider extends ChangeNotifier {
   Future<String?> superAdminLogin() async {
     final email = superEmailController.text.trim();
     final password = superPasswordController.text.trim();
-
     if (email.isEmpty && password.isEmpty) {
       return 'Please enter email and password';
     }
