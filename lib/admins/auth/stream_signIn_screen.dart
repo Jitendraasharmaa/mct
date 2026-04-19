@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/admins/admin_screen.dart';
+import 'package:mct_prayer_book/admins/adminsScreens/admin_screen.dart';
 import 'package:mct_prayer_book/admins/auth/login_screen.dart';
-import 'package:mct_prayer_book/admins/sub_sper_admin_screen.dart';
-import 'package:mct_prayer_book/admins/super_admin_screen.dart';
+import 'package:mct_prayer_book/admins/subSuperAdminScreens/sub_sper_admin_screen.dart';
+import 'package:mct_prayer_book/admins/superAdminScreens/super_admin_screen.dart';
 
 class StreamSignInScreen extends StatelessWidget {
   const StreamSignInScreen({super.key});

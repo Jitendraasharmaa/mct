@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mct_prayer_book/admins/super_admin_screen.dart';
+import 'package:mct_prayer_book/admins/adminsScreens/admin_screen.dart';
+import 'package:mct_prayer_book/admins/superAdminScreens/super_admin_screen.dart';
 import 'package:mct_prayer_book/constants/app_colors.dart';
+import 'package:mct_prayer_book/providers/admin_login_provider.dart';
 import 'package:mct_prayer_book/providers/super_admin_login_provider.dart';
 import 'package:mct_prayer_book/wigets/input_field_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/sub_super_admin_login_provider.dart';
-import '../sub_sper_admin_screen.dart';
+import '../subSuperAdminScreens/sub_sper_admin_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,13 +22,7 @@ class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   bool isLoading = false;
 
-  final _adminFormKey = GlobalKey<FormState>();
-
   late TabController _tabController;
-
-  final TextEditingController _adminEmailController = TextEditingController();
-  final TextEditingController _adminPasswordController =
-      TextEditingController();
 
   bool _showSuperPassword = true;
   bool _showAdminPassword = true;
@@ -34,14 +30,12 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
   void dispose() {
     _tabController.dispose();
-    _adminEmailController.dispose();
-    _adminPasswordController.dispose();
     super.dispose();
   }
 
@@ -202,6 +196,7 @@ class _LoginScreenState extends State<LoginScreen>
     );
     final subSuperAdminLoginProvider = context
         .watch<SubSuperAdminLoginProvider>();
+    final adminLoginProvider = Provider.of<AdminLoginProvider>(context);
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
@@ -229,7 +224,8 @@ class _LoginScreenState extends State<LoginScreen>
                   padding: const EdgeInsets.all(6),
                   tabs: const [
                     Tab(text: 'Super Admin'),
-                    Tab(text: 'Admin Access'),
+                    Tab(text: 'Admin'),
+                    Tab(text: 'User'),
                   ],
                 ),
               ),
@@ -324,6 +320,45 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           );
                         }
+                      }
+                    },
+                  ),
+                  _buildLoginForm(
+                    context: context,
+                    title: 'User Access',
+                    subtitle: 'Login to Maitreya Charitable Trust',
+                    formKey: adminLoginProvider.formKey,
+                    emailController: adminLoginProvider.emailController,
+                    passwordController: adminLoginProvider.passwordController,
+                    obscurePassword: _showAdminPassword,
+                    togglePassword: () {
+                      setState(() {
+                        _showAdminPassword = !_showAdminPassword;
+                      });
+                    },
+                    isLoading: adminLoginProvider.isLoading,
+                    onLogin: () async {
+                      FocusScope.of(context).unfocus();
+                      final message = await adminLoginProvider.loginAdmin();
+                      if (!mounted) return;
+                      if (message != null) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(message)));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Admin logged in successfully'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AdminScreen(),
+                          ),
+                        );
                       }
                     },
                   ),

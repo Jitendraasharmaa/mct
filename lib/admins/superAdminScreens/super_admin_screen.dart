@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/admins/auth/login_screen.dart';
 import 'package:mct_prayer_book/admins/initiation_main_screen.dart';
-import 'package:mct_prayer_book/admins/sub_super_admins_details.dart';
+import 'package:mct_prayer_book/admins/subSuperAdminScreens/sub_super_admins_details.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admins_details_provider.dart';
 import 'package:mct_prayer_book/screens/events_screen.dart';
@@ -13,7 +13,7 @@ import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/theme_provider.dart';
+import '../../providers/theme_provider.dart';
 
 class SuperAdminScreen extends StatefulWidget {
   const SuperAdminScreen({super.key});

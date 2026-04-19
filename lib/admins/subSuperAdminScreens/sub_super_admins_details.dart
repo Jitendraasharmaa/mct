@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mct_prayer_book/providers/admin_profile_details_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admins_details_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../wigets/Elevated_button_widget.dart';
-import '../wigets/text_button_widget.dart';
-import 'create_sup_super_admin.dart';
+import '../../wigets/Elevated_button_widget.dart';
+import '../../wigets/text_button_widget.dart';
+import '../superAdminScreens/create_sup_super_admin.dart';
 
 class SubSuperAdminsDetailsScreen extends StatefulWidget {
   const SubSuperAdminsDetailsScreen({super.key});
@@ -21,7 +22,7 @@ class _SubSuperAdminsDetailsScreenState
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<SubSuperAdminsDetailsProvider>().fetchSubSuperAdmins();
+      context.read<AdminProfileDetailsProvider>().fetchAdmins();
     });
   }
 

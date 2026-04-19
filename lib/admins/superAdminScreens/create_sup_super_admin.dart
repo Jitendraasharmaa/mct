@@ -4,8 +4,8 @@ import 'package:mct_prayer_book/providers/create_sub_admin_provider.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../constants/app_colors.dart';
-import '../wigets/input_field_widget.dart';
+import '../../constants/app_colors.dart';
+import '../../wigets/input_field_widget.dart';
 
 class CreateSupSuperAdmin extends StatefulWidget {
   const CreateSupSuperAdmin({super.key});

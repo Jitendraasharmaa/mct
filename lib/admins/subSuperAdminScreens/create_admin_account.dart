@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mct_prayer_book/wigets/Elevated_button_widget.dart';
+import 'package:mct_prayer_book/providers/create_admin_account_provider.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
+import 'package:provider/provider.dart';
 
-import '../wigets/input_field_widget.dart';
+import '../../wigets/input_field_widget.dart';
 
 class CreateAdminAccount extends StatefulWidget {
   const CreateAdminAccount({super.key});
@@ -19,12 +20,14 @@ class _CreateAdminAccountState extends State<CreateAdminAccount> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final adminCreateProfileProvider = context.watch<CreateAdminProvider>();
     return Scaffold(
       appBar: AppbarWidget(title: "Admin Account"),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsetsGeometry.symmetric(horizontal: 20.0, vertical: 30),
           child: Form(
+            key: adminCreateProfileProvider.formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -68,6 +71,7 @@ class _CreateAdminAccountState extends State<CreateAdminAccount> {
                 InputFieldWidget(
                   labelText: 'userName',
                   hintText: 'Enter Username',
+                  controller: adminCreateProfileProvider.usernameController,
                   prefixIcon: Icon(
                     Icons.lock_outline_rounded,
                     color: theme.textTheme.bodyMedium?.color,
@@ -82,6 +86,7 @@ class _CreateAdminAccountState extends State<CreateAdminAccount> {
                 InputFieldWidget(
                   labelText: 'Email',
                   hintText: 'Enter Email ID',
+                  controller: adminCreateProfileProvider.emailController,
                   prefixIcon: Icon(
                     Icons.lock_outline_rounded,
                     color: theme.textTheme.bodyMedium?.color,
@@ -97,6 +102,7 @@ class _CreateAdminAccountState extends State<CreateAdminAccount> {
                 InputFieldWidget(
                   labelText: 'Password',
                   hintText: 'Enter Password',
+                  controller: adminCreateProfileProvider.passwordController,
                   prefixIcon: Icon(
                     Icons.lock_outline_rounded,
                     color: theme.textTheme.bodyMedium?.color,
@@ -125,9 +131,36 @@ class _CreateAdminAccountState extends State<CreateAdminAccount> {
                   },
                 ),
                 SizedBox(height: 15),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButtonWidget(onTap: () {}, text: ("Create")),
+                ElevatedButton(
+                  onPressed: adminCreateProfileProvider.isLoading
+                      ? null
+                      : () async {
+                          if (adminCreateProfileProvider.formKey.currentState!
+                              .validate()) {
+                            final message = await adminCreateProfileProvider
+                                .createAdmin();
+
+                            if (!mounted) return;
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(message ?? ''),
+                                backgroundColor:
+                                    message ==
+                                        'Admin account created successfully'
+                                    ? Colors.green
+                                    : null,
+                              ),
+                            );
+                          }
+                        },
+                  child: adminCreateProfileProvider.isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Create Admin'),
                 ),
               ],
             ),
