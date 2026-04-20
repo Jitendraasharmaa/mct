@@ -27,7 +27,6 @@ class CreateAdminProvider extends ChangeNotifier {
     final day = now.day.toString().padLeft(2, '0');
     final hour = now.hour.toString().padLeft(2, '0');
     final minute = now.minute.toString().padLeft(2, '0');
-
     return 'mct$year$month$day$hour$minute';
   }
 
@@ -70,15 +69,12 @@ class CreateAdminProvider extends ChangeNotifier {
         name: 'admin_creation',
         options: Firebase.app().options,
       );
-
       final secondaryAuth = FirebaseAuth.instanceFor(app: secondaryApp);
-
       // Create admin account
       final credential = await secondaryAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-
       final adminUid = credential.user!.uid;
       final uniqueId = generateUniqueId();
 

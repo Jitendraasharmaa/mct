@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
 import 'package:mct_prayer_book/providers/single_admin_profile_details_provider.dart';
-import 'package:mct_prayer_book/wigets/Elevated_button_widget.dart';
 import 'package:provider/provider.dart';
 
 class AdminProfileScreen extends StatefulWidget {
@@ -265,27 +264,10 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 5,
-                        ),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButtonWidget(
-                            onTap: () async {
-                              await signOutProvider.signOut();
-                              Navigator.of(context).pop();
-                            },
-                            text: "LogOut",
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
               ),
-
               const SizedBox(height: 16),
             ],
           ),

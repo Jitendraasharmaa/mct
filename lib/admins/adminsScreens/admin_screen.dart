@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:mct_prayer_book/admins/adminsScreens/add_initiation_as_admin.dart';
 import 'package:mct_prayer_book/admins/adminsScreens/admin_profile_screen.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/sign_out_provider.dart';
+import '../../providers/theme_provider.dart';
+import '../../screens/events_screen.dart';
+import '../../screens/main_screen.dart';
+import '../../screens/prayer_commands_screen.dart';
+import '../../screens/songs_screens.dart';
+import '../../screens/sutra_screen.dart';
 import '../../wigets/initiation_card_widget.dart';
+import '../auth/login_screen.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
@@ -12,6 +23,23 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminScreenScreenState extends State<AdminScreen> {
+  String appVersion = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAppVersion();
+  }
+
+  Future<void> _loadAppVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    if (mounted) {
+      setState(() {
+        appVersion = packageInfo.version;
+      });
+    }
+  }
+
   final TextEditingController _searchController = TextEditingController();
   String selectedTemple = 'All';
   String selectedDm = 'All';
@@ -101,10 +129,14 @@ class _AdminScreenScreenState extends State<AdminScreen> {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => AddInitiationAsAdmin()),
+          );
+        },
         child: Icon(Icons.add),
       ),
-
+      drawer: buildAppDrawer(context, appVersion),
       appBar: AppbarWidget(
         title: 'Initiation Details',
         actions: [
@@ -370,6 +402,320 @@ class _AdminScreenScreenState extends State<AdminScreen> {
                   ),
           ),
         ],
+      ),
+    );
+  }
+
+  Drawer buildAppDrawer(BuildContext context, String appVersion) {
+    final themeProvider = context.watch<ThemeProvider>();
+    final signOutProvider = context.watch<SignOutProvider>();
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return Drawer(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      child: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    theme.colorScheme.primary,
+                    theme.colorScheme.primary.withOpacity(0.75),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(28),
+                  bottomRight: Radius.circular(28),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: 34,
+                    backgroundColor: Colors.white.withOpacity(0.18),
+                    child: Image.asset("assets/images/transparentlogo.png"),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Welcome Back',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Maitreya Charitable Trust',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 18,
+                ),
+                children: [
+                  _drawerItem(
+                    context,
+                    icon: Icons.home_outlined,
+                    title: 'Home',
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const MainScreen()),
+                      );
+                    },
+                  ),
+                  _drawerItem(
+                    context,
+                    icon: Icons.volunteer_activism_outlined,
+                    title: 'Prayer Commands',
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const PrayerCommandsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _drawerItem(
+                    context,
+                    icon: Icons.menu_book_outlined,
+                    title: 'Sutras',
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const SutraScreen()),
+                      );
+                    },
+                  ),
+                  _drawerItem(
+                    context,
+                    icon: Icons.music_note_outlined,
+                    title: 'Holy Songs',
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const SongsScreens()),
+                      );
+                    },
+                  ),
+                  _drawerItem(
+                    context,
+                    icon: Icons.event_note_outlined,
+                    title: 'Events',
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const EventsScreen()),
+                      );
+                    },
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    child: Divider(color: theme.dividerColor, thickness: 1),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12, bottom: 10),
+                    child: Text(
+                      'Preferences',
+                      style: TextStyle(
+                        color: theme.textTheme.bodySmall?.color,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.cardColor,
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(color: theme.dividerColor),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          isDark
+                              ? Icons.dark_mode_outlined
+                              : Icons.light_mode_outlined,
+                          color: theme.colorScheme.primary,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Dark Mode',
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurface,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        Switch(
+                          value: themeProvider.isDarkMode,
+                          onChanged: (value) {
+                            context.read<ThemeProvider>().toggleTheme(value);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 18),
+
+                  _drawerItem(
+                    context,
+                    icon: Icons.info_outline_rounded,
+                    title: 'About App',
+                    onTap: () {},
+                  ),
+                  _drawerItem(
+                    context,
+                    icon: Icons.settings_outlined,
+                    title: 'Settings',
+                    onTap: () {},
+                  ),
+                  _drawerItem(
+                    context,
+                    icon: Icons.logout_rounded,
+                    title: signOutProvider.isSigningOut
+                        ? 'Logging out...'
+                        : 'Logout',
+                    textColor: Colors.red,
+                    iconColor: Colors.red,
+                    onTap: signOutProvider.isSigningOut
+                        ? () {}
+                        : () async {
+                            Navigator.pop(context); // close drawer first
+
+                            try {
+                              await context.read<SignOutProvider>().signOut();
+
+                              if (!context.mounted) return;
+
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (!context.mounted) return;
+
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const LoginScreen(),
+                                  ),
+                                  (route) => false,
+                                );
+                              });
+                            } catch (e) {
+                              if (!context.mounted) return;
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Failed to sign out: $e'),
+                                ),
+                              );
+                            }
+                          },
+                  ),
+                ],
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                'Version $appVersion',
+                style: TextStyle(
+                  color: theme.textTheme.bodySmall?.color,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _drawerItem(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    Color? iconColor,
+    Color? textColor,
+  }) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(18),
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(18)),
+            child: Row(
+              children: [
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: (iconColor ?? theme.colorScheme.primary).withOpacity(
+                      0.12,
+                    ),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: iconColor ?? theme.colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      color: textColor ?? theme.colorScheme.onSurface,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 16,
+                  color: theme.textTheme.bodySmall?.color,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

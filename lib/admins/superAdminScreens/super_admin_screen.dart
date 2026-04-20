@@ -33,7 +33,7 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
     });
   }
 
-  String appVersion = '1.0.0';
+  String appVersion = '';
 
   @override
   void initState() {

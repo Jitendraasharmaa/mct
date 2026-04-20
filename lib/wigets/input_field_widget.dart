@@ -21,6 +21,7 @@ class InputFieldWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final FocusNode? focusNode;
   final EdgeInsetsGeometry padding;
+  final bool readOnly;
 
   const InputFieldWidget({
     super.key,
@@ -43,6 +44,7 @@ class InputFieldWidget extends StatelessWidget {
     this.onTap,
     this.focusNode,
     this.padding = const EdgeInsets.all(16),
+    this.readOnly = false,
   });
 
   @override
@@ -78,6 +80,7 @@ class InputFieldWidget extends StatelessWidget {
             onChanged: onChanged,
             onFieldSubmitted: onFieldSubmitted,
             onTap: onTap,
+            readOnly: readOnly,
             style: TextStyle(fontSize: 15, color: theme.colorScheme.onSurface),
             decoration: InputDecoration(
               hintText: hintText,

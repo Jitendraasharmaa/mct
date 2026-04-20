@@ -4,6 +4,7 @@ import 'package:mct_prayer_book/providers/create_admin_account_provider.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants/app_colors.dart';
 import '../../wigets/input_field_widget.dart';
 
 class CreateAdminAccount extends StatefulWidget {
@@ -131,36 +132,53 @@ class _CreateAdminAccountState extends State<CreateAdminAccount> {
                   },
                 ),
                 SizedBox(height: 15),
-                ElevatedButton(
-                  onPressed: adminCreateProfileProvider.isLoading
-                      ? null
-                      : () async {
-                          if (adminCreateProfileProvider.formKey.currentState!
-                              .validate()) {
-                            final message = await adminCreateProfileProvider
-                                .createAdmin();
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: AppColors.whiteColor,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    onPressed: adminCreateProfileProvider.isLoading
+                        ? null
+                        : () async {
+                      if (adminCreateProfileProvider.formKey.currentState!
+                          .validate()) {
+                        final message = await adminCreateProfileProvider
+                            .createAdmin();
 
-                            if (!mounted) return;
+                        if (!mounted) return;
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(message ?? ''),
-                                backgroundColor:
-                                    message ==
-                                        'Admin account created successfully'
-                                    ? Colors.green
-                                    : null,
-                              ),
-                            );
-                          }
-                        },
-                  child: adminCreateProfileProvider.isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Create Admin'),
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(message ?? ''),
+                            backgroundColor:
+                            message ==
+                                'Admin account created successfully'
+                                ? Colors.green
+                                : null,
+                          ),
+                        );
+                      }
+                    },
+                    child: adminCreateProfileProvider.isLoading
+                        ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                        : Text(
+                      'Create Admin',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

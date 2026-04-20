@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/admins/adminsScreens/admin_profile_details_screen.dart';
 import 'package:mct_prayer_book/admins/auth/login_screen.dart';
 import 'package:mct_prayer_book/admins/initiation_main_screen.dart';
-import 'package:mct_prayer_book/providers/admin_profile_details_provider.dart';
+import 'package:mct_prayer_book/providers/admin_providers/admin_profile_details_provider.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
 import 'package:mct_prayer_book/screens/events_screen.dart';
 import 'package:mct_prayer_book/screens/main_screen.dart';

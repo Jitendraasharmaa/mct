@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/providers/admin_login_provider.dart';
-import 'package:mct_prayer_book/providers/admin_profile_details_provider.dart';
+import 'package:mct_prayer_book/providers/add_initiation_details.dart';
+import 'package:mct_prayer_book/providers/admin_providers/admin_login_provider.dart';
+import 'package:mct_prayer_book/providers/admin_providers/admin_profile_details_provider.dart';
 import 'package:mct_prayer_book/providers/create_admin_account_provider.dart';
 import 'package:mct_prayer_book/providers/create_sub_admin_provider.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
@@ -42,6 +43,7 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) => SingleAdminProfileDetailsProvider()..fetchProfile(),
         ),
+        ChangeNotifierProvider(create: (_) => AddInitiationDetailsProvider()),
       ],
       child: const MyApp(),
     ),
