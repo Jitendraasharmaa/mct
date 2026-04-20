@@ -233,9 +233,7 @@ class InitiationCard extends StatelessWidget {
                                   color: theme.colorScheme.onSurface,
                                 ),
                               ),
-
                               const SizedBox(height: 10),
-
                               Text(
                                 "Are you sure you want to delete this initiation record? This action cannot be undone.",
                                 textAlign: TextAlign.center,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mct_prayer_book/providers/create_admin_account_provider.dart';
+import 'package:mct_prayer_book/providers/admin_providers/create_admin_account_provider.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:provider/provider.dart';
 

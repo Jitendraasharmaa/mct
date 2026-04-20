@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/providers/add_initiation_details.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:mct_prayer_book/wigets/custom_dropdown_inputfield.dart';
 import 'package:mct_prayer_book/wigets/input_field_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/app_colors.dart';
+import '../../providers/add_initiation_details_provider.dart';
 
 class AddInitiationAsAdmin extends StatefulWidget {
   const AddInitiationAsAdmin({super.key});
@@ -155,6 +155,7 @@ class _AddInitiationAsAdminState extends State<AddInitiationAsAdmin> {
                     labelText: "Phone",
                     hintText: "Enter Mobile Number",
                     keyboardType: TextInputType.phone,
+                    controller: provider.phoneController,
                     prefixIcon: Icon(
                       Icons.phone_outlined,
                       color: theme.textTheme.bodyMedium?.color,

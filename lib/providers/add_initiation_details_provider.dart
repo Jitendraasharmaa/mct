@@ -31,6 +31,17 @@ class AddInitiationDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  String generateUniqueId() {
+    final now = DateTime.now();
+
+    final year = now.year.toString().substring(2);
+    final month = now.month.toString().padLeft(2, '0');
+    final day = now.day.toString().padLeft(2, '0');
+    final hour = now.hour.toString().padLeft(2, '0');
+    final minute = now.minute.toString().padLeft(2, '0');
+    return 'mct$year$month$day$hour$minute';
+  }
+
   Future<String?> createInitiation() async {
     try {
       _setLoading(true);
@@ -53,8 +64,9 @@ class AddInitiationDetailsProvider extends ChangeNotifier {
       }
 
       final adminData = adminDoc.data()!;
-
+      final uniqueId = generateUniqueId();
       await FirebaseFirestore.instance.collection('initiations').add({
+        'uniqueID': uniqueId,
         'bookSlNo': bookSlNoController.text.trim(),
         'name': personNameController.text.trim(),
         'age': ageController.text.trim(),
