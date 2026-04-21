@@ -10,7 +10,6 @@ class AdminProfileScreen extends StatefulWidget {
   @override
   State<AdminProfileScreen> createState() => _AdminProfileScreenState();
 }
-
 class _AdminProfileScreenState extends State<AdminProfileScreen> {
   Widget _infoTile({
     required BuildContext context,
@@ -201,7 +200,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                       _infoTile(
                         context: context,
                         icon: Icons.badge_outlined,
-                        title: 'Unique ID: ${data['uniqueID'] ?? ''}',
+                        title: 'ID: ${data['uniqueID'] ?? ''}',
                       ),
                       _infoTile(
                         context: context,

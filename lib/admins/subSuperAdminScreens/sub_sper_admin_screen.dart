@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/admins/adminsScreens/admin_profile_details_screen.dart';
 import 'package:mct_prayer_book/admins/auth/login_screen.dart';
-import 'package:mct_prayer_book/admins/initiation_main_screen.dart';
+import 'package:mct_prayer_book/admins/subSuperAdminScreens/sup_super_admin_initiations_details_screen.dart';
 import 'package:mct_prayer_book/providers/admin_providers/admin_profile_details_provider.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
+import 'package:mct_prayer_book/providers/subSuperAdminProvider/sub_super_admin_initiations_details_provider.dart';
 import 'package:mct_prayer_book/screens/events_screen.dart';
 import 'package:mct_prayer_book/screens/main_screen.dart';
 import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
@@ -42,6 +43,11 @@ class SubSuperAdminScreenState extends State<SubSuperAdminScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AdminProfileDetailsProvider>().fetchAdmins();
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context
+          .read<SubSuperAdminInitiationsDetailsProvider>()
+          .fetchParentAdminInitiations();
+    });
   }
 
   Future<void> _loadAppVersion() async {
@@ -57,6 +63,8 @@ class SubSuperAdminScreenState extends State<SubSuperAdminScreen> {
   @override
   Widget build(BuildContext context) {
     final adminProfileProvider = context.read<AdminProfileDetailsProvider>();
+    final initiationsProvider = context
+        .read<SubSuperAdminInitiationsDetailsProvider>();
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: const AppbarWidget(title: "Dashboard"),
@@ -75,14 +83,15 @@ class SubSuperAdminScreenState extends State<SubSuperAdminScreen> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => InitiationMainScreen(),
+                      builder: (context) =>
+                          SupSuperAdminInitiationsDetailsScreen(),
                     ),
                   );
                 },
                 child: StatsCard(
                   title: 'Initiation',
                   subtitle: 'Total initiation',
-                  value: '1000',
+                  value: initiationsProvider.initiations.length.toString(),
                   colors: [Color(0xFF18C74F), Color(0xFF0DAA3D)],
                   icon: Icons.auto_graph_rounded,
                 ),

@@ -8,6 +8,7 @@ import 'package:mct_prayer_book/providers/admin_providers/create_admin_account_p
 import 'package:mct_prayer_book/providers/create_sub_admin_provider.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
 import 'package:mct_prayer_book/providers/single_admin_profile_details_provider.dart';
+import 'package:mct_prayer_book/providers/subSuperAdminProvider/sub_super_admin_initiations_details_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admin_login_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admins_details_provider.dart';
 import 'package:mct_prayer_book/providers/super_admin_login_provider.dart';
@@ -46,6 +47,9 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (_) => AddInitiationDetailsProvider()),
         ChangeNotifierProvider(create: (_) => AdminInitiationDetailsProvider()),
+        ChangeNotifierProvider(
+          create: (_) => SubSuperAdminInitiationsDetailsProvider(),
+        ),
       ],
       child: const MyApp(),
     ),

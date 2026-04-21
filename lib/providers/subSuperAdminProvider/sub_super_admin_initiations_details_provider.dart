@@ -26,7 +26,7 @@ class SubSuperAdminInitiationsDetailsProvider extends ChangeNotifier {
       final snapshot = await FirebaseFirestore.instance
           .collection('initiations')
           .where('parentAdminUid', isEqualTo: currentUser.uid)
-          .orderBy('createdAt', descending: true)
+          // .orderBy('createdAt', descending: true)
           .get();
 
       _initiations = snapshot.docs.map((doc) {
@@ -34,11 +34,31 @@ class SubSuperAdminInitiationsDetailsProvider extends ChangeNotifier {
 
         return {
           'id': doc.id,
-          'name': data['name'] ?? '',
+          'bookSlNo': data['bookSlNo'] ?? '',
+          'uniqueID': data['uniqueID'] ?? '',
+
+          'person': data['name'] ?? '',
+          'age': data['age'] ?? '',
+          'gender': data['gender'] ?? '',
           'phone': data['phone'] ?? '',
           'address': data['address'] ?? '',
+
+          'education': data['education'] ?? '',
+          'introducer': data['introducer'] ?? '',
+          'guarantor': data['guarantor'] ?? '',
+
+          'englishDate': data['englishDate'] ?? '',
+          'chineseDate': data['chineseDate'] ?? '',
+          'dmAttended': data['dmAttended'] ?? '',
+          'master': data['master'] ?? '',
+          'temple': data['temple'] ?? '',
+          'meritsFee': data['meritsFee'] ?? '',
+          'remarks': data['remarks'] ?? '',
+          'createdBy': data['createdBy'] ?? '',
           'createdByUsername': data['createdByUsername'] ?? '',
+          'parentAdminUid': data['parentAdminUid'] ?? '',
           'createdAt': data['createdAt'],
+          'updatedAt': data['updatedAt'],
         };
       }).toList();
     } catch (e) {

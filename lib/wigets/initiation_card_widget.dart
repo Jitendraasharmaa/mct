@@ -21,6 +21,7 @@ class InitiationCard extends StatelessWidget {
   final String? address;
   final String? dmAttended;
   final String? remarks;
+  final String? userRole;
 
   const InitiationCard({
     super.key,
@@ -41,6 +42,7 @@ class InitiationCard extends StatelessWidget {
     this.address,
     this.dmAttended,
     this.remarks,
+    this.userRole,
   });
 
   @override
@@ -99,80 +101,88 @@ class InitiationCard extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              _row(
-                                context,
-                                'Book Sl.No',
-                                bookId?.toString() ?? '-',
-                              ),
-                              DividerWidget(),
-                              _row(context, 'Name', personName),
-                              DividerWidget(),
-                              _row(context, 'Age', age?.toString() ?? '-'),
-                              DividerWidget(),
-                              _row(
-                                context,
-                                'Gender',
-                                gender?.toString() ?? '-',
-                              ),
-                              DividerWidget(),
-                              _row(context, 'Education', education ?? '-'),
-                              DividerWidget(),
-                              _row(
-                                context,
-                                'Phone',
-                                phoneNumber?.toString() ?? '-',
-                              ),
-                              DividerWidget(),
-                              _row(
-                                context,
-                                'Introducer',
-                                introducerName ?? '-',
-                              ),
-                              DividerWidget(),
-                              _row(context, 'guarantor', guarantorName ?? '-'),
-                              DividerWidget(),
-                              _row(context, 'Master', masterName ?? '-'),
-                              DividerWidget(),
-                              _row(context, 'Temple', templeName ?? '-'),
-                              DividerWidget(),
-                              _row(
-                                context,
-                                'English Date',
-                                iniEnglishDate ?? '-',
-                              ),
-                              DividerWidget(),
-                              _row(
-                                context,
-                                'Lunar Date',
-                                iniChineseDate ?? '-',
-                              ),
-                              DividerWidget(),
-                              _row(
-                                context,
-                                'Merits Fee',
-                                donationFee?.toString() ?? '-',
-                              ),
-                              DividerWidget(),
-                              _row(context, 'Address', address ?? '-'),
-                              DividerWidget(),
-                              _row(context, 'Dm Attended', dmAttended ?? '-'),
-                              DividerWidget(),
-                              _row(context, 'Remarks', remarks ?? '-'),
-                              SizedBox(height: 10),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text("Close"),
-                              ),
-                            ],
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: MediaQuery.of(context).size.height * 10,
+                            maxWidth: MediaQuery.of(context).size.width,
+                          ),
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _row(
+                                  context,
+                                  'Book Sl.No',
+                                  bookId?.toString() ?? '-',
+                                ),
+                                DividerWidget(),
+                                _row(context, 'Name', personName),
+                                DividerWidget(),
+                                _row(context, 'Age', age?.toString() ?? '-'),
+                                DividerWidget(),
+                                _row(
+                                  context,
+                                  'Gender',
+                                  gender?.toString() ?? '-',
+                                ),
+                                DividerWidget(),
+                                _row(context, 'Education', education ?? '-'),
+                                DividerWidget(),
+                                _row(
+                                  context,
+                                  'Phone',
+                                  phoneNumber?.toString() ?? '-',
+                                ),
+                                DividerWidget(),
+                                _row(
+                                  context,
+                                  'Introducer',
+                                  introducerName ?? '-',
+                                ),
+                                DividerWidget(),
+                                _row(
+                                  context,
+                                  'Guarantor',
+                                  guarantorName ?? '-',
+                                ),
+                                DividerWidget(),
+                                _row(context, 'Master', masterName ?? '-'),
+                                DividerWidget(),
+                                _row(context, 'Temple', templeName ?? '-'),
+                                DividerWidget(),
+                                _row(
+                                  context,
+                                  'English Date',
+                                  iniEnglishDate ?? '-',
+                                ),
+                                DividerWidget(),
+                                _row(
+                                  context,
+                                  'Lunar Date',
+                                  iniChineseDate ?? '-',
+                                ),
+                                DividerWidget(),
+                                _row(
+                                  context,
+                                  'Merits Fee',
+                                  donationFee?.toString() ?? '-',
+                                ),
+                                DividerWidget(),
+                                _row(context, 'Address', address ?? '-'),
+                                DividerWidget(),
+                                _row(context, 'Dm Attended', dmAttended ?? '-'),
+                                DividerWidget(),
+                                _row(context, 'Remarks', remarks ?? '-'),
+                                const SizedBox(height: 10),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("Close"),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -184,7 +194,8 @@ class InitiationCard extends StatelessWidget {
               // const SizedBox(width: 12),
               // _topIcon(context, Icons.copy_outlined),
               const SizedBox(width: 12),
-              InkWell(
+              if (userRole == 'sub_super_admin')
+                InkWell(
                 onTap: () {
                   showDialog(
                     context: context,
