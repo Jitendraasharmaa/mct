@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/admins/adminsScreens/add_initiation_as_admin.dart';
+import 'package:mct_prayer_book/admins/adminsScreens/add_initiations_screen.dart';
 import 'package:mct_prayer_book/admins/adminsScreens/admin_profile_screen.dart';
 import 'package:mct_prayer_book/admins/subSuperAdminScreens/sub_sper_admin_screen.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
@@ -106,16 +106,17 @@ class _AdminScreenState extends State<AdminScreen> {
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
               await Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const AddInitiationAsAdmin()),
+                MaterialPageRoute(builder: (_) => const AddInitiationsScreen()),
               );
-
               if (!mounted) return;
-
               context
                   .read<AdminInitiationDetailsProvider>()
                   .fetchInitiationsDetails();
             },
-            child: const Icon(Icons.add),
+            child: Text(provider.initiations.length.toString(),
+                style: theme.textTheme.titleLarge?.copyWith(
+                    color: theme.colorScheme.tertiary
+                )),
           ),
           appBar: AppbarWidget(
             title: 'Initiation Details',
@@ -355,8 +356,8 @@ class _AdminScreenState extends State<AdminScreen> {
                               const SizedBox(height: 14),
                           itemBuilder: (context, index) {
                             final item = filteredItems[index];
-
                             return InitiationCard(
+                                documentId: item['id'],
                               uniqueID: item['uniqueID'] ?? '',
                               bookId: item['bookSlNo'] ?? '',
                               personName: item['person'] ?? '',
@@ -374,7 +375,8 @@ class _AdminScreenState extends State<AdminScreen> {
                               donationFee: int.parse(item['meritsFee']),
                               address: item['address'] ?? '',
                               dmAttended: item['dmAttended'] ?? '',
-                              remarks: item['remarks'] ?? '',
+                                remarks: item['remarks'] ?? ''
+
                             );
                           },
                         ),

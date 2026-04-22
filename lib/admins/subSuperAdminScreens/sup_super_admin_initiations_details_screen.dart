@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mct_prayer_book/admins/adminsScreens/add_initiations_screen.dart';
+import 'package:mct_prayer_book/providers/get_current_user.dart';
 import 'package:mct_prayer_book/providers/subSuperAdminProvider/sub_super_admin_initiations_details_provider.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../wigets/Elevated_button_widget.dart';
 import '../../wigets/initiation_card_widget.dart';
+import '../../wigets/text_button_widget.dart';
 
 class SupSuperAdminInitiationsDetailsScreen extends StatefulWidget {
   const SupSuperAdminInitiationsDetailsScreen({super.key});
@@ -83,12 +87,20 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    final currentUserDetails = context.read<GetCurrentUserDetailsProvider>();
     return Consumer<SubSuperAdminInitiationsDetailsProvider>(
       builder: (context, provider, child) {
         final filteredItems = _filteredItems(provider.initiations);
         return Scaffold(
           backgroundColor: theme.scaffoldBackgroundColor,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => AddInitiationsScreen()),
+              );
+            },
+            child: Icon(Icons.add),
+          ),
           appBar: const AppbarWidget(title: 'Initiation Details'),
           body: Column(
             children: [
@@ -273,9 +285,7 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
                             ),
                           ),
                         ),
-
                         const SizedBox(width: 8),
-
                         InkWell(
                           borderRadius: BorderRadius.circular(14),
                           onTap: () {
@@ -323,7 +333,9 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
                               const SizedBox(height: 16),
                           itemBuilder: (context, index) {
                             final item = filteredItems[index];
+                            print("The item is: ${item['id']}");
                             return InitiationCard(
+                              documentId: item['id'],
                               uniqueID: item['uniqueID'] ?? '',
                               bookId: item['bookSlNo'] ?? '',
                               personName: item['person'] ?? '',
@@ -338,12 +350,279 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
                               templeName: item['temple'] ?? '',
                               iniEnglishDate: item['englishDate'] ?? '',
                               iniChineseDate: item['chineseDate'] ?? '',
-                              donationFee: int.parse(item['meritsFee']),
+                              donationFee:
+                                  int.tryParse(item['meritsFee'].toString()) ??
+                                  0,
                               address: item['address'] ?? '',
                               dmAttended: item['dmAttended'] ?? '',
                               remarks: item['remarks'] ?? '',
-                              userRole: 'sub_super_admin',
+                              role: currentUserDetails.role,
+                              onDelete: () async {
+                                final confirm = await showDialog<bool>(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) {
+                                    final theme = Theme.of(context);
+                                    final personName =
+                                        item['person'] ?? 'this person';
+
+                                    return Dialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      insetPadding: const EdgeInsets.symmetric(
+                                        horizontal: 28,
+                                        vertical: 24,
+                                      ),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(24),
+                                        decoration: BoxDecoration(
+                                          color: theme.cardColor,
+                                          borderRadius: BorderRadius.circular(
+                                            24,
+                                          ),
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              width: 72,
+                                              height: 72,
+                                              decoration: BoxDecoration(
+                                                color: Colors.red.withOpacity(
+                                                  0.12,
+                                                ),
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: const Icon(
+                                                Icons.delete_outline_rounded,
+                                                color: Colors.red,
+                                                size: 36,
+                                              ),
+                                            ),
+
+                                            const SizedBox(height: 20),
+
+                                            Text(
+                                              personName,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.w700,
+                                                color:
+                                                    theme.colorScheme.onSurface,
+                                              ),
+                                            ),
+
+                                            const SizedBox(height: 10),
+
+                                            Text(
+                                              "Are you sure you want to delete this initiation record? This action cannot be undone.",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                height: 1.5,
+                                                color: theme
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.color,
+                                              ),
+                                            ),
+
+                                            const SizedBox(height: 24),
+
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: TextButtonWidget(
+                                                    onTap: () {
+                                                      Navigator.of(
+                                                        context,
+                                                      ).pop(false);
+                                                    },
+                                                    text: "Cancel",
+                                                  ),
+                                                ),
+
+                                                const SizedBox(width: 12),
+
+                                                Expanded(
+                                                  child: ElevatedButtonWidget(
+                                                    onTap: () {
+                                                      Navigator.of(
+                                                        context,
+                                                      ).pop(true);
+                                                    },
+                                                    text: "Delete",
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+
+                                if (confirm != true) return;
+
+                                final message = await provider.deleteInitiation(
+                                  item['id'],
+                                );
+
+                                if (!context.mounted) return;
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      message ?? 'Something went wrong',
+                                    ),
+                                    backgroundColor:
+                                        message != null &&
+                                            message.toLowerCase().contains(
+                                              'success',
+                                            )
+                                        ? Colors.green
+                                        : Colors.red,
+                                  ),
+                                );
+                              },
                             );
+                            // return InitiationCard(
+                            //   documentId: item['id'],
+                            //   uniqueID: item['uniqueID'] ?? '',
+                            //   bookId: item['bookSlNo'] ?? '',
+                            //   personName: item['person'] ?? '',
+                            //   age: int.tryParse(item['age'].toString()) ?? 0,
+                            //   gender: item['gender'] ?? '',
+                            //   education: item['education'] ?? '',
+                            //   phoneNumber:
+                            //       int.tryParse(item['phone'].toString()) ?? 0,
+                            //   introducerName: item['introducer'] ?? '',
+                            //   guarantorName: item['guarantor'] ?? '',
+                            //   masterName: item['master'] ?? '',
+                            //   templeName: item['temple'] ?? '',
+                            //   iniEnglishDate: item['englishDate'] ?? '',
+                            //   iniChineseDate: item['chineseDate'] ?? '',
+                            //   donationFee: int.parse(item['meritsFee']),
+                            //   address: item['address'] ?? '',
+                            //   dmAttended: item['dmAttended'] ?? '',
+                            //   remarks: item['remarks'] ?? '',
+                            //   role: currentUserDetails.role,
+                            //   onDelete: () async {
+                            //     final confirm = await showDialog<bool>(
+                            //       context: context,
+                            //       builder: (context) {
+                            //         return Dialog(
+                            //           shape: RoundedRectangleBorder(
+                            //             borderRadius: BorderRadius.circular(24),
+                            //           ),
+                            //           insetPadding: const EdgeInsets.symmetric(
+                            //             horizontal: 28,
+                            //             vertical: 24,
+                            //           ),
+                            //           child: Container(
+                            //             padding: const EdgeInsets.all(24),
+                            //             decoration: BoxDecoration(
+                            //               color: theme.cardColor,
+                            //               borderRadius: BorderRadius.circular(
+                            //                 24,
+                            //               ),
+                            //             ),
+                            //             child: Column(
+                            //               mainAxisSize: MainAxisSize.min,
+                            //               children: [
+                            //                 Container(
+                            //                   width: 72,
+                            //                   height: 72,
+                            //                   decoration: BoxDecoration(
+                            //                     color: Colors.red.withOpacity(
+                            //                       0.12,
+                            //                     ),
+                            //                     shape: BoxShape.circle,
+                            //                   ),
+                            //                   child: const Icon(
+                            //                     Icons.delete_outline_rounded,
+                            //                     color: Colors.red,
+                            //                     size: 36,
+                            //                   ),
+                            //                 ),
+                            //
+                            //                 const SizedBox(height: 20),
+                            //
+                            //                 const SizedBox(height: 10),
+                            //                 Text(
+                            //                   "'Are you sure you want to delete ${item['person']}?', This action cannot be undone.",
+                            //                   textAlign: TextAlign.center,
+                            //                   style: TextStyle(
+                            //                     fontSize: 15,
+                            //                     height: 1.5,
+                            //                     color: theme
+                            //                         .textTheme
+                            //                         .bodyMedium
+                            //                         ?.color,
+                            //                   ),
+                            //                 ),
+                            //
+                            //                 const SizedBox(height: 24),
+                            //
+                            //                 Row(
+                            //                   children: [
+                            //                     Expanded(
+                            //                       child: TextButtonWidget(
+                            //                         onTap: () {
+                            //                           Navigator.of(
+                            //                             context,
+                            //                           ).pop();
+                            //                         },
+                            //                         text: "Cancel",
+                            //                       ),
+                            //                     ),
+                            //
+                            //                     const SizedBox(width: 12),
+                            //
+                            //                     Expanded(
+                            //                       child: ElevatedButtonWidget(
+                            //                         onTap: () {
+                            //                           Navigator.pop(context);
+                            //                         },
+                            //                         text: "Delete",
+                            //                       ),
+                            //                     ),
+                            //                   ],
+                            //                 ),
+                            //               ],
+                            //             ),
+                            //           ),
+                            //         );
+                            //       },
+                            //     );
+                            //
+                            //     if (confirm != true) return;
+                            //
+                            //     final message = await provider.deleteInitiation(
+                            //       item['id'],
+                            //     );
+                            //
+                            //     if (!context.mounted) return;
+                            //
+                            //     ScaffoldMessenger.of(context).showSnackBar(
+                            //       SnackBar(
+                            //         content: Text(
+                            //           message ?? 'Something went wrong',
+                            //         ),
+                            //         backgroundColor:
+                            //             message != null &&
+                            //                 message.toLowerCase().contains(
+                            //                   'success',
+                            //                 )
+                            //             ? Colors.green
+                            //             : Colors.red,
+                            //       ),
+                            //     );
+                            //   },
+                            // );
                           },
                         ),
                       ),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/wigets/Elevated_button_widget.dart';
 import 'package:mct_prayer_book/wigets/divider_widget.dart';
-import 'package:mct_prayer_book/wigets/text_button_widget.dart';
 
 class InitiationCard extends StatelessWidget {
   final String uniqueID;
@@ -21,7 +19,9 @@ class InitiationCard extends StatelessWidget {
   final String? address;
   final String? dmAttended;
   final String? remarks;
-  final String? userRole;
+  final String? role;
+  final String documentId;
+  final VoidCallback? onDelete;
 
   const InitiationCard({
     super.key,
@@ -42,14 +42,15 @@ class InitiationCard extends StatelessWidget {
     this.address,
     this.dmAttended,
     this.remarks,
-    this.userRole,
+    this.role,
+    required this.documentId,
+    this.onDelete,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     // final color = _statusColor(context);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
@@ -80,7 +81,7 @@ class InitiationCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                uniqueID,
+                "Sl No. $bookId",
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   color: theme.colorScheme.onSurface,
@@ -194,103 +195,14 @@ class InitiationCard extends StatelessWidget {
               // const SizedBox(width: 12),
               // _topIcon(context, Icons.copy_outlined),
               const SizedBox(width: 12),
-              if (userRole == 'sub_super_admin')
+              if (role == 'sub_super_admin' || role == 'super_admin')
                 InkWell(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) {
-                      final theme = Theme.of(context);
-
-                      return Dialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        insetPadding: const EdgeInsets.symmetric(
-                          horizontal: 28,
-                          vertical: 24,
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: theme.cardColor,
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 72,
-                                height: 72,
-                                decoration: BoxDecoration(
-                                  color: Colors.red.withOpacity(0.12),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.delete_outline_rounded,
-                                  color: Colors.red,
-                                  size: 36,
-                                ),
-                              ),
-
-                              const SizedBox(height: 20),
-
-                              Text(
-                                personName,
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w700,
-                                  color: theme.colorScheme.onSurface,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                "Are you sure you want to delete this initiation record? This action cannot be undone.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  height: 1.5,
-                                  color: theme.textTheme.bodyMedium?.color,
-                                ),
-                              ),
-
-                              const SizedBox(height: 24),
-
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TextButtonWidget(
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      text: "Cancel",
-                                    ),
-                                  ),
-
-                                  const SizedBox(width: 12),
-
-                                  Expanded(
-                                    child: ElevatedButtonWidget(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      text: "Delete",
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: _topIcon(context, Icons.delete_outline),
-              ),
+                  onTap: onDelete,
+                  child: _topIcon(context, Icons.delete_outline),
+                ),
               const SizedBox(width: 12),
-              _topIcon(context, Icons.edit_outlined),
+              if (role == 'sub_super_admin' || role == 'super_admin')
+                _topIcon(context, Icons.edit_outlined),
             ],
           ),
           const SizedBox(height: 16),
@@ -355,15 +267,4 @@ class InitiationCard extends StatelessWidget {
       color: Theme.of(context).textTheme.bodyMedium?.color,
     );
   }
-
-  // Color _statusColor(BuildContext context) {
-  //   switch (inventoryType) {
-  //     case InventoryType.stable:
-  //       return Colors.green;
-  //     case InventoryType.excess:
-  //       return Colors.blue;
-  //     case InventoryType.low:
-  //       return Colors.pinkAccent;
-  //   }
-  // }
 }

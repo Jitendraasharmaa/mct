@@ -68,7 +68,6 @@ class _SubSuperAdminsDetailsScreenState
               ),
               itemBuilder: (context, index) {
                 final member = provider.subSuperAdmins[index];
-
                 return Material(
                   color: Colors.transparent,
                   child: InkWell(
@@ -90,9 +89,7 @@ class _SubSuperAdminsDetailsScreenState
                               color: theme.colorScheme.primary,
                             ),
                           ),
-
                           const SizedBox(width: 16),
-
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,8 +134,7 @@ class _SubSuperAdminsDetailsScreenState
                               borderRadius: BorderRadius.circular(14),
                             ),
                             onSelected: (value) async {
-                              if (value == 'edit') {
-                                // TODO: Navigate to edit screen
+                              if (value == 'view') {
                               } else if (value == 'remove') {
                                 final confirm = await showDialog(
                                   context: context,

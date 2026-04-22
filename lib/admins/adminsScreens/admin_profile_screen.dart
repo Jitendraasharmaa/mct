@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/providers/sign_out_provider.dart';
+import 'package:mct_prayer_book/admins/adminsScreens/admin_change_password_screen.dart';
 import 'package:mct_prayer_book/providers/single_admin_profile_details_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +10,7 @@ class AdminProfileScreen extends StatefulWidget {
   @override
   State<AdminProfileScreen> createState() => _AdminProfileScreenState();
 }
+
 class _AdminProfileScreenState extends State<AdminProfileScreen> {
   Widget _infoTile({
     required BuildContext context,
@@ -61,7 +62,6 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final signOutProvider = context.read<SignOutProvider>();
     return Consumer<SingleAdminProfileDetailsProvider>(
       builder: (context, provider, child) {
         if (provider.isLoading) {
@@ -84,6 +84,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
           );
         }
         return Scaffold(
+          resizeToAvoidBottomInset: true,
           backgroundColor: theme.scaffoldBackgroundColor,
           body: Column(
             children: [
@@ -222,9 +223,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                         icon: Icons.calendar_month_outlined,
                         title: 'Joined: ${_formatDate(data['createdAt'])}',
                       ),
-
                       const Spacer(),
-
                       Padding(
                         padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
                         child: SizedBox(
@@ -242,7 +241,12 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                             ),
                             child: ElevatedButton(
                               onPressed: () {
-                                // Navigate to edit profile screen
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        AdminChangePasswordScreen(),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
@@ -252,7 +256,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                 ),
                               ),
                               child: const Text(
-                                'Edit Profile',
+                                'Change Password',
                                 style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w700,

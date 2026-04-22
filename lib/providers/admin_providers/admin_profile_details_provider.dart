@@ -40,6 +40,7 @@ class AdminProfileDetailsProvider extends ChangeNotifier {
         return {
           'id': doc.id,
           'username': data['username'] ?? '',
+          'role': data['role'] ?? '',
           'email': data['email'] ?? '',
           'uniqueID': data['uniqueID'] ?? '',
           'createdBy': data['createdBy'] ?? '',

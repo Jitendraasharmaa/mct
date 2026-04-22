@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mct_prayer_book/admins/subSuperAdminScreens/all_admin_profile_screen.dart';
 import 'package:mct_prayer_book/admins/subSuperAdminScreens/create_admin_account.dart';
 import 'package:mct_prayer_book/providers/admin_providers/admin_profile_details_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admins_details_provider.dart';
@@ -7,16 +8,15 @@ import 'package:provider/provider.dart';
 import '../../wigets/Elevated_button_widget.dart';
 import '../../wigets/text_button_widget.dart';
 
-class AdminProfileDetailsScreen extends StatefulWidget {
-  const AdminProfileDetailsScreen({super.key});
+class AllAdminsScreen extends StatefulWidget {
+  const AllAdminsScreen({super.key});
 
   @override
-  State<AdminProfileDetailsScreen> createState() =>
+  State<AllAdminsScreen> createState() =>
       _AdminProfileDetailsScreenScreenState();
 }
 
-class _AdminProfileDetailsScreenScreenState
-    extends State<AdminProfileDetailsScreen> {
+class _AdminProfileDetailsScreenScreenState extends State<AllAdminsScreen> {
   @override
   void initState() {
     super.initState();
@@ -67,10 +67,23 @@ class _AdminProfileDetailsScreenScreenState
               ),
               itemBuilder: (context, index) {
                 final member = provider.admins[index];
+                print("Role: ${member['role']}");
                 return Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => AllAdminProfileScreen(
+                            uniqueID: member['uniqueID'] ?? '',
+                            userName: member['username'] ?? '',
+                            role: member['role'] ?? '',
+                            email: member['email'],
+                            createdBy: member['createdByUsername'],
+                          ),
+                        ),
+                      );
+                    },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,

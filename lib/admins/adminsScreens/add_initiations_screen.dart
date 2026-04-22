@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:mct_prayer_book/providers/add_initiation_provider.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:mct_prayer_book/wigets/custom_dropdown_inputfield.dart';
 import 'package:mct_prayer_book/wigets/input_field_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/app_colors.dart';
-import '../../providers/add_initiation_details_provider.dart';
 
-class AddInitiationAsAdmin extends StatefulWidget {
-  const AddInitiationAsAdmin({super.key});
+class AddInitiationsScreen extends StatefulWidget {
+  const AddInitiationsScreen({super.key});
 
   @override
-  State<AddInitiationAsAdmin> createState() => _AddInitiationAsAdminState();
+  State<AddInitiationsScreen> createState() => _AddInitiationsScreenState();
 }
 
-class _AddInitiationAsAdminState extends State<AddInitiationAsAdmin> {
+class _AddInitiationsScreenState extends State<AddInitiationsScreen> {
   bool isChecked = false;
 
   Future<void> pickEnglishDate(
     BuildContext context,
-    AddInitiationDetailsProvider provider,
+    AddInitiationProvider provider,
   ) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -37,7 +37,7 @@ class _AddInitiationAsAdminState extends State<AddInitiationAsAdmin> {
 
   Future<void> pickChineseDate(
     BuildContext context,
-    AddInitiationDetailsProvider provider,
+    AddInitiationProvider provider,
   ) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -56,7 +56,7 @@ class _AddInitiationAsAdminState extends State<AddInitiationAsAdmin> {
 
   Future<void> pickDmAttendedDate(
     BuildContext context,
-    AddInitiationDetailsProvider provider,
+    AddInitiationProvider provider,
   ) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -76,7 +76,7 @@ class _AddInitiationAsAdminState extends State<AddInitiationAsAdmin> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Consumer<AddInitiationDetailsProvider>(
+    return Consumer<AddInitiationProvider>(
       builder: (context, provider, child) {
         return Scaffold(
           appBar: const AppbarWidget(title: "Add Initiation"),

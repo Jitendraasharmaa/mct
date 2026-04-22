@@ -20,33 +20,55 @@ class SubSuperAdminInitiationsDetailsProvider extends ChangeNotifier {
 
       if (currentUser == null) {
         _initiations = [];
+        _isLoading = false;
+        notifyListeners();
         return;
       }
 
-      final snapshot = await FirebaseFirestore.instance
+      // Fetch all data added under this sub super admin
+      final parentSnapshot = await FirebaseFirestore.instance
           .collection('initiations')
           .where('parentAdminUid', isEqualTo: currentUser.uid)
-          // .orderBy('createdAt', descending: true)
           .get();
 
-      _initiations = snapshot.docs.map((doc) {
+      // Fetch data directly created by this sub super admin
+      final selfSnapshot = await FirebaseFirestore.instance
+          .collection('initiations')
+          .where('createdByUid', isEqualTo: currentUser.uid)
+          .get();
+
+      // Merge both query results and remove duplicates
+      final allDocs = [...parentSnapshot.docs, ...selfSnapshot.docs];
+
+      final uniqueDocs = {for (var doc in allDocs) doc.id: doc}.values.toList();
+
+      // Optional: sort by createdAt descending
+      uniqueDocs.sort((a, b) {
+        final aTime = a.data()['createdAt'] as Timestamp?;
+        final bTime = b.data()['createdAt'] as Timestamp?;
+
+        if (aTime == null && bTime == null) return 0;
+        if (aTime == null) return 1;
+        if (bTime == null) return -1;
+
+        return bTime.compareTo(aTime);
+      });
+
+      _initiations = uniqueDocs.map((doc) {
         final data = doc.data();
 
         return {
           'id': doc.id,
           'bookSlNo': data['bookSlNo'] ?? '',
           'uniqueID': data['uniqueID'] ?? '',
-
           'person': data['name'] ?? '',
           'age': data['age'] ?? '',
           'gender': data['gender'] ?? '',
           'phone': data['phone'] ?? '',
           'address': data['address'] ?? '',
-
           'education': data['education'] ?? '',
           'introducer': data['introducer'] ?? '',
           'guarantor': data['guarantor'] ?? '',
-
           'englishDate': data['englishDate'] ?? '',
           'chineseDate': data['chineseDate'] ?? '',
           'dmAttended': data['dmAttended'] ?? '',
@@ -55,6 +77,7 @@ class SubSuperAdminInitiationsDetailsProvider extends ChangeNotifier {
           'meritsFee': data['meritsFee'] ?? '',
           'remarks': data['remarks'] ?? '',
           'createdBy': data['createdBy'] ?? '',
+          'createdByUid': data['createdByUid'] ?? '',
           'createdByUsername': data['createdByUsername'] ?? '',
           'parentAdminUid': data['parentAdminUid'] ?? '',
           'createdAt': data['createdAt'],

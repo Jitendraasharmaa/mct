@@ -88,18 +88,43 @@ class _CreateAdminAccountState extends State<CreateAdminAccount> {
                   labelText: 'Email',
                   hintText: 'Enter Email ID',
                   controller: adminCreateProfileProvider.emailController,
+                  keyboardType: TextInputType.emailAddress,
                   prefixIcon: Icon(
-                    Icons.lock_outline_rounded,
+                    Icons.email_outlined,
                     color: theme.textTheme.bodyMedium?.color,
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null || value.trim().isEmpty) {
                       return 'Please enter Email ID';
+                    }
+                    final email = value.trim();
+                    // Email regex
+                    final emailRegex = RegExp(
+                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                    );
+
+                    if (!emailRegex.hasMatch(email)) {
+                      return 'Please enter a valid Email ID';
                     }
                     return null;
                   },
                 ),
 
+                // InputFieldWidget(
+                //   labelText: 'Email',
+                //   hintText: 'Enter Email ID',
+                //   controller: adminCreateProfileProvider.emailController,
+                //   prefixIcon: Icon(
+                //     Icons.lock_outline_rounded,
+                //     color: theme.textTheme.bodyMedium?.color,
+                //   ),
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'Please enter Email ID';
+                //     }
+                //     return null;
+                //   },
+                // ),
                 InputFieldWidget(
                   labelText: 'Password',
                   hintText: 'Enter Password',
@@ -147,37 +172,35 @@ class _CreateAdminAccountState extends State<CreateAdminAccount> {
                     onPressed: adminCreateProfileProvider.isLoading
                         ? null
                         : () async {
-                      if (adminCreateProfileProvider.formKey.currentState!
-                          .validate()) {
-                        final message = await adminCreateProfileProvider
-                            .createAdmin();
+                            if (adminCreateProfileProvider.formKey.currentState!
+                                .validate()) {
+                              final message = await adminCreateProfileProvider
+                                  .createAdmin();
 
-                        if (!mounted) return;
+                              if (!mounted) return;
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(message ?? ''),
-                            backgroundColor:
-                            message ==
-                                'Admin account created successfully'
-                                ? Colors.green
-                                : null,
-                          ),
-                        );
-                      }
-                    },
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(message ?? ''),
+                                  backgroundColor:
+                                      message ==
+                                          'Admin account created successfully'
+                                      ? Colors.green
+                                      : null,
+                                ),
+                              );
+                            }
+                          },
                     child: adminCreateProfileProvider.isLoading
                         ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
                         : Text(
-                      'Create Admin',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                            'Create Admin',
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
                   ),
                 ),
               ],

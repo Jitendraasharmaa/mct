@@ -19,6 +19,7 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
 
   final List<InitiationCard> allItems = [
     InitiationCard(
+      documentId: 001.toString(),
       uniqueID: 'HC26041010',
       bookId: "001",
       personName: 'Jitendra Sharma',
@@ -38,6 +39,7 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
       remarks: "Nagendra friend's",
     ),
     InitiationCard(
+      documentId: "004",
       uniqueID: 'HC26041012',
       bookId: "002",
       personName: 'Birendra Sharma',
@@ -330,6 +332,7 @@ class _InitiationMainScreenState extends State<InitiationMainScreen> {
                     itemBuilder: (context, index) {
                       final item = filteredItems[index];
                       return InitiationCard(
+                        documentId: "00",
                         uniqueID: item.uniqueID,
                         bookId: 001.toString(),
                         personName: item.personName,

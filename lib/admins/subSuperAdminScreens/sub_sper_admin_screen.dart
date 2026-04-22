@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/admins/adminsScreens/admin_profile_details_screen.dart';
+import 'package:mct_prayer_book/admins/adminsScreens/all_admins_screen.dart';
 import 'package:mct_prayer_book/admins/auth/login_screen.dart';
 import 'package:mct_prayer_book/admins/subSuperAdminScreens/sup_super_admin_initiations_details_screen.dart';
 import 'package:mct_prayer_book/providers/admin_providers/admin_profile_details_provider.dart';
@@ -64,13 +64,19 @@ class SubSuperAdminScreenState extends State<SubSuperAdminScreen> {
   Widget build(BuildContext context) {
     final adminProfileProvider = context.read<AdminProfileDetailsProvider>();
     final initiationsProvider = context
-        .read<SubSuperAdminInitiationsDetailsProvider>();
+        .watch<SubSuperAdminInitiationsDetailsProvider>();
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: const AppbarWidget(title: "Dashboard"),
       drawer: buildAppDrawer(context, appVersion),
       body: RefreshIndicator(
-        onRefresh: _refreshScreen,
+        onRefresh: () async {
+          await context
+              .read<SubSuperAdminInitiationsDetailsProvider>()
+              .fetchParentAdminInitiations();
+
+          await context.read<AdminProfileDetailsProvider>().fetchAdmins();
+        },
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: GridView.count(
@@ -99,9 +105,7 @@ class SubSuperAdminScreenState extends State<SubSuperAdminScreen> {
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => AdminProfileDetailsScreen(),
-                    ),
+                    MaterialPageRoute(builder: (context) => AllAdminsScreen()),
                   );
                 },
                 child: StatsCard(

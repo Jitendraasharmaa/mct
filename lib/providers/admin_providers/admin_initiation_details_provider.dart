@@ -58,7 +58,7 @@ class AdminInitiationDetailsProvider extends ChangeNotifier {
           'parentAdminUid': data['parentAdminUid'] ?? '',
           'parentAdminUsername': data['parentAdminUsername'] ?? '',
           'createdAt': data['createdAt'],
-          'updatedAt': data['updatedAt'],
+          'updatedAt': data['updaatedAt'],
         };
       }).toList();
     } catch (e) {
