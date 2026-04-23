@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 import '../constants/app_colors.dart';
 import '../models/daily_quote.dart';
+import '../providers/superAdminProviders/get_annual_events_provider.dart';
 import '../providers/theme_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -112,6 +113,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     _checkForUpdate();
+    Future.microtask(() {
+      Provider.of<GetAnnualEventsProvider>(
+        context,
+        listen: false,
+      ).fetchAllEvents();
+    });
   }
 
   @override
@@ -119,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final themeProvider = context.watch<ThemeProvider>();
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final annualProvider = Provider.of<GetAnnualEventsProvider>(context);
 
     return SafeArea(
       child: Scaffold(
@@ -377,7 +385,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       QuickAccessItem(
                         icon: '📣',
                         title: 'Events',
-                        subtitle: '$eventTotalLength available',
+                        subtitle:
+                            '${annualProvider.listEvents.length} available',
                       ),
                     ];
 

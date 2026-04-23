@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/admins/superAdmin/event_details_provider.dart';
+import 'package:mct_prayer_book/providers/superAdminProviders/event_details_provider.dart';
 import 'package:mct_prayer_book/screens/add_event_screen.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +42,7 @@ class _SingleEventScreenState extends State<SingleEventScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => EditEventScreen(event: event), // ✅ FIXED
+                      builder: (_) => EditEventScreen(event: event),
                     ),
                   );
                 },

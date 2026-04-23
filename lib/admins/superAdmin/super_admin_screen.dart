@@ -3,12 +3,12 @@ import 'package:mct_prayer_book/admins/adminsScreens/all_admins_screen.dart';
 import 'package:mct_prayer_book/admins/auth/login_screen.dart';
 import 'package:mct_prayer_book/admins/initiation_main_screen.dart';
 import 'package:mct_prayer_book/admins/subSuperAdminScreens/sub_super_admins_details.dart';
+import 'package:mct_prayer_book/admins/superAdmin/annual_events_screen.dart';
 import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/providers/admin_providers/admin_profile_details_provider.dart';
 import 'package:mct_prayer_book/providers/all_initiations_provider.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admins_details_provider.dart';
-import 'package:mct_prayer_book/providers/superAdminProviders/edit_event_provider.dart';
 import 'package:mct_prayer_book/screens/events_screen.dart';
 import 'package:mct_prayer_book/screens/main_screen.dart';
 import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
@@ -18,6 +18,7 @@ import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/superAdminProviders/get_annual_events_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../singleEventScreen.dart';
 
@@ -51,6 +52,12 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AllInitiationsProvider>().fetchAllInitiations();
     });
+    Future.microtask(() {
+      Provider.of<GetAnnualEventsProvider>(
+        context,
+        listen: false,
+      ).fetchAllEvents();
+    });
   }
 
   Future<void> _loadAppVersion() async {
@@ -69,8 +76,7 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
         Provider.of<SubSuperAdminsDetailsProvider>(context);
     final adminsProvider = Provider.of<AdminProfileDetailsProvider>(context);
     final allInitiationProvider = Provider.of<AllInitiationsProvider>(context);
-
-    final editEventProvider = Provider.of<EditEventProvider>(context);
+    final annualProvider = Provider.of<GetAnnualEventsProvider>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -137,13 +143,15 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => EventsScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => AnnualEventsScreen(),
+                    ),
                   );
                 },
                 child: StatsCard(
-                  title: 'All Events',
-                  subtitle: 'Total Events',
-                  value: '14',
+                  title: 'Annual Events',
+                  subtitle: 'All Events',
+                  value: annualProvider.listEvents.length.toString(),
                   colors: [Color(0xFFFFA726), Color(0xFFF57C00)],
                   icon: Icons.event_available_outlined,
                 ),
@@ -159,22 +167,6 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
                 child: StatsCard(
                   title: 'Events',
                   subtitle: 'Upcoming events',
-                  value: '1',
-                  colors: [AppColors.pinkColor, AppColors.orange],
-                  icon: Icons.event_available_outlined,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => SingleEventScreen(),
-                    ),
-                  );
-                },
-                child: StatsCard(
-                  title: 'Annual Events',
-                  subtitle: 'All Events',
                   value: '1',
                   colors: [AppColors.pinkColor, AppColors.orange],
                   icon: Icons.event_available_outlined,

@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/admins/superAdmin/event_details_provider.dart';
 import 'package:mct_prayer_book/providers/add_initiation_provider.dart';
 import 'package:mct_prayer_book/providers/admin_providers/admin_change_password_provider.dart';
 import 'package:mct_prayer_book/providers/admin_providers/admin_initiation_details_provider.dart';
@@ -12,11 +11,15 @@ import 'package:mct_prayer_book/providers/create_sub_admin_provider.dart';
 import 'package:mct_prayer_book/providers/get_current_user.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
 import 'package:mct_prayer_book/providers/single_admin_profile_details_provider.dart';
+import 'package:mct_prayer_book/providers/subSuperAdminProvider/add_annual_event_provider.dart';
+import 'package:mct_prayer_book/providers/subSuperAdminProvider/edit_annual_event_provider.dart';
 import 'package:mct_prayer_book/providers/subSuperAdminProvider/sub_super_admin_edit_initiations_provider.dart';
 import 'package:mct_prayer_book/providers/subSuperAdminProvider/sub_super_admin_initiations_details_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admin_login_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admins_details_provider.dart';
 import 'package:mct_prayer_book/providers/superAdminProviders/edit_event_provider.dart';
+import 'package:mct_prayer_book/providers/superAdminProviders/event_details_provider.dart';
+import 'package:mct_prayer_book/providers/superAdminProviders/get_annual_events_provider.dart';
 import 'package:mct_prayer_book/providers/superAdminProviders/super_admin_login_provider.dart';
 import 'package:mct_prayer_book/providers/theme_provider.dart';
 import 'package:mct_prayer_book/screens/splash_screen.dart';
@@ -67,6 +70,9 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AllInitiationsProvider()),
         ChangeNotifierProvider(create: (_) => EditEventProvider()),
         ChangeNotifierProvider(create: (_) => EventDetailsProvider()),
+        ChangeNotifierProvider(create: (_) => AddAnnualEventProvider()),
+        ChangeNotifierProvider(create: (_) => GetAnnualEventsProvider()),
+        ChangeNotifierProvider(create: (_) => EditAnnualEventProvider()),
       ],
       child: const MyApp(),
     ),
