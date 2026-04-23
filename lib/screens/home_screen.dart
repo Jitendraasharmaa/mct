@@ -488,13 +488,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       );
                     }
-
                     final programs = Map<String, dynamic>.from(rawData);
-
                     final firstProgram = Map<String, dynamic>.from(
                       programs.values.first as Map,
                     );
-
                     return Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(

@@ -19,6 +19,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/theme_provider.dart';
+import '../../singleEventScreen.dart';
 
 class SuperAdminScreen extends StatefulWidget {
   const SuperAdminScreen({super.key});
@@ -149,13 +150,31 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(builder: (context) => EditEventScreen(eventId: eventId, eventName: eventName, templeName: templeName, time: time, day: day, month: month)),
-                  // );
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SingleEventScreen(),
+                    ),
+                  );
                 },
                 child: StatsCard(
                   title: 'Events',
                   subtitle: 'Upcoming events',
+                  value: '1',
+                  colors: [AppColors.pinkColor, AppColors.orange],
+                  icon: Icons.event_available_outlined,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SingleEventScreen(),
+                    ),
+                  );
+                },
+                child: StatsCard(
+                  title: 'Annual Events',
+                  subtitle: 'All Events',
                   value: '1',
                   colors: [AppColors.pinkColor, AppColors.orange],
                   icon: Icons.event_available_outlined,

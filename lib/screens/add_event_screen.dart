@@ -4,25 +4,13 @@ import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:mct_prayer_book/wigets/input_field_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../models/events_model.dart';
 import '../providers/superAdminProviders/edit_event_provider.dart';
 
 class EditEventScreen extends StatefulWidget {
-  final String eventId;
-  final String eventName;
-  final String templeName;
-  final String time;
-  final int day;
-  final String month;
+  final EventModel event;
 
-  const EditEventScreen({
-    super.key,
-    required this.eventId,
-    required this.eventName,
-    required this.templeName,
-    required this.time,
-    required this.day,
-    required this.month,
-  });
+  const EditEventScreen({super.key, required this.event});
 
   @override
   State<EditEventScreen> createState() => _EditEventScreenState();
@@ -32,17 +20,15 @@ class _EditEventScreenState extends State<EditEventScreen> {
   @override
   void initState() {
     super.initState();
-
     final provider = Provider.of<EditEventProvider>(context, listen: false);
 
-    // ✅ Prefill data
     provider.setInitialData(
-      id: widget.eventId,
-      eventName: widget.eventName,
-      templeName: widget.templeName,
-      time: widget.time,
-      day: widget.day,
-      month: widget.month,
+      id: widget.event.id,
+      eventName: widget.event.eventName,
+      templeName: widget.event.templeName,
+      time: widget.event.time,
+      day: widget.event.day,
+      month: widget.event.month,
     );
   }
 

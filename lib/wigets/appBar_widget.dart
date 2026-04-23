@@ -19,7 +19,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     return AppBar(
-      backgroundColor: AppColors.appBarColor,
+      backgroundColor: theme.colorScheme.primary,
       automaticallyImplyLeading: true,
       leading: showBack
           ? IconButton(

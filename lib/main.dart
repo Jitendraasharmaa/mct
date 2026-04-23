@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mct_prayer_book/admins/superAdmin/event_details_provider.dart';
 import 'package:mct_prayer_book/providers/add_initiation_provider.dart';
 import 'package:mct_prayer_book/providers/admin_providers/admin_change_password_provider.dart';
 import 'package:mct_prayer_book/providers/admin_providers/admin_initiation_details_provider.dart';
@@ -65,6 +66,7 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (_) => AllInitiationsProvider()),
         ChangeNotifierProvider(create: (_) => EditEventProvider()),
+        ChangeNotifierProvider(create: (_) => EventDetailsProvider()),
       ],
       child: const MyApp(),
     ),

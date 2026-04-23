@@ -22,7 +22,6 @@ class EditEventProvider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  // ✅ 1. PREFILL DATA
   void setInitialData({
     required String id,
     required String eventName,
@@ -38,6 +37,7 @@ class EditEventProvider extends ChangeNotifier {
     timeController.text = time;
 
     // Convert month + day → Date
+
     final monthIndex = _getMonthIndex(month);
     selectedDate = DateTime(DateTime.now().year, monthIndex, day);
 
@@ -47,7 +47,11 @@ class EditEventProvider extends ChangeNotifier {
   }
 
   // ✅ 2. UPDATE EVENT
+
   Future<void> updateEvent() async {
+    final id = eventId;
+    if (id == null) return; // ✅ safe check
+
     if (!formKey.currentState!.validate() || selectedDate == null) {
       return;
     }
@@ -56,7 +60,8 @@ class EditEventProvider extends ChangeNotifier {
       _isLoading = true;
       notifyListeners();
 
-      await _dbRef.child(eventId!).update({
+      await _dbRef.child(id).update({
+        // ✅ no "!" needed
         'eventName': eventNameController.text.trim(),
         'templeName': placeController.text.trim(),
         'time': timeController.text.trim(),
