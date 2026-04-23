@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/wigets/divider_widget.dart';
+import 'package:mct_prayer_book/admins/edit_initiations_screen.dart';
+import 'package:mct_prayer_book/providers/get_current_user.dart';
+import 'package:provider/provider.dart';
+
+import 'divider_widget.dart';
 
 class InitiationCard extends StatelessWidget {
   final String uniqueID;
@@ -22,6 +26,8 @@ class InitiationCard extends StatelessWidget {
   final String? role;
   final String documentId;
   final VoidCallback? onDelete;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDeleteAsSuperAdmin;
 
   const InitiationCard({
     super.key,
@@ -45,12 +51,15 @@ class InitiationCard extends StatelessWidget {
     this.role,
     required this.documentId,
     this.onDelete,
+    this.onDeleteAsSuperAdmin,
+    this.onEdit,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     // final color = _statusColor(context);
+    final theUserRole = Provider.of<GetCurrentUserDetailsProvider>(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
@@ -195,14 +204,79 @@ class InitiationCard extends StatelessWidget {
               // const SizedBox(width: 12),
               // _topIcon(context, Icons.copy_outlined),
               const SizedBox(width: 12),
-              if (role == 'sub_super_admin' || role == 'super_admin')
+              if (theUserRole.role == "sub_super_admin")
                 InkWell(
                   onTap: onDelete,
                   child: _topIcon(context, Icons.delete_outline),
                 ),
+              if (theUserRole.role == "super_admin")
+                InkWell(
+                  onTap: onDeleteAsSuperAdmin,
+                  child: _topIcon(context, Icons.delete_outline),
+                ),
               const SizedBox(width: 12),
-              if (role == 'sub_super_admin' || role == 'super_admin')
-                _topIcon(context, Icons.edit_outlined),
+              if (theUserRole.role == "sub_super_admin")
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => EditInitiationsScreen(
+                          initiationData: {
+                            'id': documentId,
+                            'bookSlNo': bookId,
+                            'person': personName,
+                            'age': age?.toString() ?? '',
+                            'gender': gender ?? '',
+                            'education': education ?? '',
+                            'phone': phoneNumber?.toString() ?? '',
+                            'introducer': introducerName ?? '',
+                            'guarantor': guarantorName ?? '',
+                            'master': masterName ?? '',
+                            'temple': templeName ?? '',
+                            'englishDate': iniEnglishDate ?? '',
+                            'chineseDate': iniChineseDate ?? '',
+                            'meritsFee': donationFee?.toString() ?? '',
+                            'address': address ?? '',
+                            'dmAttended': dmAttended ?? '',
+                            'remarks': remarks ?? '',
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                  child: _topIcon(context, Icons.edit_outlined),
+                ),
+              if (theUserRole.role == "super_admin")
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => EditInitiationsScreen(
+                          initiationData: {
+                            'id': documentId,
+                            'bookSlNo': bookId,
+                            'person': personName,
+                            'age': age?.toString() ?? '',
+                            'gender': gender ?? '',
+                            'education': education ?? '',
+                            'phone': phoneNumber?.toString() ?? '',
+                            'introducer': introducerName ?? '',
+                            'guarantor': guarantorName ?? '',
+                            'master': masterName ?? '',
+                            'temple': templeName ?? '',
+                            'englishDate': iniEnglishDate ?? '',
+                            'chineseDate': iniChineseDate ?? '',
+                            'meritsFee': donationFee?.toString() ?? '',
+                            'address': address ?? '',
+                            'dmAttended': dmAttended ?? '',
+                            'remarks': remarks ?? '',
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                  child: _topIcon(context, Icons.edit_outlined),
+                ),
             ],
           ),
           const SizedBox(height: 16),

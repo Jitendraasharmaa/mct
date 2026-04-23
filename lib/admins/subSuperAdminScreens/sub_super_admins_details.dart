@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mct_prayer_book/providers/admin_providers/admin_profile_details_provider.dart';
+import 'package:mct_prayer_book/admins/subSuperAdminScreens/sub_super_admin_profile_screen.dart';
 import 'package:mct_prayer_book/providers/sub_super_admins_details_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +22,7 @@ class _SubSuperAdminsDetailsScreenState
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AdminProfileDetailsProvider>().fetchAdmins();
+      context.read<SubSuperAdminsDetailsProvider>().fetchSubSuperAdmins();
     });
   }
 
@@ -68,10 +68,23 @@ class _SubSuperAdminsDetailsScreenState
               ),
               itemBuilder: (context, index) {
                 final member = provider.subSuperAdmins[index];
+                print("The unique id: ${member['uniqueID']}");
                 return Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SubSuperAdminProfileScreen(
+                            uniqueID: member['uniqueID'] ?? 'N/A',
+                            userName: member['username'] ?? '',
+                            role: member['role'] ?? '',
+                            email: member['email'],
+                            createdBy: member['createdByUsername'] ?? 'N/A',
+                          ),
+                        ),
+                      );
+                    },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -115,6 +128,14 @@ class _SubSuperAdminsDetailsScreenState
                                 const SizedBox(height: 4),
                                 Text(
                                   member['role'] ?? '',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: theme.colorScheme.primary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  member['uniqueID '] ?? "",
                                   style: TextStyle(
                                     fontSize: 13,
                                     color: theme.colorScheme.primary,

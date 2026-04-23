@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mct_prayer_book/admins/adminsScreens/admin_screen.dart';
-import 'package:mct_prayer_book/admins/superAdminScreens/super_admin_screen.dart';
+import 'package:mct_prayer_book/admins/superAdmin/super_admin_screen.dart';
 import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/providers/admin_providers/admin_login_provider.dart';
-import 'package:mct_prayer_book/providers/super_admin_login_provider.dart';
+import 'package:mct_prayer_book/providers/superAdminProviders/super_admin_login_provider.dart';
 import 'package:mct_prayer_book/wigets/input_field_widget.dart';
 import 'package:provider/provider.dart';
 

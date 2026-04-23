@@ -6,14 +6,17 @@ import 'package:mct_prayer_book/providers/admin_providers/admin_initiation_detai
 import 'package:mct_prayer_book/providers/admin_providers/admin_login_provider.dart';
 import 'package:mct_prayer_book/providers/admin_providers/admin_profile_details_provider.dart';
 import 'package:mct_prayer_book/providers/admin_providers/create_admin_account_provider.dart';
+import 'package:mct_prayer_book/providers/all_initiations_provider.dart';
 import 'package:mct_prayer_book/providers/create_sub_admin_provider.dart';
 import 'package:mct_prayer_book/providers/get_current_user.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
 import 'package:mct_prayer_book/providers/single_admin_profile_details_provider.dart';
+import 'package:mct_prayer_book/providers/subSuperAdminProvider/sub_super_admin_edit_initiations_provider.dart';
 import 'package:mct_prayer_book/providers/subSuperAdminProvider/sub_super_admin_initiations_details_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admin_login_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admins_details_provider.dart';
-import 'package:mct_prayer_book/providers/super_admin_login_provider.dart';
+import 'package:mct_prayer_book/providers/superAdminProviders/edit_event_provider.dart';
+import 'package:mct_prayer_book/providers/superAdminProviders/super_admin_login_provider.dart';
 import 'package:mct_prayer_book/providers/theme_provider.dart';
 import 'package:mct_prayer_book/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -57,6 +60,11 @@ void main() async {
           create: (_) =>
               GetCurrentUserDetailsProvider()..fetchCurrentUserDetails(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => SubSuperAdminEditInitiationsProvider(),
+        ),
+        ChangeNotifierProvider(create: (_) => AllInitiationsProvider()),
+        ChangeNotifierProvider(create: (_) => EditEventProvider()),
       ],
       child: const MyApp(),
     ),

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mct_prayer_book/admins/adminsScreens/all_admins_screen.dart';
 import 'package:mct_prayer_book/admins/auth/login_screen.dart';
 import 'package:mct_prayer_book/admins/initiation_main_screen.dart';
 import 'package:mct_prayer_book/admins/subSuperAdminScreens/sub_super_admins_details.dart';
+import 'package:mct_prayer_book/constants/app_colors.dart';
+import 'package:mct_prayer_book/providers/admin_providers/admin_profile_details_provider.dart';
+import 'package:mct_prayer_book/providers/all_initiations_provider.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admins_details_provider.dart';
+import 'package:mct_prayer_book/providers/superAdminProviders/edit_event_provider.dart';
 import 'package:mct_prayer_book/screens/events_screen.dart';
 import 'package:mct_prayer_book/screens/main_screen.dart';
 import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
@@ -42,6 +47,9 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<SubSuperAdminsDetailsProvider>().fetchSubSuperAdmins();
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AllInitiationsProvider>().fetchAllInitiations();
+    });
   }
 
   Future<void> _loadAppVersion() async {
@@ -58,6 +66,11 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
   Widget build(BuildContext context) {
     final subSuperAdminsDetailsProvider =
         Provider.of<SubSuperAdminsDetailsProvider>(context);
+    final adminsProvider = Provider.of<AdminProfileDetailsProvider>(context);
+    final allInitiationProvider = Provider.of<AllInitiationsProvider>(context);
+
+    final editEventProvider = Provider.of<EditEventProvider>(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: const AppbarWidget(title: "Dashboard"),
@@ -84,17 +97,24 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
                 child: StatsCard(
                   title: 'Initiation',
                   subtitle: 'Total initiation',
-                  value: '1000',
+                  value: allInitiationProvider.initiations.length.toString(),
                   colors: [Color(0xFF18C74F), Color(0xFF0DAA3D)],
                   icon: Icons.auto_graph_rounded,
                 ),
               ),
-              StatsCard(
-                title: 'Admins',
-                subtitle: 'Number of admins',
-                value: '10',
-                colors: [Color(0xFF4F8CFF), Color(0xFF2D68F0)],
-                icon: Icons.people_alt_outlined,
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => AllAdminsScreen()),
+                  );
+                },
+                child: StatsCard(
+                  title: 'Admins',
+                  subtitle: 'Number of admins',
+                  value: adminsProvider.admins.length.toString(),
+                  colors: [Color(0xFF4F8CFF), Color(0xFF2D68F0)],
+                  icon: Icons.people_alt_outlined,
+                ),
               ),
               GestureDetector(
                 onTap: () {
@@ -120,10 +140,24 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
                   );
                 },
                 child: StatsCard(
-                  title: 'Events',
-                  subtitle: 'Upcoming events',
+                  title: 'All Events',
+                  subtitle: 'Total Events',
                   value: '14',
                   colors: [Color(0xFFFFA726), Color(0xFFF57C00)],
+                  icon: Icons.event_available_outlined,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(builder: (context) => EditEventScreen(eventId: eventId, eventName: eventName, templeName: templeName, time: time, day: day, month: month)),
+                  // );
+                },
+                child: StatsCard(
+                  title: 'Events',
+                  subtitle: 'Upcoming events',
+                  value: '1',
+                  colors: [AppColors.pinkColor, AppColors.orange],
                   icon: Icons.event_available_outlined,
                 ),
               ),

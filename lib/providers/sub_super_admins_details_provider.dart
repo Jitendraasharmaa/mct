@@ -28,6 +28,7 @@ class SubSuperAdminsDetailsProvider extends ChangeNotifier {
         final data = doc.data();
         return {
           'id': doc.id,
+          'uniqueID': data['uniqueID'] ?? '',
           'username': data['username'] ?? '',
           'email': data['email'] ?? '',
           'role': data['role'] ?? '',

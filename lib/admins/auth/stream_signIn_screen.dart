@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/admins/adminsScreens/admin_screen.dart';
 import 'package:mct_prayer_book/admins/auth/login_screen.dart';
 import 'package:mct_prayer_book/admins/subSuperAdminScreens/sub_sper_admin_screen.dart';
-import 'package:mct_prayer_book/admins/superAdminScreens/super_admin_screen.dart';
+import 'package:mct_prayer_book/admins/superAdmin/super_admin_screen.dart';
 
 class StreamSignInScreen extends StatelessWidget {
   const StreamSignInScreen({super.key});
