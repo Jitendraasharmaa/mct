@@ -6,15 +6,14 @@ import '../../constants/app_colors.dart';
 import '../../providers/admin_providers/admin_change_password_provider.dart';
 import '../../wigets/input_field_widget.dart';
 
-class AdminChangePasswordScreen extends StatefulWidget {
-  const AdminChangePasswordScreen({super.key});
+class ChangePasswordScreen extends StatefulWidget {
+  const ChangePasswordScreen({super.key});
 
   @override
-  State<AdminChangePasswordScreen> createState() =>
-      _AdminChangePasswordScreenState();
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-class _AdminChangePasswordScreenState extends State<AdminChangePasswordScreen> {
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

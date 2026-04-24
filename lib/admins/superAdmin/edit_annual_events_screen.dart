@@ -110,6 +110,12 @@ class _EditAnnualEventsScreenState extends State<EditAnnualEventsScreen> {
 
                                 if (msg.contains("success")) {
                                   Navigator.pop(context);
+                                  Future.microtask(() {
+                                    Provider.of<EditAnnualEventProvider>(
+                                      context,
+                                      listen: false,
+                                    ).initData(widget.event);
+                                  });
                                 }
                               }
                             },

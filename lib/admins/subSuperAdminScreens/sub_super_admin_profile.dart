@@ -1,22 +1,30 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/admins/adminsScreens/change_password_screen.dart';
-import 'package:mct_prayer_book/providers/single_admin_profile_details_provider.dart';
+import 'package:mct_prayer_book/providers/subSuperAdminProvider/super_admin_profile_provider.dart';
 import 'package:provider/provider.dart';
 
-class AdminProfileScreen extends StatefulWidget {
-  const AdminProfileScreen({super.key});
+class SubSuperAdminProfile extends StatefulWidget {
+  const SubSuperAdminProfile({super.key});
 
   @override
-  State<AdminProfileScreen> createState() => _AdminProfileScreenState();
+  State<SubSuperAdminProfile> createState() => _SubSuperAdminProfileState();
 }
 
-class _AdminProfileScreenState extends State<AdminProfileScreen> {
+class _SubSuperAdminProfileState extends State<SubSuperAdminProfile> {
+  @override
+  void initState() {
+    super.initState();
+
+    /// ✅ Fetch Sub Super Admin Profile
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SubSuperAdminProfileProvider>().fetchProfile();
+    });
+  }
+
   Widget _infoTile({
     required BuildContext context,
     required IconData icon,
     required String title,
-    Widget? trailing,
   }) {
     final theme = Theme.of(context);
 
@@ -29,11 +37,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
       ),
       child: Row(
         children: [
-          Icon(
-            icon,
-            size: 24,
-            color: theme.colorScheme.primary.withOpacity(0.85),
-          ),
+          Icon(icon, size: 24, color: theme.colorScheme.primary),
           const SizedBox(width: 18),
           Expanded(
             child: Text(
@@ -45,25 +49,18 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
               ),
             ),
           ),
-          if (trailing != null) trailing,
         ],
       ),
     );
   }
 
-  String _formatDate(Timestamp? timestamp) {
-    if (timestamp == null) return 'N/A';
-
-    final date = timestamp.toDate();
-
-    return '${date.day}/${date.month}/${date.year}';
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Consumer<SingleAdminProfileDetailsProvider>(
+
+    return Consumer<SubSuperAdminProfileProvider>(
       builder: (context, provider, child) {
+        /// 🔄 Loading
         if (provider.isLoading) {
           return Scaffold(
             backgroundColor: theme.scaffoldBackgroundColor,
@@ -71,23 +68,22 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
           );
         }
 
-        final data = provider.userData;
+        final data = provider.profile;
 
+        /// ❌ No Data
         if (data == null) {
           return Scaffold(
-            body: Center(
-              child: Text(
-                'Profile not found',
-                style: TextStyle(color: theme.textTheme.bodyLarge?.color),
-              ),
-            ),
+            backgroundColor: theme.scaffoldBackgroundColor,
+            body: const Center(child: Text('Profile not found')),
           );
         }
+
+        /// ✅ UI
         return Scaffold(
-          resizeToAvoidBottomInset: true,
           backgroundColor: theme.scaffoldBackgroundColor,
           body: Column(
             children: [
+              /// 🔷 HEADER
               Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -100,8 +96,6 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                           theme.colorScheme.primary,
                           theme.colorScheme.secondary,
                         ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
                       ),
                       borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(80),
@@ -110,10 +104,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                     ),
                     child: SafeArea(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 18,
-                          vertical: 12,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 18),
                         child: Column(
                           children: [
                             Row(
@@ -121,28 +112,24 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                 IconButton(
                                   onPressed: () => Navigator.pop(context),
                                   icon: const Icon(
-                                    Icons.arrow_back_ios_new_rounded,
+                                    Icons.arrow_back,
                                     color: Colors.white,
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 10),
                             Text(
-                              data['username'] ?? '',
+                              data['username'] ?? 'N/A',
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 30,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 6),
                             Text(
                               data['role'] ?? '',
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 16,
-                              ),
+                              style: const TextStyle(color: Colors.white70),
                             ),
                           ],
                         ),
@@ -150,80 +137,59 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                     ),
                   ),
 
+                  /// 👤 Avatar
                   Positioned(
-                    bottom: -48,
+                    bottom: -45,
                     left: 0,
                     right: 0,
-                    child: Center(
-                      child: Container(
-                        width: 96,
-                        height: 96,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: theme.cardColor,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.12),
-                              blurRadius: 16,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                          border: Border.all(
-                            color: theme.scaffoldBackgroundColor,
-                            width: 4,
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.person_rounded,
-                          size: 52,
-                          color: theme.colorScheme.primary,
-                        ),
+                    child: CircleAvatar(
+                      radius: 45,
+                      backgroundColor: theme.cardColor,
+                      child: Icon(
+                        Icons.person,
+                        size: 45,
+                        color: theme.colorScheme.primary,
                       ),
                     ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 70),
+              const SizedBox(height: 60),
 
+              /// 📄 DETAILS
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                     color: theme.cardColor,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: theme.dividerColor.withOpacity(0.5),
-                    ),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: Column(
                     children: [
                       _infoTile(
                         context: context,
-                        icon: Icons.badge_outlined,
+                        icon: Icons.badge,
                         title: 'ID: ${data['uniqueID'] ?? ''}',
                       ),
                       _infoTile(
                         context: context,
-                        icon: Icons.person_outline_rounded,
+                        icon: Icons.person,
                         title: data['username'] ?? '',
                       ),
                       _infoTile(
                         context: context,
-                        icon: Icons.email_outlined,
+                        icon: Icons.email,
                         title: data['email'] ?? '',
                       ),
-                      _infoTile(
-                        context: context,
-                        icon: Icons.person_add_alt_1_outlined,
-                        title: 'Created By: ${data['createdByUsername'] ?? ''}',
-                      ),
-                      _infoTile(
-                        context: context,
-                        icon: Icons.calendar_month_outlined,
-                        title: 'Joined: ${_formatDate(data['createdAt'])}',
-                      ),
+
+                      // _infoTile(
+                      //   context: context,
+                      //   icon: Icons.person_add,
+                      //   title: 'Created By: ${data['createdBy'] ?? ''}',
+                      // ),
                       const Spacer(),
+
                       Padding(
                         padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
                         child: SizedBox(
@@ -271,6 +237,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                   ),
                 ),
               ),
+
               const SizedBox(height: 16),
             ],
           ),

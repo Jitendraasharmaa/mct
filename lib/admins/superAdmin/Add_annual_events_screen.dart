@@ -5,6 +5,8 @@ import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:mct_prayer_book/wigets/input_field_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/superAdminProviders/get_annual_events_provider.dart';
+
 class AddAnnualEventsScreen extends StatefulWidget {
   const AddAnnualEventsScreen({super.key});
 
@@ -97,7 +99,13 @@ class _AddAnnualEventsScreenState extends State<AddAnnualEventsScreen> {
                                   if (provider.formKey.currentState!
                                       .validate()) {
                                     final message = await provider.addEvent();
-
+                                    Future.microtask(
+                                      () =>
+                                          Provider.of<GetAnnualEventsProvider>(
+                                            context,
+                                            listen: false,
+                                          ).fetchAllEvents(),
+                                    );
                                     if (!mounted) return;
 
                                     ScaffoldMessenger.of(context).showSnackBar(

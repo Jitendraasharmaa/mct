@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/admins/adminsScreens/all_admins_screen.dart';
 import 'package:mct_prayer_book/admins/auth/login_screen.dart';
+import 'package:mct_prayer_book/admins/subSuperAdminScreens/sub_super_admin_profile.dart';
 import 'package:mct_prayer_book/admins/subSuperAdminScreens/sup_super_admin_initiations_details_screen.dart';
+import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/providers/admin_providers/admin_profile_details_provider.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
 import 'package:mct_prayer_book/providers/subSuperAdminProvider/sub_super_admin_initiations_details_provider.dart';
+import 'package:mct_prayer_book/providers/superAdminProviders/get_annual_events_provider.dart';
 import 'package:mct_prayer_book/screens/events_screen.dart';
 import 'package:mct_prayer_book/screens/main_screen.dart';
 import 'package:mct_prayer_book/screens/prayer_commands_screen.dart';
@@ -14,6 +17,7 @@ import 'package:mct_prayer_book/wigets/appBar_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/subSuperAdminProvider/super_admin_profile_provider.dart';
 import '../../providers/theme_provider.dart';
 
 class SubSuperAdminScreen extends StatefulWidget {
@@ -24,17 +28,7 @@ class SubSuperAdminScreen extends StatefulWidget {
 }
 
 class SubSuperAdminScreenState extends State<SubSuperAdminScreen> {
-  Future<void> _refreshScreen() async {
-    // Optional delay (for UI effect)
-    await Future.delayed(const Duration(seconds: 1));
-
-    setState(() {
-      // This will rebuild entire screen
-      // StreamBuilder will re-listen automatically
-    });
-  }
-
-  String appVersion = '1.0.0';
+  String appVersion = 'N?A';
 
   @override
   void initState() {
@@ -47,6 +41,15 @@ class SubSuperAdminScreenState extends State<SubSuperAdminScreen> {
       context
           .read<SubSuperAdminInitiationsDetailsProvider>()
           .fetchParentAdminInitiations();
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<GetAnnualEventsProvider>().fetchAllEvents();
+    });
+    Future.microtask(() {
+      Provider.of<SubSuperAdminProfileProvider>(
+        context,
+        listen: false,
+      ).fetchProfile();
     });
   }
 
@@ -65,6 +68,9 @@ class SubSuperAdminScreenState extends State<SubSuperAdminScreen> {
     final adminProfileProvider = context.read<AdminProfileDetailsProvider>();
     final initiationsProvider = context
         .watch<SubSuperAdminInitiationsDetailsProvider>();
+    final allAnnualEvent = Provider.of<GetAnnualEventsProvider>(context);
+    // final profileProvider = context.watch<SubSuperAdminProfileProvider>();
+    // final profile = profileProvider.profile;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: const AppbarWidget(title: "Dashboard"),
@@ -125,9 +131,25 @@ class SubSuperAdminScreenState extends State<SubSuperAdminScreen> {
                 child: StatsCard(
                   title: 'Events',
                   subtitle: 'Upcoming events',
-                  value: '14',
+                  value: allAnnualEvent.listEvents.length.toString(),
                   colors: [Color(0xFFFFA726), Color(0xFFF57C00)],
-                  icon: Icons.event_available_outlined,
+                  icon: Icons.person,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SubSuperAdminProfile(),
+                    ),
+                  );
+                },
+                child: StatsCard(
+                  title: 'Profile',
+                  subtitle: 'View Profile',
+                  value: "",
+                  colors: [AppColors.primaryColor, Color(0xFFF57C00)],
+                  icon: Icons.person,
                 ),
               ),
             ],

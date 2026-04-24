@@ -9,12 +9,14 @@ import 'package:mct_prayer_book/providers/admin_providers/create_admin_account_p
 import 'package:mct_prayer_book/providers/all_initiations_provider.dart';
 import 'package:mct_prayer_book/providers/create_sub_admin_provider.dart';
 import 'package:mct_prayer_book/providers/get_current_user.dart';
+import 'package:mct_prayer_book/providers/internet_provider.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
 import 'package:mct_prayer_book/providers/single_admin_profile_details_provider.dart';
 import 'package:mct_prayer_book/providers/subSuperAdminProvider/add_annual_event_provider.dart';
 import 'package:mct_prayer_book/providers/subSuperAdminProvider/edit_annual_event_provider.dart';
 import 'package:mct_prayer_book/providers/subSuperAdminProvider/sub_super_admin_edit_initiations_provider.dart';
 import 'package:mct_prayer_book/providers/subSuperAdminProvider/sub_super_admin_initiations_details_provider.dart';
+import 'package:mct_prayer_book/providers/subSuperAdminProvider/super_admin_profile_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admin_login_provider.dart';
 import 'package:mct_prayer_book/providers/sub_super_admins_details_provider.dart';
 import 'package:mct_prayer_book/providers/superAdminProviders/edit_event_provider.dart';
@@ -73,6 +75,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AddAnnualEventProvider()),
         ChangeNotifierProvider(create: (_) => GetAnnualEventsProvider()),
         ChangeNotifierProvider(create: (_) => EditAnnualEventProvider()),
+        ChangeNotifierProvider(create: (_) => SubSuperAdminProfileProvider()),
+        ChangeNotifierProvider(create: (_) => InternetProvider()),
       ],
       child: const MyApp(),
     ),

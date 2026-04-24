@@ -16,11 +16,6 @@ class AnnualEventsScreen extends StatefulWidget {
 }
 
 class _AnnualEventsScreenState extends State<AnnualEventsScreen> {
-  Future<void> _refresh() async {
-    await Future.delayed(Duration(seconds: 2)); // simulate network call
-
-    setState(() {});
-  }
 
   @override
   void initState() {
@@ -31,7 +26,6 @@ class _AnnualEventsScreenState extends State<AnnualEventsScreen> {
         listen: false,
       ).fetchAllEvents(),
     );
-    _refresh();
   }
 
   @override
@@ -56,7 +50,7 @@ class _AnnualEventsScreenState extends State<AnnualEventsScreen> {
           : provider.listEvents.isEmpty
           ? const Center(child: Text("No Events Found"))
           : RefreshIndicator(
-              onRefresh: _refresh,
+              onRefresh: () => provider.fetchAllEvents(),
               child: ListView.builder(
                 padding: const EdgeInsets.all(16),
                 itemCount: provider.listEvents.length,
