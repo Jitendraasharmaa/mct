@@ -133,7 +133,6 @@ class _PrayerCommandsScreenState extends State<PrayerCommandsScreen> {
                   ),
 
                   const SizedBox(width: 10),
-
                   InkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () => _openScreen(context, index),

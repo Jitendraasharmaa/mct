@@ -4,7 +4,6 @@ class DailyTeaching {
 
   DailyTeaching({required this.quote, required this.author});
 }
-
 final List<DailyTeaching> teachings = [
   DailyTeaching(
     quote:

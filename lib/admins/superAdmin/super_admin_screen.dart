@@ -58,6 +58,12 @@ class _SuperAdminScreenState extends State<SuperAdminScreen> {
         listen: false,
       ).fetchAllEvents();
     });
+    Future.microtask(() {
+      Provider.of<AdminProfileDetailsProvider>(
+        context,
+        listen: false,
+      ).fetchAdmins();
+    });
   }
 
   Future<void> _loadAppVersion() async {

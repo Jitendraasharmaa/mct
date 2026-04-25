@@ -68,7 +68,7 @@ class SubSuperAdminLoginProvider extends ChangeNotifier {
       switch (e.code) {
         case 'invalid-credential':
         case 'user-not-found':
-          return 'Invalid email or password';
+          return 'Incorrect email and password';
 
         case 'wrong-password':
           return 'Incorrect password';

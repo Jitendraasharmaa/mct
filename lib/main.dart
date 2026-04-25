@@ -7,6 +7,7 @@ import 'package:mct_prayer_book/providers/admin_providers/admin_login_provider.d
 import 'package:mct_prayer_book/providers/admin_providers/admin_profile_details_provider.dart';
 import 'package:mct_prayer_book/providers/admin_providers/create_admin_account_provider.dart';
 import 'package:mct_prayer_book/providers/all_initiations_provider.dart';
+import 'package:mct_prayer_book/providers/call_provider.dart';
 import 'package:mct_prayer_book/providers/create_sub_admin_provider.dart';
 import 'package:mct_prayer_book/providers/get_current_user.dart';
 import 'package:mct_prayer_book/providers/internet_provider.dart';
@@ -24,6 +25,7 @@ import 'package:mct_prayer_book/providers/superAdminProviders/event_details_prov
 import 'package:mct_prayer_book/providers/superAdminProviders/get_annual_events_provider.dart';
 import 'package:mct_prayer_book/providers/superAdminProviders/super_admin_login_provider.dart';
 import 'package:mct_prayer_book/providers/theme_provider.dart';
+import 'package:mct_prayer_book/providers/whatsApp_provider.dart';
 import 'package:mct_prayer_book/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -77,6 +79,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => EditAnnualEventProvider()),
         ChangeNotifierProvider(create: (_) => SubSuperAdminProfileProvider()),
         ChangeNotifierProvider(create: (_) => InternetProvider()),
+        ChangeNotifierProvider(create: (_) => CallProvider()),
+        ChangeNotifierProvider(create: (_) => WhatsappProvider()),
       ],
       child: const MyApp(),
     ),

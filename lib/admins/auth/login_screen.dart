@@ -102,8 +102,8 @@ class _LoginScreenState extends State<LoginScreen>
             const SizedBox(height: 34),
             InputFieldWidget(
               controller: emailController,
-              labelText: 'Email or Username',
-              hintText: 'Enter username or email',
+              labelText: 'Email',
+              hintText: 'Enter username',
               keyboardType: TextInputType.emailAddress,
               prefixIcon: Icon(
                 Icons.person_outline_rounded,
@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen>
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Please enter your email or username';
+                  return 'Please enter your email';
                 }
                 return null;
               },

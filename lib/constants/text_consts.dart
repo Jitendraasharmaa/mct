@@ -1,6 +1,6 @@
 class TextConsts {
   List<String> commandHeading = [
-    "Coming\nLeaving",
+    "Coming -Leaving",
     "Morning\nEvening",
     "(Sien Kong Li Cie)\nServing Prasada",
     "Purnima\nAmavasya",

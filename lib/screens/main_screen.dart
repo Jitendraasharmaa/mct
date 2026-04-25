@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:mct_prayer_book/providers/internet_provider.dart';
-
 import 'package:mct_prayer_book/screens/home_screen.dart';
 import 'package:mct_prayer_book/screens/more_screens.dart';
 import 'package:mct_prayer_book/screens/prayers_screen.dart';
 import 'package:mct_prayer_book/screens/songs_screens.dart';
 import 'package:mct_prayer_book/screens/sutra_screen.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -66,7 +65,7 @@ class _MainScreenState extends State<MainScreen> {
                 },
                 icon: const Icon(Icons.refresh),
                 label: Text(
-                  "Try Again"style: TextStyle(
+                  "Try Again", style: TextStyle(
                     color: theme.colorScheme.onPrimary
                 ),),
               ),

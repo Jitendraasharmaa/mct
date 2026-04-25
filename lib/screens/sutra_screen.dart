@@ -96,7 +96,8 @@ class SutraScreen extends StatelessWidget {
                     PrayerCard(
                       title: 'Mi Lek Ciu Khu Cen Cing',
                       subtitle: 'Chinese · English · Hindi',
-                      preview: 'Sutra of Maitreya salvation from suffering',
+                      preview:
+                          'Sutra of Maitreya Buddha salvation from suffering',
                       duration: '2:15',
                       progress: 0.55,
                       isFavorite: true,

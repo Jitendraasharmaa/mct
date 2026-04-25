@@ -21,8 +21,8 @@ class _AdminScreenState extends State<AdminScreen> {
 
   final TextEditingController _searchController = TextEditingController();
 
-  String selectedTemple = 'All';
-  String selectedDm = 'All';
+  String selectedTemple = 'Temple';
+  String selectedDm = 'DM';
   DateTime? selectedDate;
 
   @override
@@ -45,6 +45,81 @@ class _AdminScreenState extends State<AdminScreen> {
     }
   }
 
+  // =========================
+  // ✅ YEAR PICKER
+  // =========================
+  Future<void> _pickYear() async {
+    final currentYear = DateTime.now().year;
+    final years = List.generate(30, (i) => currentYear - 15 + i);
+
+    final pickedYear = await showDialog<int>(
+      context: context,
+      builder: (context) {
+        final theme = Theme.of(context);
+
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            height: 320,
+            child: Column(
+              children: [
+                Text("Select Year", style: theme.textTheme.titleMedium),
+                const SizedBox(height: 12),
+                Expanded(
+                  child: GridView.builder(
+                    itemCount: years.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                        ),
+                    itemBuilder: (context, index) {
+                      final year = years[index];
+                      final isSelected = selectedDate?.year == year;
+
+                      return InkWell(
+                        onTap: () => Navigator.pop(context, year),
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? theme.colorScheme.primary
+                                : theme.cardColor,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            year.toString(),
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : null,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (pickedYear != null) {
+      setState(() {
+        selectedDate = DateTime(pickedYear);
+      });
+    }
+  }
+
+  // =========================
+  // ✅ FILTER (YEAR ONLY)
+  // =========================
   List<Map<String, dynamic>> _filteredItems(List<Map<String, dynamic>> items) {
     return items.where((item) {
       final query = _searchController.text.toLowerCase();
@@ -55,9 +130,9 @@ class _AdminScreenState extends State<AdminScreen> {
           item['temple'].toString().toLowerCase().contains(query);
 
       final matchesTemple =
-          selectedTemple == 'All' || item['temple'] == selectedTemple;
+          selectedTemple == 'Temple' || item['temple'] == selectedTemple;
 
-      final matchesDm = selectedDm == 'All' || item['dmAttended'] == selectedDm;
+      final matchesDm = selectedDm == 'DM' || item['dmAttended'] == selectedDm;
 
       bool matchesDate = true;
 
@@ -66,17 +141,9 @@ class _AdminScreenState extends State<AdminScreen> {
           item['englishDate'].toString().isNotEmpty) {
         try {
           final parts = item['englishDate'].toString().split('/');
+          final year = int.parse(parts[2]);
 
-          final date = DateTime(
-            int.parse(parts[2]),
-            int.parse(parts[1]),
-            int.parse(parts[0]),
-          );
-
-          matchesDate =
-              date.year == selectedDate!.year &&
-              date.month == selectedDate!.month &&
-              date.day == selectedDate!.day;
+          matchesDate = year == selectedDate!.year;
         } catch (_) {
           matchesDate = false;
         }
@@ -103,6 +170,7 @@ class _AdminScreenState extends State<AdminScreen> {
         return Scaffold(
           backgroundColor: theme.scaffoldBackgroundColor,
           drawer: buildAppDrawer(context, appVersion),
+
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
               await Navigator.of(context).push(
@@ -113,11 +181,14 @@ class _AdminScreenState extends State<AdminScreen> {
                   .read<AdminInitiationDetailsProvider>()
                   .fetchInitiationsDetails();
             },
-            child: Text(provider.initiations.length.toString(),
-                style: theme.textTheme.titleLarge?.copyWith(
-                    color: theme.colorScheme.tertiary
-                )),
+            child: Text(
+              provider.initiations.length.toString(),
+              style: theme.textTheme.titleLarge?.copyWith(
+                color: theme.colorScheme.tertiary,
+              ),
+            ),
           ),
+
           appBar: AppbarWidget(
             title: 'Initiation Details',
             actions: [
@@ -134,230 +205,100 @@ class _AdminScreenState extends State<AdminScreen> {
               ),
             ],
           ),
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: _searchController,
-                      onChanged: (_) => setState(() {}),
-                      decoration: InputDecoration(
-                        hintText: 'Search by name, ID or temple',
-                        prefixIcon: const Icon(Icons.search),
-                        filled: true,
-                        fillColor: theme.cardColor,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide.none,
+
+          body: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: _searchController,
+                        onChanged: (_) => setState(() {}),
+                        decoration: InputDecoration(
+                          hintText: 'Search...',
+                          prefixIcon: const Icon(Icons.search),
+                          filled: true,
+                          fillColor: theme.cardColor,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              color: theme.cardColor,
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: theme.dividerColor),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: selectedTemple,
-                                isExpanded: true,
-                                dropdownColor: theme.cardColor,
-                                items: const [
-                                  DropdownMenuItem(
-                                    value: 'All',
-                                    child: Text(
-                                      'Temple',
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: 'Hong Ci',
-                                    child: Text('Hong Ci'),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: 'Kong Ta',
-                                    child: Text('Kong Ta'),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: 'Yi En',
-                                    child: Text('Yi En'),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: 'Kuang Ji',
-                                    child: Text('Kuang Ji'),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: 'Kong Thong',
-                                    child: Text('Kong Thong'),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: 'Kuang Wu',
-                                    child: Text('Kuang Wu'),
-                                  ),
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedTemple = value!;
-                                  });
-                                },
-                              ),
+
+                      const SizedBox(height: 12),
+
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildDropdown(
+                              value: selectedTemple,
+                              items: const [
+                                'Temple',
+                                'Hong Ci',
+                                'Kong Ta',
+                                'Yi En',
+                                'Kuang Ji',
+                                'Kong Thong',
+                                'Kuang Wu',
+                              ],
+                              onChanged: (v) =>
+                                  setState(() => selectedTemple = v!),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
+                          const SizedBox(width: 8),
 
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              color: theme.cardColor,
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: theme.dividerColor),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: selectedDm,
-                                isExpanded: true,
-                                dropdownColor: theme.cardColor,
-                                items: const [
-                                  DropdownMenuItem(
-                                    value: 'All',
-                                    child: Text('DM'),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: 'Yes',
-                                    child: Text('Yes'),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: 'No',
-                                    child: Text('No'),
-                                  ),
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedDm = value!;
-                                  });
-                                },
-                              ),
+                          Expanded(
+                            child: _buildDropdown(
+                              value: selectedDm,
+                              items: const ['DM', 'Yes', 'No'],
+                              onChanged: (v) => setState(() => selectedDm = v!),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
+                          const SizedBox(width: 8),
 
-                        Expanded(
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(14),
-                            onTap: () async {
-                              final picked = await showDatePicker(
-                                context: context,
-                                initialDate: selectedDate ?? DateTime.now(),
-                                firstDate: DateTime(2020),
-                                lastDate: DateTime(2035),
-                              );
-
-                              if (picked != null) {
-                                setState(() {
-                                  selectedDate = picked;
-                                });
-                              }
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 16,
-                              ),
-                              decoration: BoxDecoration(
-                                color: theme.cardColor,
-                                borderRadius: BorderRadius.circular(14),
-                                border: Border.all(color: theme.dividerColor),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.calendar_today_outlined,
-                                    size: 18,
-                                    color: theme.colorScheme.primary,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Expanded(
-                                    child: Text(
-                                      selectedDate == null
-                                          ? 'Date'
-                                          : '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: selectedDate == null
-                                            ? theme.textTheme.bodyMedium?.color
-                                            : theme.colorScheme.onSurface,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(width: 8),
-
-                        InkWell(
-                          borderRadius: BorderRadius.circular(14),
-                          onTap: () {
-                            setState(() {
-                              selectedTemple = 'All';
-                              selectedDm = 'All';
-                              selectedDate = null;
-                              _searchController.clear();
-                            });
-                          },
-                          child: Container(
-                            height: 54,
-                            width: 54,
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.primary.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(
-                                color: theme.colorScheme.primary.withOpacity(
-                                  0.25,
+                          /// YEAR PICKER UI
+                          Expanded(
+                            child: InkWell(
+                              onTap: _pickYear,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 16,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: theme.cardColor,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Text(
+                                  selectedDate == null
+                                      ? 'Year'
+                                      : '${selectedDate!.year}',
                                 ),
                               ),
                             ),
-                            child: Icon(
-                              Icons.filter_alt_off_rounded,
-                              color: theme.colorScheme.primary,
-                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: provider.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : filteredItems.isEmpty
-                    ? const Center(child: Text('No matching records found'))
-                    : RefreshIndicator(
-                        onRefresh: provider.fetchInitiationsDetails,
-                        child: ListView.separated(
-                          padding: const EdgeInsets.all(16),
+
+                Expanded(
+                  child: provider.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : filteredItems.isEmpty
+                      ? const Center(child: Text('No records'))
+                      : ListView.builder(
                           itemCount: filteredItems.length,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(height: 14),
                           itemBuilder: (context, index) {
                             final item = filteredItems[index];
+
                             return InitiationCard(
-                                documentId: item['id'],
+                              documentId: item['id'],
                               uniqueID: item['uniqueID'] ?? '',
                               bookId: item['bookSlNo'] ?? '',
                               personName: item['person'] ?? '',
@@ -375,17 +316,31 @@ class _AdminScreenState extends State<AdminScreen> {
                               donationFee: int.parse(item['meritsFee']),
                               address: item['address'] ?? '',
                               dmAttended: item['dmAttended'] ?? '',
-                                remarks: item['remarks'] ?? ''
-
+                              remarks: item['remarks'] ?? '',
                             );
                           },
                         ),
-                      ),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildDropdown({
+    required String value,
+    required List<String> items,
+    required Function(String?) onChanged,
+  }) {
+    return DropdownButton<String>(
+      value: value,
+      isExpanded: true,
+      items: items
+          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+          .toList(),
+      onChanged: onChanged,
     );
   }
 }

@@ -85,7 +85,7 @@ class AdminLoginProvider extends ChangeNotifier {
 
         case 'wrong-password':
         case 'invalid-credential':
-          return 'Invalid email or password';
+          return 'Incorrect email and password';
 
         case 'invalid-email':
           return 'Please enter a valid email';

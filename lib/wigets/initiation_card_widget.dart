@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:mct_prayer_book/admins/edit_initiations_screen.dart';
+import 'package:mct_prayer_book/constants/app_colors.dart';
 import 'package:mct_prayer_book/providers/get_current_user.dart';
+import 'package:mct_prayer_book/providers/whatsApp_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/call_provider.dart';
 import 'divider_widget.dart';
 
 class InitiationCard extends StatelessWidget {
@@ -57,6 +61,27 @@ class InitiationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Future<void> openWhatsApp(BuildContext context, int? phoneNumber) async {
+    //   if (phoneNumber == null) return;
+    //
+    //   final String phone = phoneNumber.toString();
+    //
+    //   final String message = Uri.encodeComponent(
+    //     "Namaste🙏,\nI’m Maitreya Charitable Trust.",
+    //   );
+    //
+    //   final Uri uri = Uri.parse("https://wa.me/91$phone?text=$message");
+    //
+    //   try {
+    //     await launchUrl(uri, mode: LaunchMode.externalApplication);
+    //   } catch (e) {
+    //     // 👇 Show message here
+    //     ScaffoldMessenger.of(
+    //       context,
+    //     ).showSnackBar(const SnackBar(content: Text("WhatsApp not installed")));
+    //   }
+    // }
+
     final theme = Theme.of(context);
     // final color = _statusColor(context);
     final theUserRole = Provider.of<GetCurrentUserDetailsProvider>(context);
@@ -285,6 +310,47 @@ class InitiationCard extends StatelessWidget {
           _row(context, 'Age', age.toString()),
           DividerWidget(),
           _row(context, 'Temple Name', templeName.toString()),
+          SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () {
+                  Provider.of<CallProvider>(
+                    context,
+                    listen: false,
+                  ).makePhoneCall(context, phoneNumber);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: AppColors.greenColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Symbols.call,
+                    color: AppColors.greenColor,
+                    size: 28,
+                  ),
+                ),
+              ),
+              SizedBox(width: 5.0),
+              InkWell(
+                onTap: () {
+                  context.read<WhatsappProvider>().openWhatsApp(
+                      context, phoneNumber);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: AppColors.greenColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset(width: 30, "assets/images/whatsApp.png"),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

@@ -98,7 +98,7 @@ class SuperAdminLoginProvider extends ChangeNotifier {
           return 'No internet connection';
 
         case 'invalid-credential':
-          return 'Invalid email or password';
+          return 'Incorrect email and password';
 
         default:
           return 'Login failed';
