@@ -1,13 +1,13 @@
 class TextConsts {
   List<String> commandHeading = [
-    "Coming -Leaving",
-    "Morning\nEvening",
+    "Coming-Leaving",
+    "Morning-Evening",
     "(Sien Kong Li Cie)\nServing Prasada",
     "Purnima\nAmavasya",
-    "(Ta Tien)\nPurnima\nAmavasya",
+    "(Ta Tien)\n(Big Purnima -Amavasya)",
     "Initiation\nCeremony",
     "(Khai Pan)\nOpening Class",
-    "(Sien En)\nExpress Gratitude",
+    "(Sie En)\nExpress Gratitude",
     "(Hui Siang)\nTransfer Merits",
     "Repentance\nCeremony",
     "Li Yuan Li Cie\nMaking Vow",

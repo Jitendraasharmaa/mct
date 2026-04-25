@@ -16,7 +16,6 @@ class AddInitiationsScreen extends StatefulWidget {
 
 class _AddInitiationsScreenState extends State<AddInitiationsScreen> {
   bool isChecked = false;
-
   Future<void> pickEnglishDate(
     BuildContext context,
     AddInitiationProvider provider,
@@ -74,6 +73,13 @@ class _AddInitiationsScreenState extends State<AddInitiationsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    final provider = Provider.of<AddInitiationProvider>(context, listen: false);
+    provider.dmYesNoController.text = "No";
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Consumer<AddInitiationProvider>(
@@ -122,7 +128,6 @@ class _AddInitiationsScreenState extends State<AddInitiationsScreen> {
                       return null;
                     },
                   ),
-
                   CustomDropdownFormField(
                     label: "Gender",
                     items: const ['Male', 'Female'],
@@ -370,26 +375,41 @@ class _AddInitiationsScreenState extends State<AddInitiationsScreen> {
                         onChanged: (bool? value) {
                           setState(() {
                             isChecked = value ?? false;
+                            provider.dmYesNoController.text = isChecked
+                                ? "Yes"
+                                : "No";
                           });
                         },
                       ),
-                      Text("Is DM Attended?"),
                     ],
                   ),
-
                   if (isChecked)
-                    InputFieldWidget(
-                      controller: provider.dmAttendedController,
-                      labelText: "DMAttended Date",
-                      hintText: "Select DM Attended Date",
-                      readOnly: true,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please DM attended';
-                        }
-                        return null;
-                      },
-                      onTap: () => pickDmAttendedDate(context, provider),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InputFieldWidget(
+                            controller: provider.dmAttendedController,
+                            labelText: "DM Attended Date",
+                            hintText: "Select DM Attended Date",
+                            readOnly: true,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Please DM attended';
+                              }
+                              return null;
+                            },
+                            onTap: () => pickDmAttendedDate(context, provider),
+                          ),
+                        ),
+                        Expanded(
+                          child: InputFieldWidget(
+                            controller: provider.dmYesNoController,
+                            labelText: "DM Attended?",
+                            hintText: "DM Attended?",
+                            readOnly: true,
+                          ),
+                        ),
+                      ],
                     ),
                   const SizedBox(height: 20),
                   SizedBox(

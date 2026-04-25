@@ -20,6 +20,7 @@ class AddInitiationProvider extends ChangeNotifier {
   final meritsFeeController = TextEditingController();
   final addressController = TextEditingController();
   final dmAttendedController = TextEditingController();
+  final dmYesNoController = TextEditingController();
   final remarksController = TextEditingController();
 
   bool _isLoading = false;
@@ -103,6 +104,7 @@ class AddInitiationProvider extends ChangeNotifier {
         'meritsFee': meritsFeeController.text.trim(),
         'address': addressController.text.trim(),
         'dmAttended': dmAttendedController.text.trim(),
+        'dmYesNo': dmYesNoController.text.trim(),
         'remarks': remarksController.text.trim(),
 
         // Creator information
@@ -146,6 +148,7 @@ class AddInitiationProvider extends ChangeNotifier {
     meritsFeeController.clear();
     addressController.clear();
     dmAttendedController.clear();
+    dmYesNoController.clear();
     remarksController.clear();
   }
 
@@ -166,6 +169,7 @@ class AddInitiationProvider extends ChangeNotifier {
     meritsFeeController.dispose();
     addressController.dispose();
     dmAttendedController.dispose();
+    dmYesNoController.dispose();
     remarksController.dispose();
     super.dispose();
   }

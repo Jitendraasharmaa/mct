@@ -9,6 +9,7 @@ import 'package:mct_prayer_book/providers/admin_providers/create_admin_account_p
 import 'package:mct_prayer_book/providers/all_initiations_provider.dart';
 import 'package:mct_prayer_book/providers/call_provider.dart';
 import 'package:mct_prayer_book/providers/create_sub_admin_provider.dart';
+import 'package:mct_prayer_book/providers/export_initiations_provider.dart';
 import 'package:mct_prayer_book/providers/get_current_user.dart';
 import 'package:mct_prayer_book/providers/internet_provider.dart';
 import 'package:mct_prayer_book/providers/sign_out_provider.dart';
@@ -81,6 +82,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => InternetProvider()),
         ChangeNotifierProvider(create: (_) => CallProvider()),
         ChangeNotifierProvider(create: (_) => WhatsappProvider()),
+        ChangeNotifierProvider(create: (_) => ExportInitiationsProvider()),
       ],
       child: const MyApp(),
     ),

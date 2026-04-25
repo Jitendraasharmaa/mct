@@ -72,6 +72,7 @@ class SubSuperAdminInitiationsDetailsProvider extends ChangeNotifier {
           'englishDate': data['englishDate'] ?? '',
           'chineseDate': data['chineseDate'] ?? '',
           'dmAttended': data['dmAttended'] ?? '',
+          'dmYesNo': data['dmYesNo'] ?? '',
           'master': data['master'] ?? '',
           'temple': data['temple'] ?? '',
           'meritsFee': data['meritsFee'] ?? '',
@@ -93,29 +94,29 @@ class SubSuperAdminInitiationsDetailsProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> updateInitiation({
-    required String documentId,
-    required String name,
-    required String phone,
-    required String address,
-  }) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('initiations')
-          .doc(documentId)
-          .update({
-            'name': name,
-            'phone': phone,
-            'address': address,
-            'updatedAt': FieldValue.serverTimestamp(),
-          });
-
-      await fetchParentAdminInitiations();
-      return 'Initiation updated successfully';
-    } catch (e) {
-      return 'Failed to update initiation: $e';
-    }
-  }
+  // Future<String?> updateInitiation({
+  //   required String documentId,
+  //   required String name,
+  //   required String phone,
+  //   required String address,
+  // }) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('initiations')
+  //         .doc(documentId)
+  //         .update({
+  //           'name': name,
+  //           'phone': phone,
+  //           'address': address,
+  //           'updatedAt': FieldValue.serverTimestamp(),
+  //         });
+  //
+  //     await fetchParentAdminInitiations();
+  //     return 'Initiation updated successfully';
+  //   } catch (e) {
+  //     return 'Failed to update initiation: $e';
+  //   }
+  // }
 
   Future<String?> deleteInitiation(String documentId) async {
     try {

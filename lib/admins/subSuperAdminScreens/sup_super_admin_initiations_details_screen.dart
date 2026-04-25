@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mct_prayer_book/admins/adminsScreens/add_initiations_screen.dart';
+import 'package:mct_prayer_book/providers/export_initiations_provider.dart';
 import 'package:mct_prayer_book/providers/get_current_user.dart';
 import 'package:mct_prayer_book/providers/subSuperAdminProvider/sub_super_admin_initiations_details_provider.dart';
 import 'package:mct_prayer_book/wigets/appBar_widget.dart';
@@ -17,7 +18,6 @@ class SupSuperAdminInitiationsDetailsScreen extends StatefulWidget {
 
 class _SupSuperAdminInitiationsDetailsScreenScreenState
     extends State<SupSuperAdminInitiationsDetailsScreen> {
-
   final TextEditingController _searchController = TextEditingController();
 
   String selectedTemple = 'All';
@@ -38,9 +38,7 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
   //  YEAR PICKER (NO CALENDAR)
   // =========================
   Future<void> _pickYear() async {
-    final currentYear = DateTime
-        .now()
-        .year;
+    final currentYear = DateTime.now().year;
     final years = List.generate(100, (i) => currentYear - 30 + i);
 
     final pickedYear = await showDialog<int>(
@@ -64,11 +62,11 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
                   child: GridView.builder(
                     itemCount: years.length,
                     gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                    ),
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                        ),
                     itemBuilder: (context, index) {
                       final year = years[index];
                       final isSelected = selectedDate?.year == year;
@@ -126,14 +124,13 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
 
       final matchesSearch =
           item['person'].toString().toLowerCase().contains(query) ||
-              item['uniqueID'].toString().toLowerCase().contains(query) ||
-              item['temple'].toString().toLowerCase().contains(query);
+          item['uniqueID'].toString().toLowerCase().contains(query) ||
+          item['temple'].toString().toLowerCase().contains(query);
 
       final matchesTemple =
           selectedTemple == 'All' || item['temple'] == selectedTemple;
 
-      final matchesDm =
-          selectedDm == 'All' || item['dmAttended'] == selectedDm;
+      final matchesDm = selectedDm == 'All' || item['dmYesNo'] == selectedDm;
 
       bool matchesDate = true;
 
@@ -163,12 +160,10 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final currentUserDetails =
-    context.read<GetCurrentUserDetailsProvider>();
+    final currentUserDetails = context.read<GetCurrentUserDetailsProvider>();
 
     return Consumer<SubSuperAdminInitiationsDetailsProvider>(
       builder: (context, provider, child) {
-
         final filteredItems = _filteredItems(provider.initiations);
 
         return Scaffold(
@@ -176,46 +171,101 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
 
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => AddInitiationsScreen(),
-                ),
-              );
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => AddInitiationsScreen()));
             },
             child: const Icon(Icons.add),
           ),
 
-          appBar: const AppbarWidget(title: 'Initiation Details'),
+          appBar: AppbarWidget(title: 'Initiation Details'),
 
           body: Column(
             children: [
-
               /// FILTERS
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Column(
                   children: [
-
-                    TextField(
-                      controller: _searchController,
-                      onChanged: (_) => setState(() {}),
-                      decoration: InputDecoration(
-                        hintText: 'Search by name, ID or temple',
-                        prefixIcon: const Icon(Icons.search),
-                        filled: true,
-                        fillColor: theme.cardColor,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide.none,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _searchController,
+                            onChanged: (_) => setState(() {}),
+                            decoration: InputDecoration(
+                              hintText: 'Search by name, ID or temple',
+                              prefixIcon: const Icon(Icons.search),
+                              filled: true,
+                              fillColor: theme.cardColor,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        SizedBox(width: 10),
+                        GestureDetector(
+                          onTap: () {
+                            final exportProvider = context
+                                .read<ExportInitiationsProvider>();
+                            exportProvider.exportCSV(
+                              context,
+                              filteredItems,
+                            ); // 👈 pass filtered data
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 5,
+                              horizontal: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.shade50,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: Colors.blue.shade200),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.05),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.blue,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.upload,
+                                    color: Colors.white,
+                                    size: 22,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  "Export",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
 
                     const SizedBox(height: 12),
 
                     Row(
                       children: [
-
                         Expanded(
                           child: _buildDropdown(
                             value: selectedTemple,
@@ -239,8 +289,7 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
                           child: _buildDropdown(
                             value: selectedDm,
                             items: const ['All', 'Yes', 'No'],
-                            onChanged: (v) =>
-                                setState(() => selectedDm = v!),
+                            onChanged: (v) => setState(() => selectedDm = v!),
                           ),
                         ),
 
@@ -253,7 +302,9 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
                             borderRadius: BorderRadius.circular(14),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 16),
+                                horizontal: 12,
+                                vertical: 16,
+                              ),
                               decoration: BoxDecoration(
                                 color: theme.cardColor,
                                 borderRadius: BorderRadius.circular(14),
@@ -261,9 +312,11 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
                               ),
                               child: Row(
                                 children: [
-                                  Icon(Icons.calendar_today_outlined,
-                                      size: 18,
-                                      color: theme.colorScheme.primary),
+                                  Icon(
+                                    Icons.calendar_today_outlined,
+                                    size: 18,
+                                    color: theme.colorScheme.primary,
+                                  ),
                                   const SizedBox(width: 6),
                                   Expanded(
                                     child: Text(
@@ -298,8 +351,10 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
                               color: theme.colorScheme.primary.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(14),
                             ),
-                            child: Icon(Icons.filter_alt_off_rounded,
-                                color: theme.colorScheme.primary),
+                            child: Icon(
+                              Icons.filter_alt_off_rounded,
+                              color: theme.colorScheme.primary,
+                            ),
                           ),
                         ),
                       ],
@@ -315,43 +370,44 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
                     : filteredItems.isEmpty
                     ? const Center(child: Text('No matching records found'))
                     : RefreshIndicator(
-                  onRefresh: provider.fetchParentAdminInitiations,
-                  child: ListView.separated(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: filteredItems.length,
-                    separatorBuilder: (_, __) =>
-                    const SizedBox(height: 16),
-                    itemBuilder: (context, index) {
-                      final item = filteredItems[index];
+                        onRefresh: provider.fetchParentAdminInitiations,
+                        child: ListView.separated(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: filteredItems.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 16),
+                          itemBuilder: (context, index) {
+                            final item = filteredItems[index];
 
-                      return InitiationCard(
+                            return InitiationCard(
                         documentId: item['id'],
-                        uniqueID: item['uniqueID'] ?? '',
-                        bookId: item['bookSlNo'] ?? '',
-                        personName: item['person'] ?? '',
+                        uniqueID: item['uniqueID'] ?? 'N/A',
+                        bookId: item['bookSlNo'] ?? 'N/A',
+                        personName: item['person'] ?? 'N/A',
                         age: int.tryParse(item['age'].toString()) ?? 0,
-                        gender: item['gender'] ?? '',
-                        education: item['education'] ?? '',
+                        gender: item['gender'] ?? 'N/A',
+                        education: item['education'] ?? 'N/A',
                         phoneNumber:
                         int.tryParse(item['phone'].toString()) ?? 0,
-                        introducerName: item['introducer'] ?? '',
-                        guarantorName: item['guarantor'] ?? '',
-                        masterName: item['master'] ?? '',
-                        templeName: item['temple'] ?? '',
-                        iniEnglishDate: item['englishDate'] ?? '',
-                        iniChineseDate: item['chineseDate'] ?? '',
+                        introducerName: item['introducer'] ?? 'N/A',
+                        guarantorName: item['guarantor'] ?? 'N/A',
+                        masterName: item['master'] ?? 'N/A',
+                        templeName: item['temple'] ?? 'N/A',
+                        iniEnglishDate: item['englishDate'] ?? 'N/A',
+                        iniChineseDate: item['chineseDate'] ?? 'N/A',
                         donationFee:
-                        int.tryParse(item['meritsFee'].toString()) ?? 0,
-                        address: item['address'] ?? '',
-                        dmAttended: item['dmAttended'] ?? '',
-                        remarks: item['remarks'] ?? '',
+                        int.tryParse(item['meritsFee'].toString()) ??
+                            0,
+                        address: item['address'] ?? 'N/A',
+                        dmAttended: item['dmAttended'] ?? 'N/A',
+                        remarks: item['remarks'] ?? 'N/A',
                         role: currentUserDetails.role,
                         onDelete: () async {
                           final confirm = await showDialog<bool>(
                             context: context,
                             builder: (_) =>
                                 AlertDialog(
-                                  title: Text(item['person'] ?? ''),
+                                  title: Text(item['person'] ?? 'N/A'),
                                   content: const Text("Delete this record?"),
                                   actions: [
                                     TextButton(
@@ -368,17 +424,19 @@ class _SupSuperAdminInitiationsDetailsScreenScreenState
                                 ),
                           );
 
-                          if (confirm != true) return;
+                                if (confirm != true) return;
 
-                          final message =
-                          await provider.deleteInitiation(item['id']);
+                                final message = await provider.deleteInitiation(
+                            item['id'],
+                          );
 
-                          if (!context.mounted) return;
+                                if (!context.mounted) return;
 
-                          ScaffoldMessenger.of(context).showSnackBar(
+                                ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                  message ?? 'Something went wrong'),
+                                message ?? 'Something went wrong',
+                              ),
                             ),
                           );
                         },
